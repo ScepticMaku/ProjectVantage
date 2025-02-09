@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Mark/Documents/NetBeansProjects/ProjectVantage/src/projectvantage/fxml/Login.fxml</file>
+            <file>file:/C:/Users/Mark/Documents/NetBeansProjects/ProjectVantage/src/projectvantage/controllers/authentication/AuthenticationController.java</file>
+            <file>file:/C:/Users/Mark/Documents/NetBeansProjects/ProjectVantage/src/projectvantage/utility/Database.java</file>
+            <file>file:/C:/Users/Mark/Documents/NetBeansProjects/ProjectVantage/src/projectvantage/main/ProjectVantage.java</file>
+            <file>file:/C:/Users/Mark/Documents/NetBeansProjects/ProjectVantage/src/projectvantage/controllers/authentication/LoginController.java</file>
+            <file>file:/C:/Users/Mark/Documents/NetBeansProjects/ProjectVantage/src/projectvantage/controllers/authentication/RegisterController.java</file>
+            <file>file:/C:/Users/Mark/Documents/NetBeansProjects/ProjectVantage/src/projectvantage/utility/Config.java</file>
+            <file>file:/C:/Users/Mark/Documents/NetBeansProjects/ProjectVantage/src/projectvantage/fxml/Authentication.fxml</file>
+            <file>file:/C:/Users/Mark/Documents/NetBeansProjects/ProjectVantage/src/projectvantage/fxml/Register.fxml</file>
+        </group>
+    </open-files>
+</project-private>
