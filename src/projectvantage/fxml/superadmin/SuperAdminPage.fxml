@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.superadmin.SuperAdminPageController">
+   <top>
+      <Pane prefHeight="91.0" prefWidth="1000.0" style="-fx-background-color: #00A9FF;" BorderPane.alignment="CENTER">
+         <children>
+            <Rectangle fx:id="rectangle" arcHeight="20.0" arcWidth="20.0" height="68.0" layoutX="14.0" layoutY="12.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="257.0" />
+            <Label layoutX="84.0" layoutY="18.0" prefHeight="56.0" prefWidth="80.0" text="Project" textFill="WHITE">
+               <font>
+                  <Font name="Leelawadee UI Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="164.0" layoutY="29.0" text="Vantage" textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="83.0" fitWidth="58.0" layoutX="26.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../resources/img/LoginLogo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+   </top>
+   <left>
+      <Pane prefHeight="509.0" prefWidth="120.0" style="-fx-background-color: #89CFF3;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER" prefHeight="130.0" prefWidth="120.0" style="-fx-background-color: #89CFF3;">
+               <children>
+                  <Pane prefHeight="66.0" prefWidth="120.0">
+                     <children>
+                        <ImageView fitHeight="50.0" fitWidth="30.0" layoutX="45.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/icons/dashboard-icon.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="29.0" layoutY="39.0" prefHeight="17.0" prefWidth="63.0" text="Dashboard" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="Leelawadee UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="userManagementButton" layoutX="10.0" layoutY="10.0" onMouseClicked="#userManagementButtonActionHandler" prefHeight="66.0" prefWidth="120.0">
+                     <children>
+                        <ImageView fitHeight="50.0" fitWidth="30.0" layoutX="45.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/icons/user-icon.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="6.0" layoutY="39.0" prefHeight="17.0" prefWidth="108.0" text="User Management" textFill="WHITE">
+                           <font>
+                              <Font name="Leelawadee UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+   </left>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane prefHeight="509.0" prefWidth="880.0" style="-fx-background-color: #EEF5FF;" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

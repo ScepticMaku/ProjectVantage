@@ -24,8 +24,8 @@ public class ProjectVantage extends Application {
     
     Config config = new Config();
     
-    String authFXML = "/projectvantage/fxml/Authentication.fxml";
-    String loginFXML = "/projectvantage/fxml/Login.fxml";
+    String authFXML = "/projectvantage/fxml/authentication/Authentication.fxml";
+    String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -36,6 +36,7 @@ public class ProjectVantage extends Application {
         primaryStage.setTitle("Login");
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
+        config.setCenterAlignment(primaryStage);
     }
 
     /**

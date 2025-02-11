@@ -15,6 +15,6 @@
       <Label layoutX="79.0" layoutY="105.0" text="Don't have an account?" textFill="WHITE" />
       <Label fx:id="registerButton" layoutX="211.0" layoutY="105.0" onMouseClicked="#registerButtonMouseClickHandler" text="Register." textFill="#0593ff" />
       <Button fx:id="loginButton" layoutX="145.0" layoutY="131.0" mnemonicParsing="false" onMouseClicked="#loginButtonMouseClickHandler" text="Login" />
-      <Label layoutX="105.0" layoutY="14.0" text="Please login to continue" textFill="WHITE" />
+      <Label layoutX="120.0" layoutY="14.0" text="Login to continue." textFill="WHITE" />
    </children>
 </Pane>

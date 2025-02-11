@@ -11,11 +11,11 @@ import java.sql.*;
  *
  * @author Mark
  */
-public class Database {
+public class dbConnect {
     
     private Connection connect;
     
-    public Database(){
+    public dbConnect(){
         try {
             connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectvantage_db", "root", "");
         } catch(SQLException e) {
