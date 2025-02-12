@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import projectvantage.utility.dbConnect;
 import java.sql.*;
+import javafx.event.Event;
 
 /**
  * FXML Controller class
@@ -56,6 +57,32 @@ public class LoginController implements Initializable {
         return false;
     }
     
+    private String getRole(String user, String pass) {
+        dbConnect db = new dbConnect();
+        try(ResultSet result = db.getData("SELECT role FROM user WHERE username = '" + user + "' AND password = '" + pass + "'")) {
+            if(result.next()) {
+                String role = result.getString("role");
+                return role;
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    private String getStatus(String user, String pass) {
+        dbConnect db = new dbConnect();
+        try(ResultSet result = db.getData("SELECT status FROM user WHERE username = '" + user + "' AND password = '" + pass + "'")) {
+            if(result.next()) {
+                String status = result.getString("status");
+                return status;
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return null;
+    }
+    
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws Exception {
         AuthenticationController authControl = AuthenticationController.getInstance();
@@ -91,6 +118,21 @@ public class LoginController implements Initializable {
     
         if(!locateUser(username, password)) {
             config.showErrorMessage("Username not found.", "Login error");
+            return;
+        }
+        
+        if(getStatus(username, password).equals("inactive")) {
+            config.showErrorMessage("Your account isn't active yet.", "Account Status Error");
+            return;
+        }
+        
+        switch(getRole(username, password)) {
+            case "team member":
+                config.switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
+                break;
+            case "admin":
+                config.switchScene(getClass(), event, "/projectvantage/fxml/admin/MainPage.fxml");
+                break;
         }
     }
     

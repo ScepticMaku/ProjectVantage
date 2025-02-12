@@ -6,12 +6,14 @@
 package projectvantage.controllers.authentication;
 
 import projectvantage.utility.Config;
+import projectvantage.utility.dbConnect;
 
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -61,6 +63,7 @@ public class RegisterController implements Initializable {
     }
     
     Config config = new Config();
+    dbConnect connect = new dbConnect();
 
     @FXML
     private void loginButtonMouseClickHandler(MouseEvent event) {
@@ -88,6 +91,9 @@ public class RegisterController implements Initializable {
         String password = passwordField.getText();
         String passwordConfirm = passwordConfirmField.getText();
         
+        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, password, role, status) "
+                + "VALUES (?, ?, ?, ?, ?, ? ,? , 'team member' , 'inactive')";
+        
         if(firstName.isEmpty() || lastName.isEmpty() || emailAddress.isEmpty() || phoneNumber.isEmpty() || 
                 username.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
             config.showErrorMessage("Fields must not be empty", "Field Error");
@@ -104,6 +110,11 @@ public class RegisterController implements Initializable {
             return;
         }
         
+        if(!password.equals(passwordConfirm)) {
+            config.showErrorMessage("Password doesn't match.", "Password Error");
+            return;
+        }
+        
         if(config.isDuplicated("username", username)) {
             config.showErrorMessage("Username already exists", "Username Error");
             return;
@@ -113,6 +124,12 @@ public class RegisterController implements Initializable {
             config.showErrorMessage("Email already exist.", "Email Error");
             return;
         }
+        
+        if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password)) {
+            System.out.println("User added to database!");
+            config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!");
+        }
+         
     }
     
 }
