@@ -19,7 +19,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import projectvantage.utility.dbConnect;
 import java.sql.*;
+import javafx.animation.FadeTransition;
 import javafx.event.Event;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -92,9 +94,23 @@ public class LoginController implements Initializable {
             Pane otherPane = authControl.getOtherPane();
             Pane title = authControl.getTitlePane();
             
-            loginPane.setVisible(false);
+//            loginPane.setVisible(false);
+            FadeTransition loginFade = new FadeTransition(Duration.millis(200), loginPane);
+            loginFade.setFromValue(250);
+            loginFade.setToValue(0);
+            loginFade.play();
+            
+            usernameField.setText("");
+            passwordField.setText("");
+            
             otherPane.setVisible(true);
-            title.setLayoutY(74);
+            FadeTransition otherFade = new FadeTransition(Duration.millis(200), otherPane);
+            otherFade.setFromValue(0);
+            otherFade.setToValue(250);
+            otherFade.play();
+            
+            title.setLayoutY(75);
+            title.setLayoutX(275);
         }
     }
 
@@ -121,7 +137,7 @@ public class LoginController implements Initializable {
             return;
         }
         
-        if(getStatus(username, password).equals("inactive")) {
+        if(!getStatus(username, password).equals("active")) {
             config.showErrorMessage("Your account isn't active yet.", "Account Status Error");
             return;
         }
@@ -133,7 +149,24 @@ public class LoginController implements Initializable {
             case "admin":
                 config.switchScene(getClass(), event, "/projectvantage/fxml/admin/MainPage.fxml");
                 break;
+            default:
+                config.showErrorMessage("Role not found", "Role error");
         }
+    }
+
+    @FXML
+    private void registerButtonMouseExitHandler(MouseEvent event) {
+        registerButton.setStyle("-fx-text-fill: #0593ff");
+    }
+
+    @FXML
+    private void registerButtonMouseEnterHandler(MouseEvent event) {
+        registerButton.setStyle("-fx-text-fill: #0676c6");
+    }
+
+    @FXML
+    private void registerButtonMousePressHandler(MouseEvent event) {
+        registerButton.setStyle("-fx-text-fill: #01528d");
     }
     
 }

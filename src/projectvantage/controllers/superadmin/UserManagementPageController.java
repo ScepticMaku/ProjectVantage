@@ -57,14 +57,13 @@ public class UserManagementPageController implements Initializable {
     private void loadTableData() {
         ObservableList<User> userList = FXCollections.observableArrayList();
         dbConnect db = new dbConnect();
-        String sql = "SELECT id, first_name, middle_name, last_name, email, phone_number, username, password, role, status FROM user";
+        String sql = "SELECT id, first_name, last_name, email, phone_number, username, password, role, status FROM user";
         
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {
                 userList.add(new User(
                         result.getInt("id"),
                         result.getString("first_name"),
-                        result.getString("middle_name"),
                         result.getString("last_name"),
                         result.getString("email"),
                         result.getString("phone_number"),

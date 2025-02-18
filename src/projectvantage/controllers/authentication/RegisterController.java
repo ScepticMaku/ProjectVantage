@@ -11,6 +11,7 @@ import projectvantage.utility.dbConnect;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -20,6 +21,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,8 +39,6 @@ public class RegisterController implements Initializable {
     private Button registerButton;
     @FXML
     private TextField firstNameField;
-    @FXML
-    private TextField middleNameField;
     @FXML
     private TextField lastNameField;
     @FXML
@@ -74,16 +74,35 @@ public class RegisterController implements Initializable {
             Pane otherPane = authControl.getOtherPane();
             Pane title = authControl.getTitlePane();
             
-            loginPane.setVisible(true);
-            otherPane.setVisible(false);
-            title.setLayoutY(157);
+            firstNameField.setText("");
+            lastNameField.setText("");
+            emailAddressField.setText("");
+            phoneNumberField.setText("");
+            usernameField.setText("");
+            passwordField.setText("");
+            passwordConfirmField.setText("");
+            
+//            loginPane.setVisible(true);
+            
+//            otherPane.setVisible(false);
+            FadeTransition otherFade = new FadeTransition(Duration.millis(200), otherPane);
+            otherFade.setFromValue(200);
+            otherFade.setToValue(0);
+            otherFade.play();
+            
+            FadeTransition loginFade = new FadeTransition(Duration.millis(200), loginPane);
+            loginFade.setFromValue(0);
+            loginFade.setToValue(200);
+            loginFade.play();
+            
+            title.setLayoutY(150);
+            title.setLayoutX(500);
         }
     }
 
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws SQLException {
         String firstName = firstNameField.getText();
-        String middleName = middleNameField.getText();
         String lastName = lastNameField.getText();
         String emailAddress = emailAddressField.getText();
         String phoneNumber = phoneNumberField.getText();
@@ -91,16 +110,50 @@ public class RegisterController implements Initializable {
         String password = passwordField.getText();
         String passwordConfirm = passwordConfirmField.getText();
         
-        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, password, role, status) "
-                + "VALUES (?, ?, ?, ?, ?, ? ,? , 'team member' , 'inactive')";
+        String query = "INSERT INTO user (first_name, last_name, email, phone_number, username, password, role, status) "
+                + "VALUES ( ?, ?, ?, ?, ? ,? , 'team member' , 'inactive')";
         
-        if(firstName.isEmpty() || lastName.isEmpty() || emailAddress.isEmpty() || phoneNumber.isEmpty() || 
-                username.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
-            config.showErrorMessage("Fields must not be empty", "Field Error");
+        if(firstName.isEmpty()) {
+            config.showErrorMessage("First name must not be empty", "Field Error");
             return;
         }
         
-        if(config.checkPhoneNumber(phoneNumber)) {
+        if(lastName.isEmpty()) {
+            config.showErrorMessage("Last name must not be empty", "Field Error");
+            return;
+        }
+        
+        if(emailAddress.isEmpty()) {
+            config.showErrorMessage("Email address must not be empty", "Field Error");
+            return;
+        }
+        
+        if(phoneNumber.isEmpty()) {
+            config.showErrorMessage("Phone number must not be empty", "Field Error");
+            return;
+        }
+        
+        if(username.isEmpty()) {
+            config.showErrorMessage("username must not be empty", "Field Error");
+            return;
+        }
+        
+        if(password.isEmpty()) {
+            config.showErrorMessage("password must not be empty", "Field Error");
+            return;
+        }
+        
+        if(passwordConfirm.isEmpty()) {
+            config.showErrorMessage("confirm password must not be empty", "Field Error");
+            return;
+        }
+        
+        if(!config.isValidEmail(emailAddress)) {
+            config.showErrorMessage("Email format is invalid", "Email Error");
+            return;
+        }
+        
+        if(config.isValidPhoneNumber(phoneNumber)) {
             config.showErrorMessage("Phone number must only be numbers.", "Phone number Error");
             return;
         }
@@ -125,11 +178,26 @@ public class RegisterController implements Initializable {
             return;
         }
         
-        if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password)) {
+        if(connect.insertData(query, firstName, lastName, emailAddress, phoneNumber, username, password)) {
             System.out.println("User added to database!");
             config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!");
         }
          
+    }
+
+    @FXML
+    private void loginButtonMouseExitHandler(MouseEvent event) {
+        loginButton.setStyle("-fx-text-fill: #0593ff");
+    }
+
+    @FXML
+    private void loginButtonMouseEnterHandler(MouseEvent event) {
+        loginButton.setStyle("-fx-text-fill: #0676c6");
+    }
+
+    @FXML
+    private void loginButtonMousePressHandler(MouseEvent event) {
+        loginButton.setStyle("-fx-text-fill: #01528d");
     }
     
 }

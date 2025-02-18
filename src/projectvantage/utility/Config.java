@@ -6,6 +6,8 @@
 package projectvantage.utility;
 
 import java.sql.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -23,6 +25,12 @@ import javax.swing.JOptionPane;
  */
 public class Config {
     
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private static final String PHONE_NUMBER_REGEX = "^09\\d{9}$";
+    
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+    private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile(PHONE_NUMBER_REGEX);
+    
     public void switchScene(Class getClass, Event evt, String targetFXML) throws Exception {
         Parent root = FXMLLoader.load(getClass.getResource(targetFXML));
         Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
@@ -36,8 +44,6 @@ public class Config {
     public void showErrorMessage(String errorMessage, String errorType) {
 //        JOptionPane.showMessageDialog(null, errorMessage, errorType, JOptionPane.ERROR_MESSAGE);
         showAlert(Alert.AlertType.ERROR, errorType, errorMessage);
-
-
     }
     
     public void setCenterAlignment(Stage stage) {
@@ -56,7 +62,7 @@ public class Config {
         alert.showAndWait();
     }
     
-    public boolean checkPhoneNumber(String phoneNumber) {
+    public boolean isValidPhoneNumber(String phoneNumber) {
         boolean hasAlpha = false;
         
         for(char c : phoneNumber.toCharArray()) {
@@ -65,6 +71,16 @@ public class Config {
             }
         }
         return hasAlpha;
+    }
+    
+    public boolean isValidPhoneNumberFormat(String phoneNumber) {
+        Matcher matcher = PHONE_NUMBER_PATTERN.matcher(phoneNumber);
+        return matcher.matches();
+    }
+    
+    public boolean isValidEmail(String email) {
+        Matcher matcher = EMAIL_PATTERN.matcher(email);
+        return matcher.matches();
     }
     
     public boolean isDuplicated(String column, String value) throws SQLException {

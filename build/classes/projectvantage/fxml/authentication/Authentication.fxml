@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -17,7 +18,7 @@
       </ImageView>
       <Pane fx:id="backgroundPane" layoutY="50.0" prefWidth="879.0">
          <children>
-            <Pane fx:id="titlePane" layoutX="456.0" layoutY="157.0">
+            <Pane fx:id="titlePane" layoutX="500.0" layoutY="150.0">
                <children>
                   <Rectangle fx:id="rectangle" arcHeight="20.0" arcWidth="20.0" height="68.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="338.0" />
                   <Label layoutX="111.0" layoutY="5.0" prefHeight="56.0" prefWidth="80.0" text="Project" textFill="WHITE">
@@ -37,20 +38,24 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="loginPane" layoutX="456.0" layoutY="232.0" prefHeight="196.0" prefWidth="338.0">
+            <Pane fx:id="loginPane" layoutX="499.0" layoutY="232.0" prefHeight="196.0" prefWidth="338.0">
                <children>
                   <fx:include maxHeight="196.0" maxWidth="335.0" minHeight="196.0" minWidth="335.0" prefHeight="196.0" prefWidth="335.0" source="Login.fxml" />
                </children>
             </Pane>
-            <Pane fx:id="otherPane" layoutX="456.0" layoutY="149.0" prefHeight="362.0" prefWidth="338.0" visible="false">
+            <Pane fx:id="otherPane" layoutX="225.0" layoutY="162.0" prefHeight="345.0" prefWidth="417.0" visible="false">
                <children>
                   <fx:include source="Register.fxml" />
                </children>
             </Pane>
-            <ImageView fx:id="closeButton" fitHeight="30.0" fitWidth="30.0" layoutX="822.0" layoutY="14.0" onMouseClicked="#closeButtonMouseClickHandler" pickOnBounds="true" preserveRatio="true">
+            <Rectangle fx:id="exitButtonBG" arcHeight="10.0" arcWidth="10.0" fill="#d71515" height="30.0" layoutX="823.0" layoutY="14.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="30.0" />
+            <ImageView fx:id="closeButton" fitHeight="30.0" fitWidth="30.0" layoutX="822.0" layoutY="14.0" onMouseClicked="#closeButtonMouseClickHandler" onMouseEntered="#closeButtonMouseEnterHandler" onMouseExited="#closeButtonMouseExitHandler" onMousePressed="#closeButtonMousePressHandler" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../resources/icons/icons8-cross-30.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
          </children>
       </Pane>

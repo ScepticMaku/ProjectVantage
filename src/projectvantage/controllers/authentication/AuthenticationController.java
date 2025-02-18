@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
@@ -49,6 +50,8 @@ public class AuthenticationController implements Initializable {
     private ImageView closeButton;
     
     private static AuthenticationController instance;
+    @FXML
+    private Rectangle exitButtonBG;
     
     /**
      * Initializes the controller class.
@@ -82,6 +85,22 @@ public class AuthenticationController implements Initializable {
             System.exit(0);
         }
             
+    }
+
+    @FXML
+    private void closeButtonMouseExitHandler(MouseEvent event) {
+        exitButtonBG.setVisible(false);
+    }
+
+    @FXML
+    private void closeButtonMouseEnterHandler(MouseEvent event) {
+        exitButtonBG.setVisible(true);
+        exitButtonBG.setFill(Color.web("#d71515"));
+    }
+
+    @FXML
+    private void closeButtonMousePressHandler(MouseEvent event) {
+        exitButtonBG.setFill(Color.web("#971111"));
     }
 
         
