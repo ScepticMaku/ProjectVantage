@@ -5,22 +5,20 @@
  */
 package projectvantage.controllers.authentication;
 
+import projectvantage.utility.Config;
+
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -28,8 +26,6 @@ import javax.swing.JOptionPane;
  * @author Mark
  */
 public class AuthenticationController implements Initializable {
-    
-    private Stage primaryStage;
     private LoginController loginControl;
     private RegisterController registerControl;
     
@@ -61,6 +57,8 @@ public class AuthenticationController implements Initializable {
         instance = this;
     }
     
+    Config config = new Config();
+    
     public static AuthenticationController getInstance() {
         return instance;
     }
@@ -79,12 +77,8 @@ public class AuthenticationController implements Initializable {
 
     @FXML
     private void closeButtonMouseClickHandler(MouseEvent event) {
-        int result = JOptionPane.showConfirmDialog(null,"Do you want to exit?", "Exit confirmation.", JOptionPane.YES_NO_OPTION);
-        
-        if(result == JOptionPane.YES_OPTION){
-            System.exit(0);
-        }
-            
+        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
+        config.showAlert(AlertType.CONFIRMATION, "Exit Confirmtaion.", "Do you want to exit?", currentStage);
     }
 
     @FXML

@@ -14,8 +14,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-
-
 /**
  *
  * @author Mark
@@ -23,6 +21,8 @@ import javafx.stage.StageStyle;
 public class ProjectVantage extends Application {
     
     Config config = new Config();
+    
+    private static Stage primaryStage;
     
     String authFXML = "/projectvantage/fxml/authentication/Authentication.fxml";
     String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
@@ -37,6 +37,10 @@ public class ProjectVantage extends Application {
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
         config.setCenterAlignment(primaryStage);
+    }
+    
+    public static Stage getStage() {
+        return primaryStage;
     }
 
     /**

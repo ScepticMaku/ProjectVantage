@@ -19,9 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import projectvantage.utility.dbConnect;
 import java.sql.*;
-import javafx.animation.FadeTransition;
-import javafx.event.Event;
-import javafx.util.Duration;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -46,6 +44,7 @@ public class LoginController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
+    
     
     Config config = new Config();
     
@@ -75,10 +74,8 @@ public class LoginController implements Initializable {
     private String getStatus(String user, String pass) {
         dbConnect db = new dbConnect();
         try(ResultSet result = db.getData("SELECT status FROM user WHERE username = '" + user + "' AND password = '" + pass + "'")) {
-            if(result.next()) {
-                String status = result.getString("status");
-                return status;
-            }
+            if(result.next())
+                return result.getString("status");
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
         }
@@ -94,36 +91,28 @@ public class LoginController implements Initializable {
             Pane otherPane = authControl.getOtherPane();
             Pane title = authControl.getTitlePane();
             
-//            loginPane.setVisible(false);
-            FadeTransition loginFade = new FadeTransition(Duration.millis(200), loginPane);
-            loginFade.setFromValue(250);
-            loginFade.setToValue(0);
-            loginFade.play();
-            
+            loginPane.setVisible(false);
             usernameField.setText("");
             passwordField.setText("");
             
-            otherPane.setVisible(true);
-            FadeTransition otherFade = new FadeTransition(Duration.millis(200), otherPane);
-            otherFade.setFromValue(0);
-            otherFade.setToValue(250);
-            otherFade.play();
-            
             title.setLayoutY(75);
             title.setLayoutX(275);
+            
+            otherPane.setVisible(true);
         }
     }
 
     @FXML
     private void loginButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage)loginButton.getScene().getWindow();
         String username = usernameField.getText();
         String password = passwordField.getText();
         
         if(username.isEmpty()) {
-            config.showErrorMessage("Username must not be empty.", "Login error");
+            config.showErrorMessage("Username must not be empty.", "Login error", currentStage);
             return;
         } else if (password.isEmpty()) {
-            config.showErrorMessage("Password must not be empty.", "Login error");
+            config.showErrorMessage("Password must not be empty.", "Login error", currentStage);
             return;
         }
         
@@ -133,12 +122,12 @@ public class LoginController implements Initializable {
         }
     
         if(!locateUser(username, password)) {
-            config.showErrorMessage("Username not found.", "Login error");
+            config.showErrorMessage("Username not found.", "Login error", currentStage);
             return;
         }
         
         if(!getStatus(username, password).equals("active")) {
-            config.showErrorMessage("Your account isn't active yet.", "Account Status Error");
+            config.showErrorMessage("Your account isn't active yet.", "Account Status Error", currentStage);
             return;
         }
         
@@ -150,7 +139,7 @@ public class LoginController implements Initializable {
                 config.switchScene(getClass(), event, "/projectvantage/fxml/admin/MainPage.fxml");
                 break;
             default:
-                config.showErrorMessage("Role not found", "Role error");
+                config.showErrorMessage("Role not found", "Role error", currentStage);
         }
     }
 
