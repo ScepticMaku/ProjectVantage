@@ -22,10 +22,19 @@ public class ProjectVantage extends Application {
     
     Config config = new Config();
     
+    private static ProjectVantage instance;
     private static Stage primaryStage;
     
     String authFXML = "/projectvantage/fxml/authentication/Authentication.fxml";
     String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
+    
+    public static ProjectVantage getInstance() {
+        return instance;
+    }
+    
+    public Stage getStage() {
+        return primaryStage;
+    }
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -38,11 +47,6 @@ public class ProjectVantage extends Application {
         primaryStage.show();
         config.setCenterAlignment(primaryStage);
     }
-    
-    public static Stage getStage() {
-        return primaryStage;
-    }
-
     /**
      * @param args the command line arguments
      */

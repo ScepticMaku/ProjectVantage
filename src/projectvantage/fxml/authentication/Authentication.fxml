@@ -33,7 +33,7 @@
                   </Label>
                   <ImageView fitHeight="83.0" fitWidth="58.0" layoutX="53.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/img/LoginLogo.png" />
+                        <Image url="@../../resources/img/ProjectLogo.png" />
                      </image>
                   </ImageView>
                </children>
@@ -48,13 +48,13 @@
                   <fx:include source="Register.fxml" />
                </children>
             </Pane>
-            <Rectangle fx:id="exitButtonBG" arcHeight="10.0" arcWidth="10.0" fill="#d71515" height="30.0" layoutX="823.0" layoutY="14.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="30.0" />
-            <ImageView fx:id="closeButton" fitHeight="30.0" fitWidth="30.0" layoutX="822.0" layoutY="14.0" onMouseClicked="#closeButtonMouseClickHandler" onMouseEntered="#closeButtonMouseEnterHandler" onMouseExited="#closeButtonMouseExitHandler" onMousePressed="#closeButtonMousePressHandler" pickOnBounds="true" preserveRatio="true">
+            <Rectangle fx:id="exitButtonBG" arcHeight="10.0" arcWidth="10.0" fill="#d71515" height="30.0" layoutX="823.0" layoutY="14.0" opacity="0.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" width="30.0" />
+            <ImageView fx:id="closeButton" fitHeight="30.0" fitWidth="30.0" layoutX="822.0" layoutY="14.0" onMouseClicked="#closeButtonMouseClickHandler" onMouseEntered="#closeButtonMouseEnterHandler" onMouseExited="#closeButtonMouseExitHandler" onMousePressed="#closeButtonMousePressHandler" onMouseReleased="#closeButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../resources/icons/icons8-cross-30.png" />
                </image>
                <cursor>
-                  <Cursor fx:constant="HAND" />
+                  <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
          </children>

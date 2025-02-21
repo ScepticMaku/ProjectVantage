@@ -10,6 +10,7 @@ import projectvantage.utility.Config;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
@@ -19,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -37,7 +39,6 @@ public class AuthenticationController implements Initializable {
     private Pane loginPane;
     @FXML
     private Pane otherPane;
-    
     @FXML
     private Pane titlePane;
     @FXML
@@ -83,19 +84,21 @@ public class AuthenticationController implements Initializable {
 
     @FXML
     private void closeButtonMouseExitHandler(MouseEvent event) {
-        exitButtonBG.setVisible(false);
+        config.fadeOut(exitButtonBG);
     }
 
     @FXML
     private void closeButtonMouseEnterHandler(MouseEvent event) {
-        exitButtonBG.setVisible(true);
-        exitButtonBG.setFill(Color.web("#d71515"));
+        config.fadeIn(exitButtonBG);
     }
 
     @FXML
     private void closeButtonMousePressHandler(MouseEvent event) {
         exitButtonBG.setFill(Color.web("#971111"));
     }
-
-        
+    
+    @FXML
+    private void closeButtonMouseReleaseHandler(MouseEvent event) {
+        exitButtonBG.setFill(Color.web("#d71515"));
+    }   
 }

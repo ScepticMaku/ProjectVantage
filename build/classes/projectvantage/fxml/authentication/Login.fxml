@@ -12,8 +12,8 @@
 <Pane maxHeight="196.0" maxWidth="335.0" minHeight="196.0" minWidth="335.0" prefHeight="196.0" prefWidth="335.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.authentication.LoginController">
    <children>
       <Rectangle arcHeight="20.0" arcWidth="20.0" height="196.0" opacity="0.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="335.0" />
-      <TextField fx:id="usernameField" alignment="CENTER" layoutX="92.0" layoutY="60.0" promptText="Username" style="-fx-prompt-text-fill: #4C4E52;" />
-      <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="92.0" layoutY="98.0" promptText="Password" style="-fx-prompt-text-fill: #4C4E52;" />
+      <TextField fx:id="usernameField" alignment="CENTER" layoutX="92.0" layoutY="60.0" onKeyPressed="#usernameFieldOnKeyPressedHandler" promptText="Username" style="-fx-prompt-text-fill: #4C4E52;" />
+      <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="92.0" layoutY="98.0" onKeyPressed="#registerFieldOnKeyPressedHandler" promptText="Password" style="-fx-prompt-text-fill: #4C4E52;" />
       <Label layoutX="79.0" layoutY="128.0" text="Don't have an account?" textFill="WHITE" />
       <Label fx:id="registerButton" layoutX="208.0" layoutY="128.0" onMouseClicked="#registerButtonMouseClickHandler" onMouseEntered="#registerButtonMouseEnterHandler" onMouseExited="#registerButtonMouseExitHandler" onMousePressed="#registerButtonMousePressHandler" text="Register." textFill="#0593ff">
          <cursor>

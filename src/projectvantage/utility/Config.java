@@ -5,9 +5,12 @@
  */
 package projectvantage.utility;
 
+import projectvantage.main.ProjectVantage;
+
 import java.sql.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.animation.FadeTransition;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -17,8 +20,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 /**
  *
@@ -44,14 +52,12 @@ public class Config {
         Parent root = FXMLLoader.load(getClass.getResource(targetFXML));
         Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
-        stage.centerOnScreen();
         stage.setResizable(false);
-        stage.show();
         setCenterAlignment(stage);
+        stage.show();
     }
     
     public void showErrorMessage(String errorMessage, String errorType, Stage owner) {
-//        JOptionPane.showMessageDialog(null, errorMessage, errorType, JOptionPane.ERROR_MESSAGE);
         showAlert(Alert.AlertType.ERROR, errorType, errorMessage, owner);
     }
     
@@ -62,23 +68,17 @@ public class Config {
         });
     }
     
-    public void showAlert(Alert.AlertType alertType, String title, String message, Stage owner) {
-        Alert alert = new Alert(alertType); 
-        alert.setTitle(title);
-        alert.setHeaderText(null);
+    public void showAlert(Alert.AlertType alertType, String header, String message, Stage owner) {
+        Alert alert = new Alert(alertType);
+        alert.setHeaderText(header);
         alert.setContentText(message);
+        alert.initStyle(StageStyle.UNDECORATED);
         alert.initOwner(owner);
-
-        // Show the alert and manually center it
-        alert.setOnShown(e -> {
-            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-            alertStage.setX(owner.getX() + (owner.getWidth() - alertStage.getWidth()) / 2);
-            alertStage.setY(owner.getY() + (owner.getHeight() - alertStage.getHeight()) / 2);
-        });
 
         if(alertType == AlertType.CONFIRMATION) {
             showConfirmationAlert(alert);
-        } 
+            return;
+        }
         
         alert.showAndWait();
     }
@@ -116,5 +116,21 @@ public class Config {
         return false;
     }
     
+    public void fadeIn(Node node) {
+        FadeTransition fadeTransition = new FadeTransition();
+        fadeTransition.setDuration(Duration.millis(100));
+        fadeTransition.setNode(node);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(1.0);
+        fadeTransition.play();
+    }
     
+    public void fadeOut(Node node) {
+        FadeTransition fadeTransition = new FadeTransition();
+        fadeTransition.setDuration(Duration.millis(100));
+        fadeTransition.setNode(node);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0);
+        fadeTransition.play();
+    }
 }

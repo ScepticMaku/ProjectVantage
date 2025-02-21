@@ -19,7 +19,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import projectvantage.utility.dbConnect;
 import java.sql.*;
+import javafx.event.Event;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -82,6 +86,48 @@ public class LoginController implements Initializable {
         return null;
     }
     
+    private void loginUser(Event event) throws Exception {
+        Stage currentStage = (Stage)loginButton.getScene().getWindow();
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        
+        if(username.isEmpty()) {
+            config.showErrorMessage("Username must not be empty.", "Login error", currentStage);
+            return;
+        }
+        
+        if (password.isEmpty()) {
+            config.showErrorMessage("Password must not be empty.", "Login error", currentStage);
+            return;
+        }
+        
+        if(username.equals("super") && password.equals("1234")) {
+            config.switchScene(getClass(), event, "/projectvantage/fxml/superadmin/SuperAdminPage.fxml");
+            return;
+        }
+    
+        if(!locateUser(username, password)) {
+            config.showErrorMessage("Username not found.", "Login error", currentStage);
+            return;
+        }
+        
+        if(!getStatus(username, password).equals("active")) {
+            config.showErrorMessage("Your account isn't active yet.", "Account Status Error", currentStage);
+            return;
+        }
+        
+        switch(getRole(username, password)) {
+            case "team member": 
+                config.switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
+                break;
+            case "admin":
+                config.switchScene(getClass(), event, "/projectvantage/fxml/admin/MainPage.fxml");
+                break;
+            default:
+                config.showErrorMessage("Role not found", "Role error", currentStage);
+        }
+    }
+    
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws Exception {
         AuthenticationController authControl = AuthenticationController.getInstance();
@@ -104,43 +150,7 @@ public class LoginController implements Initializable {
 
     @FXML
     private void loginButtonMouseClickHandler(MouseEvent event) throws Exception {
-        Stage currentStage = (Stage)loginButton.getScene().getWindow();
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        
-        if(username.isEmpty()) {
-            config.showErrorMessage("Username must not be empty.", "Login error", currentStage);
-            return;
-        } else if (password.isEmpty()) {
-            config.showErrorMessage("Password must not be empty.", "Login error", currentStage);
-            return;
-        }
-        
-        if(username.equals("super") && password.equals("1234")) {
-            config.switchScene(getClass(), event, "/projectvantage/fxml/superadmin/SuperAdminPage.fxml");
-            return;
-        }
-    
-        if(!locateUser(username, password)) {
-            config.showErrorMessage("Username not found.", "Login error", currentStage);
-            return;
-        }
-        
-        if(!getStatus(username, password).equals("active")) {
-            config.showErrorMessage("Your account isn't active yet.", "Account Status Error", currentStage);
-            return;
-        }
-        
-        switch(getRole(username, password)) {
-            case "team member":
-                config.switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
-                break;
-            case "admin":
-                config.switchScene(getClass(), event, "/projectvantage/fxml/admin/MainPage.fxml");
-                break;
-            default:
-                config.showErrorMessage("Role not found", "Role error", currentStage);
-        }
+        loginUser(event);
     }
 
     @FXML
@@ -156,6 +166,20 @@ public class LoginController implements Initializable {
     @FXML
     private void registerButtonMousePressHandler(MouseEvent event) {
         registerButton.setStyle("-fx-text-fill: #01528d");
+    }
+
+    @FXML
+    private void usernameFieldOnKeyPressedHandler(KeyEvent event) throws Exception {
+        if(event.getCode() == KeyCode.ENTER) {
+            loginUser(event);
+        }
+    }
+
+    @FXML
+    private void registerFieldOnKeyPressedHandler(KeyEvent event) throws Exception{
+        if(event.getCode() == KeyCode.ENTER) {
+            loginUser(event);
+        }
     }
     
 }
