@@ -13,7 +13,6 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.superadmin.SuperAdminPageController">
    <children>
       <VBox prefHeight="30.0" prefWidth="1000.0">
@@ -83,24 +82,44 @@
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                           </ImageView>
-                                          <Label fx:id="dashboardButtonLabel" layoutX="30.0" layoutY="6.0" text="Dashboard" textFill="#a5b4d9">
+                                          <Label fx:id="dashboardButtonLabel" layoutX="31.0" layoutY="6.0" text="Dashboard" textFill="#a5b4d9">
                                              <font>
-                                                <Font name="Century Gothic Bold" size="14.0" />
+                                                <Font name="Segoe UI Bold" size="14.0" />
                                              </font>
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                           </Label>
+                                          <Circle fx:id="dashboardButtonIndicator" fill="#2f9efe" layoutX="141.0" layoutY="15.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
                                        </children>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Group>
-                                    <Circle fx:id="dashboardButtonIndicator" fill="#2f9efe" layoutX="173.0" layoutY="29.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="DEFAULT" />
                                  </cursor>
+                              </Pane>
+                              <Pane prefHeight="55.0" prefWidth="202.0">
+                                 <children>
+                                    <Group fx:id="projectButton" layoutX="8.0" layoutY="3.0" onMouseClicked="#projectButtonMouseClickHandler" onMouseEntered="#projectButtonMouseEnterHandler" onMouseExited="#projectButtonMouseExitHandler" onMousePressed="#projectButtonMousePressHandler" onMouseReleased="#projectButtonMouseReleaseHandler">
+                                       <children>
+                                          <Rectangle fx:id="projectButtonBG" arcHeight="20.0" arcWidth="20.0" fill="WHITESMOKE" height="50.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
+                                          <ImageView fx:id="projectButtonIcon" fitWidth="30.0" layoutX="26.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../resources/icons/project-icon-unselected.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label fx:id="projectButtonLabel" layoutX="56.0" layoutY="17.0" text="Project" textFill="#a5b4d9">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Circle fx:id="projectButtonIndicator" fill="#2f9efe" layoutX="171.0" layoutY="21.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+                                       </children>
+                                    </Group>
+                                 </children>
                               </Pane>
                            </children>
                         </VBox>

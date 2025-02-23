@@ -58,6 +58,16 @@ public class SuperAdminPageController implements Initializable {
     private Circle dashboardButtonIndicator;
     @FXML
     private Rectangle dashboardButtonBG;
+    @FXML
+    private Group projectButton;
+    @FXML
+    private ImageView projectButtonIcon;
+    @FXML
+    private Label projectButtonLabel;
+    @FXML
+    private Circle projectButtonIndicator;
+    @FXML
+    private Rectangle projectButtonBG;
 
     /**
      * Initializes the controller class.
@@ -146,5 +156,33 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private void dashboardMousePressHandler(MouseEvent event) {
         dashboardButtonBG.setFill(Color.web("#eeeeee"));
+    }
+
+    @FXML
+    private void projectButtonMouseReleaseHandler(MouseEvent event) {
+        projectButtonBG.setFill(Color.web("#f5f5f5"));
+    }
+
+    @FXML
+    private void projectButtonMouseExitHandler(MouseEvent event) {
+        config.fadeOut(projectButtonBG);
+    }
+
+    @FXML
+    private void projectButtonMouseEnterHandler(MouseEvent event) {
+        config.fadeIn(projectButtonBG);
+    }
+
+    @FXML
+    private void projectButtonMouseClickHandler(MouseEvent event) {
+        Image newImage = new Image("/projectvantage/resources/icons/project-icon-selected.png");
+        projectButtonLabel.setTextFill(Color.web("#2f9efe"));
+        projectButtonIndicator.setOpacity(1.0);
+        projectButtonIcon.setImage(newImage);
+    }
+
+    @FXML
+    private void projectButtonMousePressHandler(MouseEvent event) {
+        projectButtonBG.setFill(Color.web("#eeeeee"));
     }
 }
