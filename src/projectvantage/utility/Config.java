@@ -20,9 +20,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -132,5 +135,19 @@ public class Config {
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0);
         fadeTransition.play();
+    }
+    
+    public void setSelected(String imageLocation, Label label, Circle circle, ImageView icon) {
+        Image newImage = new Image(imageLocation);
+        label.setTextFill(Color.web("#2f9efe"));
+        circle.setOpacity(1.0);
+        icon.setImage(newImage);
+    }
+    
+    public void setUnselected(String imageLocation, Label label, Circle circle, ImageView icon) {
+        Image newImage = new Image(imageLocation);
+        label.setTextFill(Color.web("#a5b4d9"));
+        circle.setOpacity(0);
+        icon.setImage(newImage);
     }
 }

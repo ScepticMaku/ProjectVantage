@@ -116,7 +116,7 @@
                                                 <Font name="Segoe UI Bold" size="14.0" />
                                              </font>
                                           </Label>
-                                          <Circle fx:id="projectButtonIndicator" fill="#2f9efe" layoutX="171.0" layoutY="21.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+                                          <Circle fx:id="projectButtonIndicator" fill="#2f9efe" layoutX="167.0" layoutY="25.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
                                        </children>
                                     </Group>
                                  </children>

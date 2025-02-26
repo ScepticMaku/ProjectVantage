@@ -147,10 +147,8 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void dashboardButtonMouseClickHandler(MouseEvent event) {
-        Image newImage = new Image("/projectvantage/resources/icons/dashboard-icon-selected.png");
-        dashboardButtonLabel.setTextFill(Color.web("#2f9efe"));
-        dashboardButtonIndicator.setOpacity(1.0);
-        dashboardButtonIcon.setImage(newImage);
+        config.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
     }
 
     @FXML
@@ -175,10 +173,7 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void projectButtonMouseClickHandler(MouseEvent event) {
-        Image newImage = new Image("/projectvantage/resources/icons/project-icon-selected.png");
-        projectButtonLabel.setTextFill(Color.web("#2f9efe"));
-        projectButtonIndicator.setOpacity(1.0);
-        projectButtonIcon.setImage(newImage);
+        config.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
     }
 
     @FXML
