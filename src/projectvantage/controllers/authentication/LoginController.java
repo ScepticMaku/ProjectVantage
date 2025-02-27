@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import projectvantage.utility.dbConnect;
 import java.sql.*;
 import javafx.event.Event;
+import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -102,10 +103,11 @@ public class LoginController implements Initializable {
         }
         
         if(username.equals("super") && password.equals("1234")) {
+            config.showAlert(Alert.AlertType.INFORMATION, "Login Message.", "Successfully Logged In", currentStage);
             config.switchScene(getClass(), event, "/projectvantage/fxml/superadmin/SuperAdminPage.fxml");
             return;
         }
-    
+        
         if(!locateUser(username, password)) {
             config.showErrorMessage("Username not found.", "Login error", currentStage);
             return;
@@ -115,6 +117,8 @@ public class LoginController implements Initializable {
             config.showErrorMessage("Your account isn't active yet.", "Account Status Error", currentStage);
             return;
         }
+        
+        config.showAlert(Alert.AlertType.INFORMATION, "Login Message.", "Successfully Logged In", currentStage);
         
         switch(getRole(username, password)) {
             case "team member": 

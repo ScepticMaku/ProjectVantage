@@ -64,7 +64,7 @@ public class Config {
         showAlert(Alert.AlertType.ERROR, errorType, errorMessage, owner);
     }
     
-    public void showConfirmationAlert(Alert alert) {
+    public void showExitConfirmationAlert(Alert alert) {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK)
                 System.exit(0);
@@ -78,8 +78,8 @@ public class Config {
         alert.initStyle(StageStyle.UNDECORATED);
         alert.initOwner(owner);
 
-        if(alertType == AlertType.CONFIRMATION) {
-            showConfirmationAlert(alert);
+        if(alertType == AlertType.CONFIRMATION && header.contains("Exit")) {
+            showExitConfirmationAlert(alert);
             return;
         }
         

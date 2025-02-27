@@ -66,7 +66,7 @@
                               </ImageView>
                            </children>
                         </Group>
-                        <VBox prefHeight="570.0" prefWidth="202.0">
+                        <VBox prefHeight="431.0" prefWidth="202.0">
                            <children>
                               <Pane prefHeight="82.0" prefWidth="202.0" />
                               <Pane prefHeight="55.0" prefWidth="202.0">
@@ -74,7 +74,7 @@
                                     <Group fx:id="dashboardButton" layoutX="34.0" layoutY="13.0" onMouseClicked="#dashboardButtonMouseClickHandler" onMouseEntered="#dashboardButtonMouseEnteredHandler" onMouseExited="#dashboardMouseExitHandler" onMousePressed="#dashboardMousePressHandler" onMouseReleased="#dashboardMouseReleaseHandler">
                                        <children>
                                           <Rectangle fx:id="dashboardButtonBG" arcHeight="20.0" arcWidth="20.0" fill="WHITESMOKE" height="50.0" layoutX="-26.0" layoutY="-10.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
-                                          <ImageView fx:id="dashboardButtonIcon" fitHeight="50.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="dashboardButtonIcon" fitHeight="50.0" fitWidth="30.0" layoutX="-12.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../resources/icons/dashboard-icon-unselected.png" />
                                              </image>
@@ -106,12 +106,12 @@
                                     <Group fx:id="projectButton" layoutX="8.0" layoutY="3.0" onMouseClicked="#projectButtonMouseClickHandler" onMouseEntered="#projectButtonMouseEnterHandler" onMouseExited="#projectButtonMouseExitHandler" onMousePressed="#projectButtonMousePressHandler" onMouseReleased="#projectButtonMouseReleaseHandler">
                                        <children>
                                           <Rectangle fx:id="projectButtonBG" arcHeight="20.0" arcWidth="20.0" fill="WHITESMOKE" height="50.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
-                                          <ImageView fx:id="projectButtonIcon" fitWidth="30.0" layoutX="26.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="projectButtonIcon" fitWidth="30.0" layoutX="14.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../resources/icons/project-icon-unselected.png" />
                                              </image>
                                           </ImageView>
-                                          <Label fx:id="projectButtonLabel" layoutX="56.0" layoutY="17.0" text="Project" textFill="#a5b4d9">
+                                          <Label fx:id="projectButtonLabel" layoutX="58.0" layoutY="17.0" text="Projects" textFill="#a5b4d9">
                                              <font>
                                                 <Font name="Segoe UI Bold" size="14.0" />
                                              </font>
@@ -121,8 +121,108 @@
                                     </Group>
                                  </children>
                               </Pane>
+                              <Pane prefHeight="55.0" prefWidth="202.0">
+                                 <children>
+                                    <Group fx:id="teamButton" layoutX="8.0" layoutY="3.0" onMouseClicked="#teamButtonMouseClickHandler" onMouseEntered="#teamButtonMouseEnterHandler" onMouseExited="#teamButtonMouseExitHandler" onMousePressed="#exitButtonMousePressHandler" onMouseReleased="#exitButtonMouseReleaseHandler">
+                                       <children>
+                                          <Rectangle fx:id="teamButtonBG" arcHeight="20.0" arcWidth="20.0" fill="WHITESMOKE" height="50.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
+                                          <ImageView fx:id="teamButtonIcon" fitHeight="150.0" fitWidth="30.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../resources/icons/team-icon-unselected.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label fx:id="teamButtonLabel" layoutX="59.0" layoutY="17.0" text="Teams" textFill="#a5b4d9">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Circle fx:id="teamButtonIndicator" fill="#2f9efe" layoutX="162.0" layoutY="20.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+                                       </children>
+                                    </Group>
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="55.0" prefWidth="202.0">
+                                 <children>
+                                    <Group fx:id="taskButton" layoutX="8.0" layoutY="3.0" onMouseClicked="#taskButtonMouseClickHandler" onMouseEntered="#taskButtonMouseEnterHandler" onMouseExited="#taskButtonMouseExitHandler" onMousePressed="#taskButtonMousePressHandler" onMouseReleased="#taskButtonMouseReleaseHandler">
+                                       <children>
+                                          <Rectangle fx:id="taskButtonBG" arcHeight="20.0" arcWidth="20.0" fill="WHITESMOKE" height="50.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
+                                          <ImageView fx:id="taskButtoIcon" fitHeight="150.0" fitWidth="30.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../resources/icons/task-icon-unselected.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label fx:id="taskButtonLabel" layoutX="58.0" layoutY="17.0" text="Tasks" textFill="#a5b4d9">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Circle fx:id="taskButtonIndicator" fill="#2f9efe" layoutX="157.0" layoutY="21.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+                                       </children>
+                                    </Group>
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="55.0" prefWidth="202.0">
+                                 <children>
+                                    <Group fx:id="userButton" layoutX="8.0" layoutY="3.0" onMouseClicked="#userButtonMouseClickHandler" onMouseEntered="#userButtonMouseEnterHandler" onMouseExited="#userButtonMouseExitHandler" onMousePressed="#userButtonMousePressHandler" onMouseReleased="#userButtonMouseReleaseHandler">
+                                       <children>
+                                          <Rectangle fx:id="userButtonBG" arcHeight="20.0" arcWidth="20.0" fill="WHITESMOKE" height="50.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
+                                          <ImageView fx:id="userButtonIcon" fitHeight="150.0" fitWidth="30.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../resources/icons/user-icon-unselected.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label fx:id="userButtonLabel" layoutX="58.0" layoutY="16.0" text="Users" textFill="#a5b4d9">
+                                             <font>
+                                                <Font name="Segoe UI Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Circle fx:id="userButtonIndicator" fill="#2f9efe" layoutX="152.0" layoutY="20.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+                                       </children>
+                                    </Group>
+                                 </children>
+                              </Pane>
                            </children>
                         </VBox>
+                        <Pane layoutY="501.0" prefHeight="55.0" prefWidth="202.0">
+                           <children>
+                              <Group fx:id="logoutButton" layoutX="8.0" layoutY="3.0" onMouseClicked="#logoutButtonMouseClickHandler" onMouseEntered="#logoutButtonMouseEnterHandler" onMouseExited="#logoutButtonMouseExitHandler" onMousePressed="#logoutButtonMousePressHandler" onMouseReleased="#logoutButtonMouseReleaseHandler">
+                                 <children>
+                                    <Rectangle fx:id="logoutButtonBG" arcHeight="20.0" arcWidth="20.0" fill="WHITESMOKE" height="50.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
+                                    <ImageView fx:id="logoutButtonIcon" fitHeight="150.0" fitWidth="30.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../resources/icons/signout-icon-unselected.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label fx:id="logoutButtonLabel" layoutX="56.0" layoutY="16.0" text="Log out" textFill="#a5b4d9">
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Circle fx:id="logoutButtonIndicator" fill="#2f9efe" layoutX="167.0" layoutY="25.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+                                 </children>
+                              </Group>
+                           </children>
+                        </Pane>
+                        <Pane layoutY="446.0" prefHeight="55.0" prefWidth="200.0">
+                           <children>
+                              <Group fx:id="settingsButton" layoutX="7.0" layoutY="3.0" onMouseClicked="#settingsButtonMouseClickHandler" onMouseEntered="#settingsButtonMouseEnterHandler" onMouseExited="#settingsButtonMouseExitHandler" onMousePressed="#settingsButtonMousePressHandler" onMouseReleased="#settingsButtonMouseReleaseHandler">
+                                 <children>
+                                    <Rectangle fx:id="settingsButtonBG" arcHeight="20.0" arcWidth="20.0" fill="WHITESMOKE" height="50.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
+                                    <ImageView fx:id="settingsButtonIcon" fitHeight="150.0" fitWidth="30.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../resources/icons/settings-icon-unselected.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label fx:id="settingsButtonLabel" layoutX="53.0" layoutY="17.0" text="Settings" textFill="#a5b4d9">
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Circle fx:id="settingsButtonIndicator" fill="#2f9efe" layoutX="163.0" layoutY="21.0" opacity="0.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+                                 </children>
+                              </Group>
+                           </children>
+                        </Pane>
                      </children>
                   </Pane>
                </left>

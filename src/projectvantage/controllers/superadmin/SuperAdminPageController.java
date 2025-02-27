@@ -9,6 +9,8 @@ import projectvantage.utility.Config;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,6 +18,8 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -68,6 +73,56 @@ public class SuperAdminPageController implements Initializable {
     private Circle projectButtonIndicator;
     @FXML
     private Rectangle projectButtonBG;
+    @FXML
+    private Rectangle logoutButtonBG;
+    @FXML
+    private ImageView logoutButtonIcon;
+    @FXML
+    private Label logoutButtonLabel;
+    @FXML
+    private Group logoutButton;
+    @FXML
+    private Rectangle teamButtonBG;
+    @FXML
+    private Circle logoutButtonIndicator;
+    @FXML
+    private Group teamButton;
+    @FXML
+    private ImageView teamButtonIcon;
+    @FXML
+    private Label teamButtonLabel;
+    @FXML
+    private Circle teamButtonIndicator;
+    @FXML
+    private Group taskButton;
+    @FXML
+    private Rectangle taskButtonBG;
+    @FXML
+    private ImageView taskButtoIcon;
+    @FXML
+    private Label taskButtonLabel;
+    @FXML
+    private Circle taskButtonIndicator;
+    @FXML
+    private Group userButton;
+    @FXML
+    private Rectangle userButtonBG;
+    @FXML
+    private ImageView userButtonIcon;
+    @FXML
+    private Label userButtonLabel;
+    @FXML
+    private Circle userButtonIndicator;
+    @FXML
+    private Group settingsButton;
+    @FXML
+    private Rectangle settingsButtonBG;
+    @FXML
+    private ImageView settingsButtonIcon;
+    @FXML
+    private Label settingsButtonLabel;
+    @FXML
+    private Circle settingsButtonIndicator;
 
     /**
      * Initializes the controller class.
@@ -148,7 +203,12 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private void dashboardButtonMouseClickHandler(MouseEvent event) {
         config.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        
         config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
@@ -174,10 +234,181 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private void projectButtonMouseClickHandler(MouseEvent event) {
         config.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        
+        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
     private void projectButtonMousePressHandler(MouseEvent event) {
         projectButtonBG.setFill(Color.web("#eeeeee"));
+    }
+
+    @FXML
+    private void logoutButtonMouseReleaseHandler(MouseEvent event) {
+        logoutButtonBG.setFill(Color.web("#f5f5f5"));
+        config.setUnselected("/projectvantage/resources/icons/signout-icon-unselected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
+    }
+
+    @FXML
+    private void logoutButtonMouseExitHandler(MouseEvent event) {
+        config.fadeOut(logoutButtonBG);
+    }
+
+    @FXML
+    private void logoutButtonMouseEnterHandler(MouseEvent event) {
+        config.fadeIn(logoutButtonBG);
+    }
+
+    @FXML
+    private void logoutButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setHeaderText("Log out Confirmation.");
+        alert.setContentText("are you sure you want to log out?");
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.initOwner(currentStage);
+        
+        alert.showAndWait().ifPresent(response -> {
+            if(response == ButtonType.OK)
+                try {
+                    config.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Authentication.fxml");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
+
+    @FXML
+    private void logoutButtonMousePressHandler(MouseEvent event) {
+        logoutButtonBG.setFill(Color.web("#eeeeee"));
+        config.setSelected("/projectvantage/resources/icons/signout-icon-selected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
+    }
+
+    @FXML
+    private void exitButtonMouseReleaseHandler(MouseEvent event) {
+        teamButtonBG.setFill(Color.web("#f5f5f5"));
+    }
+
+    @FXML
+    private void teamButtonMouseExitHandler(MouseEvent event) {
+        config.fadeOut(teamButtonBG);
+    }
+
+    @FXML
+    private void teamButtonMouseEnterHandler(MouseEvent event) {
+        config.fadeIn(teamButtonBG);
+    }
+
+    @FXML
+    private void teamButtonMouseClickHandler(MouseEvent event) {
+        config.setSelected("/projectvantage/resources/icons/team-icon-selected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        
+        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+    }
+
+    @FXML
+    private void exitButtonMousePressHandler(MouseEvent event) {
+        teamButtonBG.setFill(Color.web("#eeeeee"));
+    }
+
+    @FXML
+    private void taskButtonMouseReleaseHandler(MouseEvent event) {
+        taskButtonBG.setFill(Color.web("#f5f5f5"));
+    }
+
+    @FXML
+    private void taskButtonMouseExitHandler(MouseEvent event) {
+        config.fadeOut(taskButtonBG);
+    }
+
+    @FXML
+    private void taskButtonMouseEnterHandler(MouseEvent event) {
+        config.fadeIn(taskButtonBG);
+    }
+
+    @FXML
+    private void taskButtonMouseClickHandler(MouseEvent event) {
+        config.setSelected("/projectvantage/resources/icons/task-icon-selected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        
+        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+    }
+
+    @FXML
+    private void taskButtonMousePressHandler(MouseEvent event) {
+        teamButtonBG.setFill(Color.web("#eeeeee"));
+    }
+
+    @FXML
+    private void userButtonMouseReleaseHandler(MouseEvent event) {
+        userButtonBG.setFill(Color.web("#f5f5f5"));
+    }
+
+    @FXML
+    private void userButtonMouseExitHandler(MouseEvent event) {
+        config.fadeOut(userButtonBG);
+    }
+
+    @FXML
+    private void userButtonMouseEnterHandler(MouseEvent event) {
+        config.fadeIn(userButtonBG);
+    }
+
+    @FXML
+    private void userButtonMouseClickHandler(MouseEvent event) {
+        config.setSelected("projectvantage/resources/icons/user-icon-selected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        
+        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+    }
+
+    @FXML
+    private void userButtonMousePressHandler(MouseEvent event) {
+        userButtonBG.setFill(Color.web("#eeeeee"));
+    }
+
+    @FXML
+    private void settingsButtonMouseReleaseHandler(MouseEvent event) {
+        settingsButtonBG.setFill(Color.web("#f5f5f5"));
+    }
+
+    @FXML
+    private void settingsButtonMouseExitHandler(MouseEvent event) {
+        config.fadeOut(settingsButtonBG);
+    }
+
+    @FXML
+    private void settingsButtonMouseEnterHandler(MouseEvent event) {
+        config.fadeIn(settingsButtonBG);
+    }
+
+    @FXML
+    private void settingsButtonMouseClickHandler(MouseEvent event) {
+        config.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        
+        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+    }
+
+    @FXML
+    private void settingsButtonMousePressHandler(MouseEvent event) {
+        settingsButtonBG.setFill(Color.web("#eeeeee")); 
     }
 }
