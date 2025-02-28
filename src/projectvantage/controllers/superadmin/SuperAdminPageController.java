@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,6 +34,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -40,8 +42,7 @@ import javafx.stage.StageStyle;
  * @author Mark
  */
 public class SuperAdminPageController implements Initializable {
-
-    private BorderPane rootPane;
+    
     @FXML
     private Pane titleBar;
     @FXML
@@ -123,6 +124,12 @@ public class SuperAdminPageController implements Initializable {
     private Label settingsButtonLabel;
     @FXML
     private Circle settingsButtonIndicator;
+    @FXML
+    private ImageView profileButton;
+    @FXML
+    private ImageView notificationButton;
+    @FXML
+    private BorderPane rootPane;
 
     /**
      * Initializes the controller class.
@@ -141,9 +148,23 @@ public class SuperAdminPageController implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource(targetFXML));
         rootPane.setCenter(root);
     }
-
-    private void userManagementButtonActionHandler(MouseEvent event) throws Exception {
-        loadPage("/projectvantage/fxml/superadmin/UserManagementPage.fxml");
+    
+    public void hoverIcon(ImageView image) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(1.1);
+        scaleTransition.setToY(1.1);
+        scaleTransition.play();
+    }
+    
+    public void unhoverIcon(ImageView image) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
+        scaleTransition.setFromX(1.1);
+        scaleTransition.setFromY(1.1);
+        scaleTransition.setToX(1.0);
+        scaleTransition.setToY(1.0);
+        scaleTransition.play();
     }
 
     @FXML
@@ -366,8 +387,9 @@ public class SuperAdminPageController implements Initializable {
     }
 
     @FXML
-    private void userButtonMouseClickHandler(MouseEvent event) {
+    private void userButtonMouseClickHandler(MouseEvent event) throws Exception {
         config.setSelected("projectvantage/resources/icons/user-icon-selected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        loadPage("/projectvantage/fxml/superadmin/UserManagementPage.fxml");
         
         config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
@@ -410,5 +432,56 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private void settingsButtonMousePressHandler(MouseEvent event) {
         settingsButtonBG.setFill(Color.web("#eeeeee")); 
+    }
+    
+    @FXML
+    private void profileButtonMouseEnterHandler(MouseEvent event) {
+        hoverIcon(profileButton);
+    }
+    
+    @FXML
+    private void profileButtonMouseExitHandler(MouseEvent event) {
+        unhoverIcon(profileButton);
+    }
+
+    @FXML
+    private void profileButtonMouseReleaseHandler(MouseEvent event) {
+        config.releaseIcon(profileButton);
+    }
+
+    @FXML
+    private void profileButtonMouseClickHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void profileButtonMousePressHandler(MouseEvent event) {
+//        config.pressIcon(profileButton);
+        profileButton.setScaleX(0.9);
+        profileButton.setScaleY(0.9);
+    }
+    
+    @FXML
+    private void notificationButtonMouseEnterHandler(MouseEvent event) {
+        hoverIcon(notificationButton);
+    }
+    
+    @FXML
+    private void notificationButtonMouseExitHandler(MouseEvent event) {
+        unhoverIcon(notificationButton);
+    }
+
+    @FXML
+    private void notificationButtonMouseReleaseHandler(MouseEvent event) {
+        config.releaseIcon(notificationButton);
+    }
+
+    @FXML
+    private void notificationButtonMouseClickHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void notificationButtonMousePressHandler(MouseEvent event) {
+        notificationButton.setScaleX(0.9);
+        notificationButton.setScaleY(0.9);
     }
 }

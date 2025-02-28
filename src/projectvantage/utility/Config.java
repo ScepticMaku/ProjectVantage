@@ -11,6 +11,7 @@ import java.sql.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -150,4 +151,24 @@ public class Config {
         circle.setOpacity(0);
         icon.setImage(newImage);
     }
+    
+    public void pressIcon(ImageView image) {
+        /*ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), image);
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(0.9);
+        scaleTransition.setToY(0.9);
+        scaleTransition.play();*/
+    }
+    
+    public void releaseIcon(ImageView image) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
+        scaleTransition.setFromX(0.9);
+        scaleTransition.setFromY(0.9);
+        scaleTransition.setToX(1.0);
+        scaleTransition.setToY(1.0);
+        scaleTransition.play();
+    }
+    
+    
 }
