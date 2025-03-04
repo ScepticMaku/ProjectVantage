@@ -130,6 +130,8 @@ public class SuperAdminPageController implements Initializable {
     private ImageView notificationButton;
     @FXML
     private BorderPane rootPane;
+    @FXML
+    private Label titlebarLabel;
 
     /**
      * Initializes the controller class.
@@ -137,19 +139,33 @@ public class SuperAdminPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        instance = this;
     }
+    
+    private static SuperAdminPageController instance;
     
     Config config = new Config();
 
     private double xOffset = 0;
     private double yOffset = 0;
     
-    private void loadPage(String targetFXML) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource(targetFXML));
-        rootPane.setCenter(root);
+    public static SuperAdminPageController getInstance() {
+        return instance;
     }
     
-    public void hoverIcon(ImageView image) {
+    public void loadPage(String targetFXML) {
+        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
+        
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource(targetFXML));
+            rootPane.setCenter(root);
+        } catch (Exception e) {
+            System.out.println(e);
+            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+        }
+    }
+    
+    private void hoverIcon(ImageView image) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
         scaleTransition.setFromX(1.0);
         scaleTransition.setFromY(1.0);
@@ -158,7 +174,7 @@ public class SuperAdminPageController implements Initializable {
         scaleTransition.play();
     }
     
-    public void unhoverIcon(ImageView image) {
+    private void unhoverIcon(ImageView image) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
         scaleTransition.setFromX(1.1);
         scaleTransition.setFromY(1.1);
@@ -234,7 +250,7 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void dashboardMousePressHandler(MouseEvent event) {
-        dashboardButtonBG.setFill(Color.web("#eeeeee"));
+        taskButtonBG.setFill(Color.web("#eeeeee"));
     }
 
     @FXML
@@ -296,7 +312,7 @@ public class SuperAdminPageController implements Initializable {
         alert.showAndWait().ifPresent(response -> {
             if(response == ButtonType.OK)
                 try {
-                    config.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Authentication.fxml");
+                    config.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -311,7 +327,7 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void exitButtonMouseReleaseHandler(MouseEvent event) {
-        teamButtonBG.setFill(Color.web("#f5f5f5"));
+        logoutButtonBG.setFill(Color.web("#f5f5f5"));
     }
 
     @FXML
@@ -390,6 +406,7 @@ public class SuperAdminPageController implements Initializable {
     private void userButtonMouseClickHandler(MouseEvent event) throws Exception {
         config.setSelected("projectvantage/resources/icons/user-icon-selected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
         loadPage("/projectvantage/fxml/superadmin/UserManagementPage.fxml");
+        titlebarLabel.setText("Users");
         
         config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);

@@ -16,8 +16,10 @@ import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableCell;
@@ -29,6 +31,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import projectvantage.utility.dbConnect;
@@ -58,17 +62,15 @@ public class UserManagementPageController implements Initializable {
     @FXML
     private Pagination tablePage;
     @FXML
-    private TableColumn<User, Void> actionColumn;
-    @FXML
-    private ImageView addButton;
-    @FXML
-    private ImageView editButton;
-    @FXML
-    private ImageView deleteButton;
+    private Button addButton;
     @FXML
     private ImageView searchButton;
     @FXML
     private TextField searchField;
+    @FXML
+    private TableColumn<User, String> userFirstName;
+    @FXML
+    private AnchorPane rootPane;
 
     /**
      * Initializes the controller class.
@@ -76,12 +78,28 @@ public class UserManagementPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         userId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        userFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         userLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         userRole.setCellValueFactory(new PropertyValueFactory<>("role"));
         userStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         
         loadTableData();
     }    
+    
+    /*private void loadPage(String targetFXML) {
+        Stage currentStage = (Stage) rootPane.getScene().getWindow();
+        SuperAdminPageController admin = SuperAdminPageController.getInstance();
+        
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource(targetFXML));
+            admin.getRootPane().setCenter(root);
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+        }
+        
+    }*/
     
     private Node createPage(int pageIndex) {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
@@ -92,12 +110,13 @@ public class UserManagementPageController implements Initializable {
     
     private void loadTableData() {
         dbConnect db = new dbConnect();
-        String sql = "SELECT id, first_name, last_name, email, phone_number, username, password, role, status FROM user";
+        String sql = "SELECT id, first_name, middle_name, last_name, email, phone_number, username, password, role, status FROM user";
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {
                 userList.add(new User(
                         result.getInt("id"),
                         result.getString("first_name"),
+                        result.getString("middle_name"),
                         result.getString("last_name"),
                         result.getString("email"),
                         result.getString("phone_number"),
@@ -145,89 +164,7 @@ public class UserManagementPageController implements Initializable {
     }
 
     @FXML
-    private void addButtonMouseReleaseHandler(MouseEvent event) {
-        config.releaseIcon(addButton);
-        
-    }
-
-    @FXML
-    private void addButtonMouseExitHandler(MouseEvent event) {
-        unhoverIcon(addButton);
-        changeIcon("/projectvantage/resources/icons/add-icon-unselected.png", addButton);
-    }
-
-    @FXML
-    private void addButtonMouseEnterHandler(MouseEvent event) {
-        hoverIcon(addButton);
-        changeIcon("/projectvantage/resources/icons/add-icon-selected.png", addButton);
-    }
-
-    @FXML
-    private void addButtonMouseClickHandler(MouseEvent event) {
-    }
-
-    @FXML
-    private void addButtonMousePressHandler(MouseEvent event) {
-        addButton.setScaleX(0.9);
-        addButton.setScaleY(0.9);
-    }
-
-    @FXML
-    private void editButtonMouseReleaseHandler(MouseEvent event) {
-        config.releaseIcon(editButton);
-    }
-
-    @FXML
-    private void editButtonMouseExitHandler(MouseEvent event) {
-        unhoverIcon(editButton);
-        changeIcon("/projectvantage/resources/icons/edit-icon-unselected.png", editButton);
-    }
-
-    @FXML
-    private void editButtonMouseEnterHandler(MouseEvent event) {
-        hoverIcon(editButton);
-        changeIcon("/projectvantage/resources/icons/edit-icon-selected.png", editButton);
-    }
-
-    @FXML
-    private void editButtonMouseClickHandler(MouseEvent event) {
-    }
-
-    @FXML
-    private void editButtonMousePressHandler(MouseEvent event) {
-        editButton.setScaleX(0.9);
-        editButton.setScaleY(0.9);
-    }
-
-    @FXML
     private void userTableMouseClickHandler(MouseEvent event) {
-    }
-
-    @FXML
-    private void deleteButtonMouseReleaseHandler(MouseEvent event) {
-        config.releaseIcon(deleteButton);
-    }
-
-    @FXML
-    private void deleteButtonMouseExitHandler(MouseEvent event) {
-        unhoverIcon(deleteButton);
-        changeIcon("/projectvantage/resources/icons/delete-icon-unselected.png", deleteButton);
-    }
-
-    @FXML
-    private void deleteButtonMouseEnterHandler(MouseEvent event) {
-        hoverIcon(deleteButton);
-        changeIcon("/projectvantage/resources/icons/delete-icon-selected.png", deleteButton);
-    }
-
-    @FXML
-    private void deleteButtonMouseclickHnadler(MouseEvent event) {
-    }
-
-    @FXML
-    private void deleteButtonMousePressHandler(MouseEvent event) {
-        deleteButton.setScaleX(0.9);
-        deleteButton.setScaleY(0.9);
     }
 
     @FXML
@@ -245,5 +182,11 @@ public class UserManagementPageController implements Initializable {
         searchButton.setScaleX(0.9);
         searchButton.setScaleY(0.9);
     }
-    
+
+    @FXML
+    private void addButtonMouseClickHandler(MouseEvent event) throws Exception {
+        String FXML = "/projectvantage/fxml/superadmin/AddUserPage.fxml";
+        SuperAdminPageController admin = SuperAdminPageController.getInstance();
+        admin.loadPage(FXML);
+    }
 }

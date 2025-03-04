@@ -25,7 +25,7 @@ public class ProjectVantage extends Application {
     private static ProjectVantage instance;
     private static Stage primaryStage;
     
-    String authFXML = "/projectvantage/fxml/authentication/Authentication.fxml";
+//    String authFXML = "/projectvantage/fxml/authentication/Authentication.fxml";
     String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
     
     public static ProjectVantage getInstance() {
@@ -38,7 +38,7 @@ public class ProjectVantage extends Application {
     
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(authFXML));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(loginFXML));
         Parent root = loader.load();
         
         primaryStage.setScene(new Scene(root));

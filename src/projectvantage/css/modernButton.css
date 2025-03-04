@@ -1,19 +1,18 @@
 .modern-button {
-    -fx-background-color: linear-gradient(to bottom right, #4A90E2, #357ABD);
+    -fx-background-color: #2f9efe;
     -fx-text-fill: white;
     -fx-font-size: 12px;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-padding: 5 5 5 5;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0, 0);
     -fx-cursor: hand;
 }
 
 .modern-button:hover {
-    -fx-background-color: linear-gradient(to bottom right, #357ABD, #2C6BA0);
+    -fx-background-color: #0177DD;
 }
 
 .modern-button:pressed {
-    -fx-background-color: linear-gradient(to bottom right, #2C6BA0, #255583);
+    -fx-background-color: #02559E;
     -fx-effect: none;
 }

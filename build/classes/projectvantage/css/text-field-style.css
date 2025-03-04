@@ -1,0 +1,7 @@
+.textfield {
+	-fx-prompt-text-fill: #8a8a8a;
+	-fx-background-color: transparent;
+	-fx-padding: 0 0 1 0;
+	-fx-border-width: 2 2 2	2;
+	-fx-border-color: #9F9F9F;
+}

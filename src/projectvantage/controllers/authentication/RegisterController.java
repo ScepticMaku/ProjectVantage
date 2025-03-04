@@ -18,8 +18,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
@@ -51,6 +55,18 @@ public class RegisterController implements Initializable {
     private PasswordField passwordConfirmField;
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
+    @FXML
+    private Pane titlePane;
+    @FXML
+    private Rectangle rectangle;
+    @FXML
+    private Rectangle exitButtonBG;
+    @FXML
+    private ImageView closeButton;
+    @FXML
+    private AnchorPane rootPane;
+    @FXML
+    private TextField middleNameField;
     
     /**
      * Initializes the controller class.
@@ -63,8 +79,8 @@ public class RegisterController implements Initializable {
     Config config = new Config();
     dbConnect connect = new dbConnect();
     
-    private void switchToLogin() {
-        AuthenticationController authControl = AuthenticationController.getInstance();
+    private void switchToLogin(MouseEvent event) throws Exception {
+        /*AuthenticationController authControl = AuthenticationController.getInstance();
         
         if(authControl != null) {
             Pane loginPane = authControl.getLoginPane();
@@ -84,19 +100,95 @@ public class RegisterController implements Initializable {
             title.setLayoutX(500);
             
             loginPane.setVisible(true);
+        }*/
+        String FXML = "/projectvantage/fxml/authentication/Login.fxml";
+        config.switchScene(getClass(), event, FXML);
+    }
+    
+    public boolean verifyUser(Stage currentStage, String query, String firstName, String middleName, String lastName, String emailAddress, String phoneNumber, String username, String password, String passwordConfirm) throws Exception {
+        if(firstName.isEmpty()) {
+            config.showErrorMessage("First name must not be empty", "Field Error", currentStage);
+            return true;
         }
+        
+        if(lastName.isEmpty()) {
+            config.showErrorMessage("Last name must not be empty", "Field Error", currentStage);
+            return true;
+        }
+        
+        if(emailAddress.isEmpty()) {
+            config.showErrorMessage("Email address must not be empty", "Field Error", currentStage);
+            return true;
+        }
+        
+        if(phoneNumber.isEmpty()) {
+            config.showErrorMessage("Phone number must not be empty", "Field Error", currentStage);
+            return true;
+        }
+        
+        if(username.isEmpty()) {
+            config.showErrorMessage("username must not be empty", "Field Error", currentStage);
+            return true;
+        }
+        
+        if(password.isEmpty()) {
+            config.showErrorMessage("password must not be empty", "Field Error", currentStage);
+            return true;
+        }
+        
+        if(passwordConfirm.isEmpty()) {
+            config.showErrorMessage("confirm password must not be empty", "Field Error", currentStage);
+            return true;
+        }
+        
+        if(!config.isValidEmailFormat(emailAddress)) {
+            config.showErrorMessage("Email format is invalid", "Email Error", currentStage);
+            return true;
+        }
+        
+        if(config.isValidPhoneNumber(phoneNumber)) {
+            config.showErrorMessage("Phone number must only be numbers.", "Phone Number Error", currentStage);
+            return true;
+        }
+        
+        if(config.isValidPhoneNumberFormat(phoneNumber)) {
+            config.showErrorMessage("Phone number format is invalid, must start with 9", "Phone Number Error", currentStage);
+            return true;
+        }
+        
+        if(password.length() < MINIMUM_PASSWORD_LENGTH) {
+            config.showErrorMessage("Password must be at least 8 characters.", "Password Error", currentStage);
+            return true;
+        }
+        
+        if(!password.equals(passwordConfirm)) {
+            config.showErrorMessage("Password doesn't match.", "Password Error", currentStage);
+            return true;
+        }
+        
+        if(config.isDuplicated("username", username)) {
+            config.showErrorMessage("Username already exists", "Username Error", currentStage);
+            return true;
+        }
+        
+        if(config.isDuplicated("email", emailAddress)) {
+            config.showErrorMessage("Email already exist.", "Email Error", currentStage);
+            return true;
+        }
+        return false;
     }
 
     @FXML
-    private void loginButtonMouseClickHandler(MouseEvent event) {
-        switchToLogin();
+    private void loginButtonMouseClickHandler(MouseEvent event) throws Exception {
+        switchToLogin(event);
     }
 
     @FXML
-    private void registerButtonMouseClickHandler(MouseEvent event) throws SQLException {
+    private void registerButtonMouseClickHandler(MouseEvent event) throws SQLException, Exception {
         Stage currentStage = (Stage)registerPane.getScene().getWindow();
         
         String firstName = firstNameField.getText();
+        String middleName = middleNameField.getText();
         String lastName = lastNameField.getText();
         String emailAddress = emailAddressField.getText();
         String phoneNumber = phoneNumberField.getText();
@@ -104,84 +196,16 @@ public class RegisterController implements Initializable {
         String password = passwordField.getText();
         String passwordConfirm = passwordConfirmField.getText();
         
-        String query = "INSERT INTO user (first_name, last_name, email, phone_number, username, password, role, status) "
-                + "VALUES ( ?, ?, ?, ?, ? ,? , 'team member' , 'inactive')";
+        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, password, role, status) "
+                + "VALUES ( ?, ?, ?, ?, ?, ? ,? , 'team member' , 'inactive')";
         
-        if(firstName.isEmpty()) {
-            config.showErrorMessage("First name must not be empty", "Field Error", currentStage);
-            return;
-        }
-        
-        if(lastName.isEmpty()) {
-            config.showErrorMessage("Last name must not be empty", "Field Error", currentStage);
-            return;
-        }
-        
-        if(emailAddress.isEmpty()) {
-            config.showErrorMessage("Email address must not be empty", "Field Error", currentStage);
-            return;
-        }
-        
-        if(phoneNumber.isEmpty()) {
-            config.showErrorMessage("Phone number must not be empty", "Field Error", currentStage);
-            return;
-        }
-        
-        if(username.isEmpty()) {
-            config.showErrorMessage("username must not be empty", "Field Error", currentStage);
-            return;
-        }
-        
-        if(password.isEmpty()) {
-            config.showErrorMessage("password must not be empty", "Field Error", currentStage);
-            return;
-        }
-        
-        if(passwordConfirm.isEmpty()) {
-            config.showErrorMessage("confirm password must not be empty", "Field Error", currentStage);
-            return;
-        }
-        
-        if(!config.isValidEmailFormat(emailAddress)) {
-            config.showErrorMessage("Email format is invalid", "Email Error", currentStage);
-            return;
-        }
-        
-        if(config.isValidPhoneNumber(phoneNumber)) {
-            config.showErrorMessage("Phone number must only be numbers.", "Phone Number Error", currentStage);
-            return;
-        }
-        
-        if(config.isValidPhoneNumberFormat(phoneNumber)) {
-            config.showErrorMessage("Phone number format is invalid, must start with 9", "Phone Number Error", currentStage);
-        }
-        
-        if(password.length() < MINIMUM_PASSWORD_LENGTH) {
-            config.showErrorMessage("Password must be at least 8 characters.", "Password Error", currentStage);
-            return;
-        }
-        
-        if(!password.equals(passwordConfirm)) {
-            config.showErrorMessage("Password doesn't match.", "Password Error", currentStage);
-            return;
-        }
-        
-        if(config.isDuplicated("username", username)) {
-            config.showErrorMessage("Username already exists", "Username Error", currentStage);
-            return;
-        }
-        
-        if(config.isDuplicated("email", emailAddress)) {
-            config.showErrorMessage("Email already exist.", "Email Error", currentStage);
-            return;
-        }
-        
-        if(connect.insertData(query, firstName, lastName, emailAddress, phoneNumber, username, password)) {
-            System.out.println("User added to database!");
-            config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
-            switchToLogin();
-        }
-         
+        if(!verifyUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm)) {
+           if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password)) {
+                System.out.println("User added to database!");
+                config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
+                switchToLogin(event);
+            } 
+        }  
     }
 
     @FXML
@@ -197,6 +221,32 @@ public class RegisterController implements Initializable {
     @FXML
     private void loginButtonMousePressHandler(MouseEvent event) {
         loginButton.setStyle("-fx-text-fill: #01528d");
+    }
+
+    @FXML
+    private void closeButtonMouseReleaseHandler(MouseEvent event) {
+        exitButtonBG.setFill(Color.web("#d71515"));
+    }
+
+    @FXML
+    private void closeButtonMouseExitHandler(MouseEvent event) {
+        config.fadeOut(exitButtonBG);
+    }
+
+    @FXML
+    private void closeButtonMouseEnterHandler(MouseEvent event) {
+        config.fadeIn(exitButtonBG);
+    }
+
+    @FXML
+    private void closeButtonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage) rootPane.getScene().getWindow();
+        config.showAlert(Alert.AlertType.CONFIRMATION, "Exit Confirmtaion.", "Do you want to exit?", currentStage);
+    }
+
+    @FXML
+    private void closeButtonMousePressHandler(MouseEvent event) {
+        exitButtonBG.setFill(Color.web("#971111"));
     }
     
 }

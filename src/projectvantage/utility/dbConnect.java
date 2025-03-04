@@ -39,6 +39,7 @@ public class dbConnect {
             return rowsAffected > 0; // Returns true if the insertion was successful
         } catch (SQLException e) {
             System.out.println("Insert failed: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

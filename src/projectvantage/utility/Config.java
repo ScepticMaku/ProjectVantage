@@ -39,7 +39,7 @@ import javafx.util.Duration;
 public class Config {
     
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    private static final String PHONE_NUMBER_REGEX = "^9\\d{9}$";
+    private static final String PHONE_NUMBER_REGEX = "^(09\\d{9}|\\+639\\d{9})$";
     
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile(PHONE_NUMBER_REGEX);

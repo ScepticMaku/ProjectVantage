@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="projectvantage.controllers.misc.ProfilePageController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Profile" textFill="#192b4b">
+         <font>
+            <Font name="Segoe UI Bold" size="20.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#2f9efe" height="218.0" layoutX="14.0" layoutY="58.0" strokeType="INSIDE" strokeWidth="0.0" width="214.0">
+         <stroke>
+            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </stroke>
+      </Rectangle>
+      <ImageView fitHeight="168.0" fitWidth="204.0" layoutX="37.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../resources/icons/user-profile-icon.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="usernamePlaceholder" layoutX="88.0" layoutY="240.0" text="Username" textFill="WHITE">
+         <font>
+            <Font name="Segoe UI Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="239.0" layoutY="103.0" text="First name:" textFill="#2f9efe">
+         <font>
+            <Font name="Segoe UI Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="firstNamePlaceholder" layoutX="239.0" layoutY="122.0" text="Placeholder" textFill="#575757">
+         <font>
+            <Font name="Segoe UI" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="239.0" layoutY="148.0" text="Middle name:" textFill="#2f9efe">
+         <font>
+            <Font name="Segoe UI Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="middleNamePlaceholder" layoutX="239.0" layoutY="167.0" text="Placeholder" textFill="#575757">
+         <font>
+            <Font name="Segoe UI" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="239.0" layoutY="194.0" text="Last Name:" textFill="#2f9efe">
+         <font>
+            <Font name="Segoe UI Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lastNamePlaceholder" layoutX="239.0" layoutY="213.0" text="Placeholder" textFill="#575757">
+         <font>
+            <Font name="Segoe UI" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="399.0" layoutY="103.0" text="Email address:" textFill="#2f9efe">
+         <font>
+            <Font name="Segoe UI Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="emailAddressPlaceholder" layoutX="399.0" layoutY="122.0" text="Placeholder" textFill="#575757">
+         <font>
+            <Font name="Segoe UI" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="399.0" layoutY="148.0" text="Phone number:" textFill="#2f9efe">
+         <font>
+            <Font name="Segoe UI Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="phoneNumberPlaceholder" layoutX="399.0" layoutY="167.0" text="Placeholder" textFill="#575757">
+         <font>
+            <Font name="Segoe UI" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="398.0" layoutY="194.0" text="Role:" textFill="#2f9efe">
+         <font>
+            <Font name="Segoe UI Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="rolePlaceholder" layoutX="398.0" layoutY="213.0" text="Placeholder" textFill="#575757">
+         <font>
+            <Font name="Segoe UI" size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

@@ -17,13 +17,14 @@
 }
 
 .table-cell {
-	-fx-padding: 7px;
+	-fx-padding: 10px;
 	-fx-alignment: center;
 }
 
 .table-row-cell:hover {
     -fx-background-color: #ecf0f1;
 }
+
 
 .table-view:focused .table-row-cell:selected {
 	-fx-background-color: #2f9efe;

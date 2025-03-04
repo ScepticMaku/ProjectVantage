@@ -20,11 +20,20 @@ import javafx.scene.layout.Pane;
 import projectvantage.utility.dbConnect;
 import java.sql.*;
 import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import projectvantage.controllers.team_member.TeamMemberMainPageController;
 
 /**
  * FXML Controller class
@@ -32,6 +41,8 @@ import javafx.stage.StageStyle;
  * @author Mark
  */
 public class LoginController implements Initializable {
+    
+    private static LoginController instance;
 
     @FXML
     private TextField usernameField;
@@ -41,6 +52,16 @@ public class LoginController implements Initializable {
     private Label registerButton;
     @FXML
     private Button loginButton;
+    @FXML
+    private Pane titlePane;
+    @FXML
+    private Rectangle rectangle;
+    @FXML
+    private Rectangle exitButtonBG;
+    @FXML
+    private ImageView closeButton;
+    @FXML
+    private AnchorPane rootPane;
 
     /**
      * Initializes the controller class.
@@ -48,8 +69,12 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        this.instance = instance;
     }
     
+    public static LoginController getInstance() {
+        return instance;
+    }
     
     Config config = new Config();
     
@@ -122,7 +147,7 @@ public class LoginController implements Initializable {
         
         switch(getRole(username, password)) {
             case "team member": 
-                config.switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
+                switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
                 break;
             case "admin":
                 config.switchScene(getClass(), event, "/projectvantage/fxml/admin/MainPage.fxml");
@@ -132,9 +157,25 @@ public class LoginController implements Initializable {
         }
     }
     
+    public void switchScene(Class getClass, Event evt, String targetFXML) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
+        Parent root = loader.load();
+        
+        TeamMemberMainPageController teamMemberController = loader.getController();
+        teamMemberController.setUsername(usernameField.getText());
+        
+        Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        config.setCenterAlignment(stage);
+        stage.show();
+    }
+    
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws Exception {
-        AuthenticationController authControl = AuthenticationController.getInstance();
+        String FXML = "/projectvantage/fxml/authentication/Register.fxml";
+        config.switchScene(getClass(), event, FXML);
+        /*AuthenticationController authControl = AuthenticationController.getInstance();
         
         if(authControl != null) {
             Pane loginPane = authControl.getLoginPane();
@@ -149,7 +190,7 @@ public class LoginController implements Initializable {
             title.setLayoutX(275);
             
             otherPane.setVisible(true);
-        }
+        }*/
     }
 
     @FXML
@@ -184,6 +225,32 @@ public class LoginController implements Initializable {
         if(event.getCode() == KeyCode.ENTER) {
             loginUser(event);
         }
+    }
+
+    @FXML
+    private void closeButtonMouseReleaseHandler(MouseEvent event) {
+        exitButtonBG.setFill(Color.web("#d71515"));
+    }
+
+    @FXML
+    private void closeButtonMouseExitHandler(MouseEvent event) {
+        config.fadeOut(exitButtonBG);
+    }
+
+    @FXML
+    private void closeButtonMouseEnterHandler(MouseEvent event) {
+        config.fadeIn(exitButtonBG);
+    }
+
+    @FXML
+    private void closeButtonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage) rootPane.getScene().getWindow();
+        config.showAlert(Alert.AlertType.CONFIRMATION, "Exit Confirmtaion.", "Do you want to exit?", currentStage);
+    }
+
+    @FXML
+    private void closeButtonMousePressHandler(MouseEvent event) {
+        exitButtonBG.setFill(Color.web("#971111"));
     }
     
 }
