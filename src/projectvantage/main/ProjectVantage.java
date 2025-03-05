@@ -11,6 +11,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -44,6 +45,7 @@ public class ProjectVantage extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Login");
         primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.getIcons().add(new Image("/projectvantage/resources/img/ProjectLogo.png"));
         primaryStage.show();
         config.setCenterAlignment(primaryStage);
     }

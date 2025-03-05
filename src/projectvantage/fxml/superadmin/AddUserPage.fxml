@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -37,9 +38,7 @@
       <Label layoutX="212.0" layoutY="157.0" text="Phone number:" textFill="#575757" />
       <TextField fx:id="usernameField" layoutX="212.0" layoutY="242.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
       <Label layoutX="212.0" layoutY="218.0" text="Username:" textFill="#575757" />
-      <TextField fx:id="passwordField" layoutX="18.0" layoutY="303.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
       <Label layoutX="18.0" layoutY="279.0" text="Password" textFill="#575757" />
-      <TextField fx:id="confirmPasswordField" layoutX="212.0" layoutY="303.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
       <Label layoutX="212.0" layoutY="279.0" text="Confirm password:" textFill="#575757" />
       <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#2f9efe" height="242.0" layoutX="395.0" layoutY="97.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="184.0" />
       <RadioButton fx:id="teamMemberRadioButton" layoutX="415.0" layoutY="122.0" mnemonicParsing="false" onMouseClicked="#teamMemberButtonMouseClickHandler" text="Team member" textFill="WHITE">
@@ -77,5 +76,7 @@
             <Font name="Segoe UI Bold" size="14.0" />
          </font>
       </Button>
+      <PasswordField fx:id="passwordField" layoutX="18.0" layoutY="300.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
+      <PasswordField fx:id="confirmPasswordField" layoutX="212.0" layoutY="300.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
    </children>
 </AnchorPane>
