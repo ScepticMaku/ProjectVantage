@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projectvantage.controllers.superadmin;
+package projectvantage.controllers.admin;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author Mark Work Account
  */
-public class SuperAdminProfilePageController implements Initializable {
+public class AdminProfilePageController implements Initializable {
 
     /**
      * Initializes the controller class.

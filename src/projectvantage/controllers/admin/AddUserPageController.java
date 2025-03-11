@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projectvantage.controllers.superadmin;
+package projectvantage.controllers.admin;
 
 import projectvantage.controllers.authentication.RegisterController;
 import projectvantage.utility.dbConnect;
@@ -85,8 +85,8 @@ public class AddUserPageController implements Initializable {
 
     @FXML
     private void backButtonMouseClickHandler(MouseEvent event) {
-        String FXML = "/projectvantage/fxml/superadmin/UserManagementPage.fxml";
-        SuperAdminPageController admin = SuperAdminPageController.getInstance();
+        String FXML = "/projectvantage/fxml/admin/UserManagementPage.fxml";
+        AdminPageController admin = AdminPageController.getInstance();
         admin.loadPage(FXML);
     }
 

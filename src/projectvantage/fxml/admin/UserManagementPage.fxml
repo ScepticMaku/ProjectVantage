@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="488.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.superadmin.UserManagementPageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="488.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.UserManagementPageController">
    <children>
       <StackPane prefHeight="570.0" prefWidth="600.0">
          <children>

@@ -6,11 +6,12 @@
 package projectvantage.controllers.authentication;
 
 import projectvantage.utility.Config;
+import projectvantage.utility.PageConfig;
+import projectvantage.utility.ElementConfig;
 
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
@@ -20,7 +21,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -28,8 +28,13 @@ import javafx.util.Duration;
  * @author Mark
  */
 public class AuthenticationController implements Initializable {
+    
+    Config config = new Config();
+    PageConfig pageConf = new PageConfig();
+    ElementConfig elementConf = new ElementConfig();
+    
     private LoginController loginControl;
-    private RegisterController registerControl;
+    private RegisterController registerControl;  
     
     @FXML
     private StackPane rootPane;
@@ -58,8 +63,6 @@ public class AuthenticationController implements Initializable {
         instance = this;
     }
     
-    Config config = new Config();
-    
     public static AuthenticationController getInstance() {
         return instance;
     }
@@ -84,12 +87,12 @@ public class AuthenticationController implements Initializable {
 
     @FXML
     private void closeButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(exitButtonBG);
+        elementConf.fadeOut(exitButtonBG);
     }
 
     @FXML
     private void closeButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(exitButtonBG);
+        elementConf.fadeIn(exitButtonBG);
     }
 
     @FXML

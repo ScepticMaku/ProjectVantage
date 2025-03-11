@@ -6,8 +6,13 @@
 package projectvantage.controllers.team_member;
 
 import projectvantage.utility.Config;
+import projectvantage.utility.dbConnect;
+import projectvantage.utility.PageConfig;
+import projectvantage.utility.ElementConfig;
+import projectvantage.controllers.misc.ProfilePageController;
 
 import java.net.URL;
+import java.sql.ResultSet;
 import java.util.ResourceBundle;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
@@ -38,6 +43,9 @@ import javafx.util.Duration;
 public class TeamMemberMainPageController implements Initializable {
     
     Config config = new Config();
+    PageConfig pageConf = new PageConfig();
+    ElementConfig elementConf = new ElementConfig();
+    ProfilePageController profileController = ProfilePageController.getInstance();
     
     private static TeamMemberMainPageController instance;
     
@@ -110,7 +118,6 @@ public class TeamMemberMainPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
-        
     }
     
     public static TeamMemberMainPageController getInstance() {
@@ -162,12 +169,12 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void closeButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(closeButtonBG);
+        elementConf.fadeOut(closeButtonBG);
     }
 
     @FXML
     private void closeButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(closeButtonBG);
+        elementConf.fadeIn(closeButtonBG);
     }
 
     @FXML
@@ -202,20 +209,20 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void dashboardMouseExitHandler(MouseEvent event) {
-        config.fadeOut(dashboardButtonBG);
+        elementConf.fadeOut(dashboardButtonBG);
     }
 
     @FXML
     private void dashboardButtonMouseEnteredHandler(MouseEvent event) {
-        config.fadeIn(dashboardButtonBG);
+        elementConf.fadeIn(dashboardButtonBG);
     }
 
     @FXML
     private void dashboardButtonMouseClickHandler(MouseEvent event) {
-        config.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
         
-        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
-        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
@@ -230,20 +237,20 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void taskButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(taskButtonBG);
+        elementConf.fadeOut(taskButtonBG);
     }
 
     @FXML
     private void taskButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(taskButtonBG);
+        elementConf.fadeIn(taskButtonBG);
     }
 
     @FXML
     private void taskButtonMouseClickHandler(MouseEvent event) {
-        config.setSelected("/projectvantage/resources/icons/task-icon-selected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        elementConf.setSelected("/projectvantage/resources/icons/task-icon-selected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
         
-        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
@@ -259,20 +266,20 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void settingsButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(settingsButtonBG);
+        elementConf.fadeOut(settingsButtonBG);
     }
 
     @FXML
     private void settingsButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(settingsButtonBG);
+        elementConf.fadeIn(settingsButtonBG);
     }
 
     @FXML
     private void settingsButtonMouseClickHandler(MouseEvent event) {
-         config.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+         elementConf.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
          
-         config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-         config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+         elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
     }
 
     @FXML
@@ -283,17 +290,17 @@ public class TeamMemberMainPageController implements Initializable {
     @FXML
     private void logoutButtonMouseReleaseHandler(MouseEvent event) {
         logoutButtonBG.setFill(Color.web("#f5f5f5"));
-        config.setUnselected("/projectvantage/resources/icons/signout-icon-unselected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/signout-icon-unselected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
     }
 
     @FXML
     private void logoutButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(logoutButtonBG);
+        elementConf.fadeOut(logoutButtonBG);
     }
 
     @FXML
     private void logoutButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(logoutButtonBG);
+        elementConf.fadeIn(logoutButtonBG);
     }
 
     @FXML
@@ -308,7 +315,7 @@ public class TeamMemberMainPageController implements Initializable {
         alert.showAndWait().ifPresent(response -> {
             if(response == ButtonType.OK)
                 try {
-                    config.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
+                    pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -318,12 +325,12 @@ public class TeamMemberMainPageController implements Initializable {
     @FXML
     private void logoutButtonMousePressHandler(MouseEvent event) {
         logoutButtonBG.setFill(Color.web("#eeeeee"));
-        config.setSelected("/projectvantage/resources/icons/signout-icon-selected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
+        elementConf.setSelected("/projectvantage/resources/icons/signout-icon-selected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
     }
 
     @FXML
     private void profileButtonMouseReleaseHandler(MouseEvent event) {
-        config.releaseIcon(profileButton);
+        elementConf.releaseIcon(profileButton);
     }
 
     @FXML
@@ -338,7 +345,9 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void profileButtonMouseClickHandler(MouseEvent event) {
-        loadPage("/projectvantage/fxml/misc/ProfilePage.fxml");
+        String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
+        String user = getInstance().getUsername();
+        pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
     }
 
     @FXML
@@ -349,7 +358,7 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void notificationButtonMouseReleaseHandler(MouseEvent event) {
-        config.releaseIcon(notificationButton);
+        elementConf.releaseIcon(notificationButton);
         
     }
 

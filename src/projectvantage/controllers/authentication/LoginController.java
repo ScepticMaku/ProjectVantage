@@ -6,6 +6,10 @@
 package projectvantage.controllers.authentication;
 
 import projectvantage.utility.Config;
+import projectvantage.utility.ElementConfig;
+import projectvantage.utility.PageConfig;
+import projectvantage.controllers.team_member.TeamMemberMainPageController;
+import projectvantage.controllers.admin.AdminPageController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,7 +37,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import projectvantage.controllers.team_member.TeamMemberMainPageController;
 
 /**
  * FXML Controller class
@@ -41,6 +44,10 @@ import projectvantage.controllers.team_member.TeamMemberMainPageController;
  * @author Mark
  */
 public class LoginController implements Initializable {
+    
+    Config config = new Config();
+    PageConfig pageConf = new PageConfig();
+    ElementConfig elementConf = new ElementConfig();
     
     private static LoginController instance;
 
@@ -69,14 +76,12 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        this.instance = instance;
+        instance = this;
     }
     
     public static LoginController getInstance() {
         return instance;
     }
-    
-    Config config = new Config();
     
     private boolean locateUser(String user, String pass) {
         dbConnect db = new dbConnect();
@@ -127,12 +132,6 @@ public class LoginController implements Initializable {
             return;
         }
         
-        if(username.equals("super") && password.equals("1234")) {
-            config.showAlert(Alert.AlertType.INFORMATION, "Login Message.", "Successfully Logged In", currentStage);
-            config.switchScene(getClass(), event, "/projectvantage/fxml/superadmin/SuperAdminPage.fxml");
-            return;
-        }
-        
         if(!locateUser(username, password)) {
             config.showErrorMessage("Username not found.", "Login error", currentStage);
             return;
@@ -150,7 +149,7 @@ public class LoginController implements Initializable {
                 switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
                 break;
             case "admin":
-                config.switchScene(getClass(), event, "/projectvantage/fxml/admin/MainPage.fxml");
+                switchScene(getClass(), event, "/projectvantage/fxml/admin/AdminPage.fxml");
                 break;
             default:
                 config.showErrorMessage("Role not found", "Role error", currentStage);
@@ -161,20 +160,31 @@ public class LoginController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
         Parent root = loader.load();
         
-        TeamMemberMainPageController teamMemberController = loader.getController();
-        teamMemberController.setUsername(usernameField.getText());
+        String user = usernameField.getText();
+        String pass = passwordField.getText();
+        
+        switch(getRole(user, pass)){
+            case "team member":
+                TeamMemberMainPageController teamMemberController = loader.getController();
+                teamMemberController.setUsername(user);
+            break;
+            case "admin":
+                AdminPageController adminController = loader.getController();
+                adminController.setUsername(user);
+            break;
+        }
         
         Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setResizable(false);
-        config.setCenterAlignment(stage);
+        pageConf.setCenterAlignment(stage);
         stage.show();
     }
     
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws Exception {
         String FXML = "/projectvantage/fxml/authentication/Register.fxml";
-        config.switchScene(getClass(), event, FXML);
+        pageConf.switchScene(getClass(), event, FXML);
         /*AuthenticationController authControl = AuthenticationController.getInstance();
         
         if(authControl != null) {
@@ -234,12 +244,12 @@ public class LoginController implements Initializable {
 
     @FXML
     private void closeButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(exitButtonBG);
+        elementConf.fadeOut(exitButtonBG);
     }
 
     @FXML
     private void closeButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(exitButtonBG);
+        elementConf.fadeIn(exitButtonBG);
     }
 
     @FXML

@@ -6,32 +6,14 @@
  */
 package projectvantage.utility;
 
-import projectvantage.main.ProjectVantage;
-
 import java.sql.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javafx.animation.FadeTransition;
-import javafx.animation.ScaleTransition;
-import javafx.event.Event;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 
 /**
  *
@@ -44,23 +26,6 @@ public class Config {
     
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile(PHONE_NUMBER_REGEX);
-    
-        public void setCenterAlignment(Stage stage) {
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        double centerX = (screenBounds.getWidth() - stage.getWidth()) / 2;
-        double centerY = (screenBounds.getHeight() - stage.getHeight()) / 2;
-        stage.setX(centerX);
-        stage.setY(centerY);
-    }
-    
-    public void switchScene(Class getClass, Event evt, String targetFXML) throws Exception {
-        Parent root = FXMLLoader.load(getClass.getResource(targetFXML));
-        Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        setCenterAlignment(stage);
-        stage.show();
-    }
     
     public void showErrorMessage(String errorMessage, String errorType, Stage owner) {
         showAlert(Alert.AlertType.ERROR, errorType, errorMessage, owner);
@@ -120,56 +85,4 @@ public class Config {
         }
         return false;
     }
-    
-    public void fadeIn(Node node) {
-        FadeTransition fadeTransition = new FadeTransition();
-        fadeTransition.setDuration(Duration.millis(100));
-        fadeTransition.setNode(node);
-        fadeTransition.setFromValue(0);
-        fadeTransition.setToValue(1.0);
-        fadeTransition.play();
-    }
-    
-    public void fadeOut(Node node) {
-        FadeTransition fadeTransition = new FadeTransition();
-        fadeTransition.setDuration(Duration.millis(100));
-        fadeTransition.setNode(node);
-        fadeTransition.setFromValue(1.0);
-        fadeTransition.setToValue(0);
-        fadeTransition.play();
-    }
-    
-    public void setSelected(String imageLocation, Label label, Circle circle, ImageView icon) {
-        Image newImage = new Image(imageLocation);
-        label.setTextFill(Color.web("#2f9efe"));
-        circle.setOpacity(1.0);
-        icon.setImage(newImage);
-    }
-    
-    public void setUnselected(String imageLocation, Label label, Circle circle, ImageView icon) {
-        Image newImage = new Image(imageLocation);
-        label.setTextFill(Color.web("#a5b4d9"));
-        circle.setOpacity(0);
-        icon.setImage(newImage);
-    }
-    
-    public void pressIcon(ImageView image) {
-        /*ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), image);
-        scaleTransition.setFromX(1.0);
-        scaleTransition.setFromY(1.0);
-        scaleTransition.setToX(0.9);
-        scaleTransition.setToY(0.9);
-        scaleTransition.play();*/
-    }
-    
-    public void releaseIcon(ImageView image) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
-        scaleTransition.setFromX(0.9);
-        scaleTransition.setFromY(0.9);
-        scaleTransition.setToX(1.0);
-        scaleTransition.setToY(1.0);
-        scaleTransition.play();
-    }
-    
-    
 }

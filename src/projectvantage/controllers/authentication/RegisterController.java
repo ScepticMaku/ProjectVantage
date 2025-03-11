@@ -6,6 +6,8 @@
 package projectvantage.controllers.authentication;
 
 import projectvantage.utility.Config;
+import projectvantage.utility.ElementConfig;
+import projectvantage.utility.PageConfig;
 import projectvantage.utility.dbConnect;
 
 import java.net.URL;
@@ -32,7 +34,14 @@ import javafx.stage.Stage;
  * @author Mark
  */
 public class RegisterController implements Initializable {
-
+    
+    Config config = new Config();
+    ElementConfig elementConf = new ElementConfig();
+    PageConfig pageConf = new PageConfig();
+    dbConnect connect = new dbConnect();
+    
+    private static final int MINIMUM_PASSWORD_LENGTH = 8;
+    
     @FXML
     private Pane registerPane;
     @FXML
@@ -53,8 +62,6 @@ public class RegisterController implements Initializable {
     private PasswordField passwordField;
     @FXML
     private PasswordField passwordConfirmField;
-    
-    private static final int MINIMUM_PASSWORD_LENGTH = 8;
     @FXML
     private Pane titlePane;
     @FXML
@@ -75,9 +82,6 @@ public class RegisterController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
-    
-    Config config = new Config();
-    dbConnect connect = new dbConnect();
     
     private void switchToLogin(MouseEvent event) throws Exception {
         /*AuthenticationController authControl = AuthenticationController.getInstance();
@@ -102,7 +106,7 @@ public class RegisterController implements Initializable {
             loginPane.setVisible(true);
         }*/
         String FXML = "/projectvantage/fxml/authentication/Login.fxml";
-        config.switchScene(getClass(), event, FXML);
+        pageConf.switchScene(getClass(), event, FXML);
     }
     
     public boolean verifyUser(Stage currentStage, String query, String firstName, String middleName, String lastName, String emailAddress, String phoneNumber, String username, String password, String passwordConfirm) throws Exception {
@@ -230,12 +234,12 @@ public class RegisterController implements Initializable {
 
     @FXML
     private void closeButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(exitButtonBG);
+        elementConf.fadeOut(exitButtonBG);
     }
 
     @FXML
     private void closeButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(exitButtonBG);
+        elementConf.fadeIn(exitButtonBG);
     }
 
     @FXML

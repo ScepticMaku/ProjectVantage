@@ -5,7 +5,7 @@
  */
 package projectvantage.main;
 
-import projectvantage.utility.Config;
+import projectvantage.utility.PageConfig;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,7 @@ import javafx.stage.StageStyle;
  */
 public class ProjectVantage extends Application {
     
-    Config config = new Config();
+    PageConfig pageConf = new PageConfig();
     
     private static ProjectVantage instance;
     private static Stage primaryStage;
@@ -47,7 +47,7 @@ public class ProjectVantage extends Application {
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.getIcons().add(new Image("/projectvantage/resources/img/ProjectLogo.png"));
         primaryStage.show();
-        config.setCenterAlignment(primaryStage);
+        pageConf.setCenterAlignment(primaryStage);
     }
     /**
      * @param args the command line arguments

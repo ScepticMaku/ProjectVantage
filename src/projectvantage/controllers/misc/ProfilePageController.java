@@ -12,9 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
 import projectvantage.models.User;
 import projectvantage.utility.dbConnect;
@@ -27,6 +30,9 @@ import projectvantage.utility.dbConnect;
 public class ProfilePageController implements Initializable {
     
     TeamMemberMainPageController main = TeamMemberMainPageController.getInstance();
+    private static ProfilePageController instance;
+    
+    private String username;
 
     @FXML
     private Label usernamePlaceholder;
@@ -47,32 +53,35 @@ public class ProfilePageController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        loadUser();
+        instance = this;
     }
     
-    private void loadUser() {
-        dbConnect db = new dbConnect();
-        
-        String username = main.getUsername();
-        String sql = "SELECT first_name, middle_name, last_name, email, phone_number, username, role FROM user WHERE username = '"+ username +"'";
-        
-        try(ResultSet result = db.getData(sql)) {
-            if(result.next()) {
-                firstNamePlaceholder.setText(result.getString("first_name"));
-                middleNamePlaceholder.setText(result.getString("middle_name"));
-                lastNamePlaceholder.setText(result.getString("last_name"));
-                emailAddressPlaceholder.setText(result.getString("email"));
-                phoneNumberPlaceholder.setText(result.getString("phone_number"));
-                usernamePlaceholder.setText(result.getString("username"));
-                rolePlaceholder.setText(result.getString("role"));
-            }
-        } catch (SQLException e) {
-            System.out.println("Database Error: " + e.getMessage());
-        }
+    public static ProfilePageController getInstance() {
+        return instance;
     }
     
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+    
+    public void loadUser(String...info) {
+        firstNamePlaceholder.setText(info[0]);
+        middleNamePlaceholder.setText(info[1]);
+        lastNamePlaceholder.setText(info[2]);
+        emailAddressPlaceholder.setText(info[3]);
+        phoneNumberPlaceholder.setText(info[4]);
+        usernamePlaceholder.setText(info[5]);
+        rolePlaceholder.setText(info[6]);
+    }
 }

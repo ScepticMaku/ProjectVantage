@@ -3,32 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projectvantage.controllers.superadmin;
+package projectvantage.controllers.admin;
 
+import projectvantage.controllers.misc.ProfilePageController;
 import projectvantage.utility.Config;
+import projectvantage.utility.ElementConfig;
+import projectvantage.utility.PageConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -39,23 +36,37 @@ import javafx.util.Duration;
 /**
  * FXML Controller class
  *
- * @author Mark
+ * @author Mark Work Account
  */
-public class SuperAdminPageController implements Initializable {
+public class AdminPageController implements Initializable {
     
+    PageConfig pageConf = new PageConfig();
+    ElementConfig elementConf = new ElementConfig();
+    Config config = new Config();
+    ProfilePageController profileController = ProfilePageController.getInstance();
+    
+    private static AdminPageController instance;
+    private String username;
+    
+    private double xOffset = 0;
+    private double yOffset = 0;
+
+    @FXML
+    private AnchorPane backgroundPane;
     @FXML
     private Pane titleBar;
     @FXML
-    private Rectangle closeButtonBG;
-    private Rectangle minimizeButtonBG;
+    private Label titlebarLabel;
     @FXML
     private Group closeButton;
     @FXML
-    private AnchorPane backgroundPane;
+    private Rectangle closeButtonBG;
     @FXML
     private Rectangle rectangle;
     @FXML
     private Group dashboardButton;
+    @FXML
+    private Rectangle dashboardButtonBG;
     @FXML
     private ImageView dashboardButtonIcon;
     @FXML
@@ -63,9 +74,9 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private Circle dashboardButtonIndicator;
     @FXML
-    private Rectangle dashboardButtonBG;
-    @FXML
     private Group projectButton;
+    @FXML
+    private Rectangle projectButtonBG;
     @FXML
     private ImageView projectButtonIcon;
     @FXML
@@ -73,21 +84,9 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private Circle projectButtonIndicator;
     @FXML
-    private Rectangle projectButtonBG;
-    @FXML
-    private Rectangle logoutButtonBG;
-    @FXML
-    private ImageView logoutButtonIcon;
-    @FXML
-    private Label logoutButtonLabel;
-    @FXML
-    private Group logoutButton;
+    private Group teamButton;
     @FXML
     private Rectangle teamButtonBG;
-    @FXML
-    private Circle logoutButtonIndicator;
-    @FXML
-    private Group teamButton;
     @FXML
     private ImageView teamButtonIcon;
     @FXML
@@ -115,6 +114,16 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private Circle userButtonIndicator;
     @FXML
+    private Group logoutButton;
+    @FXML
+    private Rectangle logoutButtonBG;
+    @FXML
+    private ImageView logoutButtonIcon;
+    @FXML
+    private Label logoutButtonLabel;
+    @FXML
+    private Circle logoutButtonIndicator;
+    @FXML
     private Group settingsButton;
     @FXML
     private Rectangle settingsButtonBG;
@@ -125,14 +134,12 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private Circle settingsButtonIndicator;
     @FXML
+    private BorderPane rootPane;
+    @FXML
     private ImageView profileButton;
     @FXML
     private ImageView notificationButton;
-    @FXML
-    private BorderPane rootPane;
-    @FXML
-    private Label titlebarLabel;
-
+    
     /**
      * Initializes the controller class.
      */
@@ -140,16 +147,9 @@ public class SuperAdminPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
-    }
+    }    
     
-    private static SuperAdminPageController instance;
-    
-    Config config = new Config();
-
-    private double xOffset = 0;
-    private double yOffset = 0;
-    
-    public static SuperAdminPageController getInstance() {
+    public static AdminPageController getInstance() {
         return instance;
     }
     
@@ -163,6 +163,14 @@ public class SuperAdminPageController implements Initializable {
             System.out.println(e);
             config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
         }
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getUsername() {
+        return username;
     }
     
     private void hoverIcon(ImageView image) {
@@ -183,6 +191,7 @@ public class SuperAdminPageController implements Initializable {
         scaleTransition.play();
     }
 
+
     @FXML
     private void titleBarOnMousePressedHandler(MouseEvent event) {
         xOffset = event.getSceneX();
@@ -198,12 +207,12 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void closeButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(closeButtonBG);
+        elementConf.fadeOut(closeButtonBG);
     }
 
     @FXML
     private void closeButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(closeButtonBG);
+        elementConf.fadeIn(closeButtonBG);
     }
 
     @FXML
@@ -229,23 +238,23 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void dashboardMouseExitHandler(MouseEvent event) {
-        config.fadeOut(dashboardButtonBG);
+        elementConf.fadeOut(dashboardButtonBG);
     }
 
     @FXML
     private void dashboardButtonMouseEnteredHandler(MouseEvent event) {
-        config.fadeIn(dashboardButtonBG);
+        elementConf.fadeIn(dashboardButtonBG);
     }
 
     @FXML
     private void dashboardButtonMouseClickHandler(MouseEvent event) {
-        config.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
         
-        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
-        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        elementConf.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
@@ -260,23 +269,23 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void projectButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(projectButtonBG);
+        elementConf.fadeOut(projectButtonBG);
     }
 
     @FXML
     private void projectButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(projectButtonBG);
+        elementConf.fadeIn(projectButtonBG);
     }
 
     @FXML
     private void projectButtonMouseClickHandler(MouseEvent event) {
-        config.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        elementConf.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         
-        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
-        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        elementConf.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
@@ -287,23 +296,23 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private void logoutButtonMouseReleaseHandler(MouseEvent event) {
         logoutButtonBG.setFill(Color.web("#f5f5f5"));
-        config.setUnselected("/projectvantage/resources/icons/signout-icon-unselected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/signout-icon-unselected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
     }
 
     @FXML
     private void logoutButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(logoutButtonBG);
+        elementConf.fadeOut(logoutButtonBG);
     }
 
     @FXML
     private void logoutButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(logoutButtonBG);
+        elementConf.fadeIn(logoutButtonBG);
     }
 
     @FXML
     private void logoutButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
-        Alert alert = new Alert(AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Log out Confirmation.");
         alert.setContentText("are you sure you want to log out?");
         alert.initStyle(StageStyle.UNDECORATED);
@@ -312,7 +321,7 @@ public class SuperAdminPageController implements Initializable {
         alert.showAndWait().ifPresent(response -> {
             if(response == ButtonType.OK)
                 try {
-                    config.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
+                    pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -322,7 +331,7 @@ public class SuperAdminPageController implements Initializable {
     @FXML
     private void logoutButtonMousePressHandler(MouseEvent event) {
         logoutButtonBG.setFill(Color.web("#eeeeee"));
-        config.setSelected("/projectvantage/resources/icons/signout-icon-selected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
+        elementConf.setSelected("/projectvantage/resources/icons/signout-icon-selected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
     }
 
     @FXML
@@ -332,23 +341,23 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void teamButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(teamButtonBG);
+        elementConf.fadeOut(teamButtonBG);
     }
 
     @FXML
     private void teamButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(teamButtonBG);
+        elementConf.fadeIn(teamButtonBG);
     }
 
     @FXML
     private void teamButtonMouseClickHandler(MouseEvent event) {
-        config.setSelected("/projectvantage/resources/icons/team-icon-selected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
-        
-        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
-        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setSelected("/projectvantage/resources/icons/team-icon-selected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+      
+        elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        elementConf.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
@@ -363,23 +372,23 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void taskButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(taskButtonBG);
+        elementConf.fadeOut(taskButtonBG);
     }
 
     @FXML
     private void taskButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(taskButtonBG);
+        elementConf.fadeIn(taskButtonBG);
     }
 
     @FXML
     private void taskButtonMouseClickHandler(MouseEvent event) {
-        config.setSelected("/projectvantage/resources/icons/task-icon-selected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        elementConf.setSelected("/projectvantage/resources/icons/task-icon-selected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
         
-        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
-        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        elementConf.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
@@ -394,25 +403,25 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void userButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(userButtonBG);
+        elementConf.fadeOut(userButtonBG);
     }
 
     @FXML
     private void userButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(userButtonBG);
+        elementConf.fadeIn(userButtonBG);
     }
 
     @FXML
     private void userButtonMouseClickHandler(MouseEvent event) throws Exception {
-        config.setSelected("projectvantage/resources/icons/user-icon-selected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
-        loadPage("/projectvantage/fxml/superadmin/UserManagementPage.fxml");
+        elementConf.setSelected("projectvantage/resources/icons/user-icon-selected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        loadPage("/projectvantage/fxml/admin/UserManagementPage.fxml");
         titlebarLabel.setText("Users");
         
-        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
-        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
@@ -427,23 +436,23 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void settingsButtonMouseExitHandler(MouseEvent event) {
-        config.fadeOut(settingsButtonBG);
+        elementConf.fadeOut(settingsButtonBG);
     }
 
     @FXML
     private void settingsButtonMouseEnterHandler(MouseEvent event) {
-        config.fadeIn(settingsButtonBG);
+        elementConf.fadeIn(settingsButtonBG);
     }
 
     @FXML
     private void settingsButtonMouseClickHandler(MouseEvent event) {
-        config.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
         
-        config.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        config.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
-        config.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
-        config.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        elementConf.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
     }
 
     @FXML
@@ -463,11 +472,15 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void profileButtonMouseReleaseHandler(MouseEvent event) {
-        config.releaseIcon(profileButton);
+        elementConf.releaseIcon(profileButton);
     }
 
     @FXML
     private void profileButtonMouseClickHandler(MouseEvent event) {
+        String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
+        String user = getInstance().username;
+        System.out.println(user);
+        pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
     }
 
     @FXML
@@ -489,7 +502,7 @@ public class SuperAdminPageController implements Initializable {
 
     @FXML
     private void notificationButtonMouseReleaseHandler(MouseEvent event) {
-        config.releaseIcon(notificationButton);
+        elementConf.releaseIcon(notificationButton);
     }
 
     @FXML

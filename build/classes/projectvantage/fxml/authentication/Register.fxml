@@ -41,11 +41,11 @@
             </Label>
             <TextField fx:id="middleNameField" layoutX="55.0" layoutY="284.0" prefHeight="30.0" prefWidth="150.0" promptText="Ex. Samayo" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
             <TextField fx:id="lastNameField" layoutX="212.0" layoutY="284.0" prefHeight="30.0" prefWidth="150.0" promptText="Ex. Sison" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
-            <TextField fx:id="emailAddressField" layoutX="54.0" layoutY="333.0" prefHeight="30.0" prefWidth="150.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
+            <TextField fx:id="emailAddressField" layoutX="54.0" layoutY="333.0" prefHeight="30.0" prefWidth="150.0" promptText="Ex. user@email.com" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
             <TextField fx:id="phoneNumberField" layoutX="213.0" layoutY="333.0" prefHeight="30.0" prefWidth="150.0" promptText="Ex. 09541065582" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
             <TextField fx:id="usernameField" layoutX="54.0" layoutY="388.0" prefHeight="30.0" prefWidth="307.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
-            <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="55.0" layoutY="443.0" prefHeight="30.0" prefWidth="150.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
-            <PasswordField fx:id="passwordConfirmField" alignment="CENTER" layoutX="210.0" layoutY="443.0" prefHeight="30.0" prefWidth="150.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
+            <PasswordField fx:id="passwordField" layoutX="55.0" layoutY="443.0" prefHeight="30.0" prefWidth="150.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
+            <PasswordField fx:id="passwordConfirmField" layoutX="210.0" layoutY="443.0" prefHeight="30.0" prefWidth="150.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
             <Label layoutX="55.0" layoutY="267.0" text="Middle name (optional):" textFill="#575757">
                <font>
                   <Font name="Leelawadee UI" size="12.0" />
