@@ -44,6 +44,7 @@ public class AdminPageController implements Initializable {
     ElementConfig elementConf = new ElementConfig();
     Config config = new Config();
     ProfilePageController profileController = ProfilePageController.getInstance();
+    AdminDashboardPageController dashboardController = AdminDashboardPageController.getInstance();
     
     private static AdminPageController instance;
     private String username;
@@ -143,26 +144,8 @@ public class AdminPageController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        instance = this;
-    }    
-    
     public static AdminPageController getInstance() {
         return instance;
-    }
-    
-    public void loadPage(String targetFXML) {
-        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
-        
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource(targetFXML));
-            rootPane.setCenter(root);
-        } catch (Exception e) {
-            System.out.println(e);
-            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
-        }
     }
     
     public void setUsername(String username) {
@@ -171,6 +154,26 @@ public class AdminPageController implements Initializable {
     
     public String getUsername() {
         return username;
+    }
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+        instance = this;
+    }    
+    
+    
+    
+    public void loadPage(String targetFXML) {
+        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
+        
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource(targetFXML));
+            rootPane.setCenter(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+        }
     }
     
     private void hoverIcon(ImageView image) {
@@ -248,7 +251,17 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void dashboardButtonMouseClickHandler(MouseEvent event) {
+//        String user = getInstance().getUsername();
+        String fxmlLocation = "/projectvantage/fxml/admin/AdminDashboardPage.fxml";
+        
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlLocation));
+//        AdminDashboardPageController dashboardController = loader.getController();
+        
         elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        loadPage(fxmlLocation);
+        titlebarLabel.setText("Dashboard");
+//        dashboardController.getUsernameLabel().setText(user);
+//        dashboardController.getWelcomeMessageLabel().setOpacity(1);
         
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
@@ -413,6 +426,7 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void userButtonMouseClickHandler(MouseEvent event) throws Exception {
+        
         elementConf.setSelected("projectvantage/resources/icons/user-icon-selected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
         loadPage("/projectvantage/fxml/admin/UserManagementPage.fxml");
         titlebarLabel.setText("Users");
@@ -479,7 +493,6 @@ public class AdminPageController implements Initializable {
     private void profileButtonMouseClickHandler(MouseEvent event) {
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
         String user = getInstance().username;
-        System.out.println(user);
         pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
     }
 

@@ -10,6 +10,7 @@ import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
 import projectvantage.controllers.admin.AdminPageController;
+import projectvantage.controllers.admin.AdminDashboardPageController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -149,16 +150,50 @@ public class LoginController implements Initializable {
                 switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
                 break;
             case "admin":
-                switchScene(getClass(), event, "/projectvantage/fxml/admin/AdminPage.fxml");
+                loginToDashboard(getClass(), event, "/projectvantage/fxml/admin/AdminPage.fxml", "/projectvantage/fxml/admin/AdminDashboardPage.fxml");
                 break;
             default:
                 config.showErrorMessage("Role not found", "Role error", currentStage);
         }
     }
     
+    public void loginToDashboard(Class getClass, Event evt, String targetFXML, String dashboardFXML) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
+        FXMLLoader dashboardLoader = new FXMLLoader(getClass.getResource(dashboardFXML));
+        Parent root = loader.load();
+        Parent dashboardRoot = dashboardLoader.load();
+        
+        Stage currentStage = (Stage) titlePane.getScene().getWindow();
+        
+        String user = usernameField.getText();
+        String pass = passwordField.getText();
+        
+        switch(getRole(user, pass)){
+            case "team member":
+                TeamMemberMainPageController teamMemberController = loader.getController();
+                teamMemberController.setUsername(user);
+            break;
+            case "admin":
+                AdminPageController adminController = loader.getController();
+                AdminDashboardPageController dashboardController = dashboardLoader.getController();
+                adminController.setUsername(user);
+                dashboardController.loadUsername(user);
+            break;
+        }
+        
+        Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        pageConf.setCenterAlignment(stage);
+        stage.show();
+        config.showAlert(Alert.AlertType.INFORMATION, "Login Sucessful!", "Welcome " + user + "!",currentStage);
+    }
+    
     public void switchScene(Class getClass, Event evt, String targetFXML) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
         Parent root = loader.load();
+        
+        Stage currentStage = (Stage) titlePane.getScene().getWindow();
         
         String user = usernameField.getText();
         String pass = passwordField.getText();
@@ -179,6 +214,7 @@ public class LoginController implements Initializable {
         stage.setResizable(false);
         pageConf.setCenterAlignment(stage);
         stage.show();
+        config.showAlert(Alert.AlertType.INFORMATION, "Login Sucessful!", "Welcome " + user + "!",currentStage);
     }
     
     @FXML

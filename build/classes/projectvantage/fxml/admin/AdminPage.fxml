@@ -252,7 +252,23 @@
                <center>
                   <BorderPane fx:id="rootPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <center>
-                        <Pane prefHeight="488.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+                        <Pane prefHeight="488.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Group fx:id="welcomeMessageLabel" layoutX="14.0" layoutY="14.0">
+                                 <children>
+                                    <Label text="Hello," textFill="#192b4b">
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="usernameLabel" layoutX="62.0" text="Username" textFill="#2f9efe">
+                                       <font>
+                                          <Font name="Segoe UI Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Group>
+                           </children></Pane>
                      </center>
                      <right>
                         <Pane prefHeight="488.0" prefWidth="200.0" BorderPane.alignment="CENTER">
