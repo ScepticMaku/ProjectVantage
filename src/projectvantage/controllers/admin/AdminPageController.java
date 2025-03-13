@@ -156,6 +156,14 @@ public class AdminPageController implements Initializable {
         return username;
     }
     
+    public AnchorPane getBackgroundPane() {
+        return backgroundPane;
+    }
+    
+    public BorderPane getRootPane() {
+        return rootPane;
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -494,6 +502,7 @@ public class AdminPageController implements Initializable {
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
         String user = getInstance().username;
         pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
+        titlebarLabel.setText("Profile");
     }
 
     @FXML

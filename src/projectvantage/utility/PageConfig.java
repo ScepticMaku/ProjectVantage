@@ -5,6 +5,11 @@
  */
 package projectvantage.utility;
 
+import projectvantage.controllers.misc.ProfilePageController;
+import projectvantage.controllers.admin.AdminDashboardPageController;
+import projectvantage.controllers.authentication.LoginController;
+import projectvantage.controllers.team_member.TeamMemberDashboardPageController;
+
 import java.sql.ResultSet;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
@@ -15,14 +20,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import projectvantage.controllers.misc.ProfilePageController;
+
 
 /**
  *
  * @author Mark Work Account
  */
 public class PageConfig {
-    
     Config config = new Config();
     
     public void setCenterAlignment(Stage stage) {
@@ -68,5 +72,21 @@ public class PageConfig {
             e.printStackTrace();
             config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
         }
+    }
+    
+    public void loadDashboardPage(String targetFXML, String user, Node node, BorderPane pane) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
+        Parent root = loader.load();
+        
+        
+        switch(LoginController.getInstance().getRole(user)) {
+            case "team member":
+                TeamMemberDashboardPageController.getInstance().loadUsername(user);
+                break;
+            case "admin":
+                AdminDashboardPageController.getInstance().loadUsername(user);
+            break;
+        }
+        pane.setCenter(root);
     }
 }

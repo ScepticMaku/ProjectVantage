@@ -144,6 +144,14 @@ public class TeamMemberMainPageController implements Initializable {
         return username;
     }
     
+    public AnchorPane getBackgroundPane() {
+        return backgroundPane;
+    }
+    
+    public BorderPane getRootPane() {
+        return rootPane;
+    }
+    
     private void hoverIcon(ImageView image) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
         scaleTransition.setFromX(1.0);

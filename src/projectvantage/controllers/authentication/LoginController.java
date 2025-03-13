@@ -10,7 +10,6 @@ import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
 import projectvantage.controllers.admin.AdminPageController;
-import projectvantage.controllers.admin.AdminDashboardPageController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -49,6 +48,8 @@ public class LoginController implements Initializable {
     Config config = new Config();
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
+    
+    AdminPageController adminController = AdminPageController.getInstance();
     
     private static LoginController instance;
 
@@ -94,9 +95,9 @@ public class LoginController implements Initializable {
         return false;
     }
     
-    private String getRole(String user, String pass) {
+    public String getRole(String user) {
         dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT role FROM user WHERE username = '" + user + "' AND password = '" + pass + "'")) {
+        try(ResultSet result = db.getData("SELECT role FROM user WHERE username = '" + user + "'")) {
             if(result.next()) {
                 String role = result.getString("role");
                 return role;
@@ -145,18 +146,19 @@ public class LoginController implements Initializable {
         
         config.showAlert(Alert.AlertType.INFORMATION, "Login Message.", "Successfully Logged In", currentStage);
         
-        switch(getRole(username, password)) {
+        switch(getRole(username)) {
             case "team member": 
                 switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
                 break;
             case "admin":
-                loginToDashboard(getClass(), event, "/projectvantage/fxml/admin/AdminPage.fxml", "/projectvantage/fxml/admin/AdminDashboardPage.fxml");
+                switchScene(getClass(), event, "/projectvantage/fxml/admin/AdminPage.fxml");
                 break;
             default:
                 config.showErrorMessage("Role not found", "Role error", currentStage);
         }
     }
     
+    /*
     public void loginToDashboard(Class getClass, Event evt, String targetFXML, String dashboardFXML) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
         FXMLLoader dashboardLoader = new FXMLLoader(getClass.getResource(dashboardFXML));
@@ -187,7 +189,7 @@ public class LoginController implements Initializable {
         pageConf.setCenterAlignment(stage);
         stage.show();
         config.showAlert(Alert.AlertType.INFORMATION, "Login Sucessful!", "Welcome " + user + "!",currentStage);
-    }
+    }*/
     
     public void switchScene(Class getClass, Event evt, String targetFXML) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
@@ -198,14 +200,16 @@ public class LoginController implements Initializable {
         String user = usernameField.getText();
         String pass = passwordField.getText();
         
-        switch(getRole(user, pass)){
+        switch(getRole(user)){
             case "team member":
                 TeamMemberMainPageController teamMemberController = loader.getController();
                 teamMemberController.setUsername(user);
+                pageConf.loadDashboardPage("/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml", user, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane());
             break;
             case "admin":
                 AdminPageController adminController = loader.getController();
                 adminController.setUsername(user);
+                pageConf.loadDashboardPage("/projectvantage/fxml/admin/AdminDashboardPage.fxml", user, adminController.getBackgroundPane(), adminController.getRootPane());
             break;
         }
         
