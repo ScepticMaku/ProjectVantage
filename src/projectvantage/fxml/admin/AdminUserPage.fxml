@@ -11,9 +11,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.ProfilePageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.AdminUserPageController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Profile" textFill="#192b4b">
+      <Label layoutX="14.0" layoutY="14.0" text="User" textFill="#192b4b">
          <font>
             <Font name="Segoe UI Bold" size="20.0" />
          </font>
@@ -106,7 +106,21 @@
             <Font name="Segoe UI" size="14.0" />
          </font>
       </Label>
-      <Button fx:id="editProfileButton" layoutX="503.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#editProfileMouseClickHandler" prefHeight="27.0" prefWidth="83.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Edit Profile" />
-      <Button fx:id="changePasswordButton" layoutX="377.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#changePasswordMouseClickHandler" prefHeight="27.0" prefWidth="116.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Change Password" />
+      <Button fx:id="editUserButton" layoutX="409.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#editUserButtonMouseClickHandler" prefHeight="27.0" prefWidth="83.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Edit User" />
+      <Label layoutX="398.0" layoutY="240.0" text="Status:" textFill="#2f9efe">
+         <font>
+            <Font name="Segoe UI Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="statusPlaceholder" layoutX="399.0" layoutY="259.0" text="Placeholder" textFill="#575757">
+         <font>
+            <Font name="Segoe UI" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="backButton" layoutX="504.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#backButtonMouseClickHandler" prefHeight="27.0" prefWidth="82.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Back">
+         <font>
+            <Font name="Segoe UI" size="12.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

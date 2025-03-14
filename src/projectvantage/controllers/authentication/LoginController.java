@@ -108,9 +108,9 @@ public class LoginController implements Initializable {
         return null;
     }
     
-    private String getStatus(String user, String pass) {
+    public String getStatus(String user) {
         dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT status FROM user WHERE username = '" + user + "' AND password = '" + pass + "'")) {
+        try(ResultSet result = db.getData("SELECT status FROM user WHERE username = '" + user + "'")) {
             if(result.next())
                 return result.getString("status");
         } catch (SQLException e) {
@@ -139,7 +139,7 @@ public class LoginController implements Initializable {
             return;
         }
         
-        if(!getStatus(username, password).equals("active")) {
+        if(!getStatus(username).equals("active")) {
             config.showErrorMessage("Your account isn't active yet.", "Account Status Error", currentStage);
             return;
         }

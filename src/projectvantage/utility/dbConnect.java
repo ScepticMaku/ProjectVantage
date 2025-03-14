@@ -43,4 +43,17 @@ public class dbConnect {
             return false;
         }
     }
+    
+    public boolean updateData(String query, Object... values) {
+        try (PreparedStatement pstmt = connect.prepareStatement(query)) {
+            for (int i = 0; i < values.length; i++) {
+                pstmt.setObject(i + 1, values[i]); // Set values dynamically
+            }
+            return pstmt.executeUpdate() > 0; // Returns true if the update was successful
+        } catch (SQLException e) {
+            System.out.println("Update failed: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

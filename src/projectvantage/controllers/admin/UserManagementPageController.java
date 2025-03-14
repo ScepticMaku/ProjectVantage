@@ -7,9 +7,11 @@ package projectvantage.controllers.admin;
 
 import projectvantage.models.User;
 
+import projectvantage.controllers.admin.AdminPageController;
 import projectvantage.utility.Config;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.ElementConfig;
+
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,6 +77,8 @@ public class UserManagementPageController implements Initializable {
     private ImageView searchButton;
     @FXML
     private Button addButton;
+    @FXML
+    private Button viewButton;
 
     /**
      * Initializes the controller class.
@@ -82,6 +86,19 @@ public class UserManagementPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+
+        userId.setResizable(false);
+        userFirstName.setResizable(false);
+        userLastName.setResizable(false);
+        userRole.setResizable(false);
+        userStatus.setResizable(false);
+        
+        userId.setSortable(false);
+        userFirstName.setSortable(false);
+        userLastName.setSortable(false);
+        userRole.setSortable(false);
+        userStatus.setSortable(false);
+        
         userId.setCellValueFactory(new PropertyValueFactory<>("id"));
         userFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         userLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -91,7 +108,7 @@ public class UserManagementPageController implements Initializable {
         loadTableData();
     }    
 
- private Node createPage(int pageIndex) {
+    private Node createPage(int pageIndex) {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
         int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, userList.size());
         userTable.setItems(FXCollections.observableArrayList(userList.subList(fromIndex, toIndex)));
@@ -178,5 +195,23 @@ public class UserManagementPageController implements Initializable {
         String FXML = "/projectvantage/fxml/admin/AddUserPage.fxml";
         AdminPageController admin = AdminPageController.getInstance();
         admin.loadPage(FXML);
+    }
+
+    @FXML
+    private void viewButtonMouseClickHandler(MouseEvent event) {
+        AdminPageController adminController = AdminPageController.getInstance();
+        
+        Stage currentStage = (Stage) rootPane.getScene().getWindow();
+        User selectedRow = userTable.getSelectionModel().getSelectedItem();
+        
+        if(selectedRow == null) {
+            config.showErrorMessage("You must select a row.", "Selection Error", currentStage);
+            return;
+        }
+        
+        String fxmlLocation = "/projectvantage/fxml/admin/AdminUserPage.fxml";
+        String user = selectedRow.getUsername();
+        pageConf.loadUserPage(fxmlLocation, user ,adminController.getBackgroundPane(), adminController.getRootPane());
+        adminController.getTitlebarLabel().setText("User");
     }
 }

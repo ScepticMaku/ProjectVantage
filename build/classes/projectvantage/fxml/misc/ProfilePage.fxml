@@ -106,6 +106,7 @@
             <Font name="Segoe UI" size="14.0" />
          </font>
       </Label>
-      <Button layoutX="503.0" layoutY="13.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="83.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Edit Profile" />
+      <Button fx:id="editProfileButton" layoutX="503.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#editProfileMouseClickHandler" prefHeight="27.0" prefWidth="83.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Edit Profile" />
+      <Button fx:id="changePasswordButton" layoutX="377.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#changePasswordMouseClickHandler" prefHeight="27.0" prefWidth="116.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Change Password" />
    </children>
 </AnchorPane>

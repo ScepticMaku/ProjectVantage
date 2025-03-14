@@ -9,6 +9,8 @@ import projectvantage.controllers.misc.ProfilePageController;
 import projectvantage.controllers.admin.AdminDashboardPageController;
 import projectvantage.controllers.authentication.LoginController;
 import projectvantage.controllers.team_member.TeamMemberDashboardPageController;
+import projectvantage.controllers.admin.AdminUserPageController;
+import projectvantage.controllers.admin.EditUserPageController;
 
 import java.sql.ResultSet;
 import javafx.event.Event;
@@ -20,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import projectvantage.controllers.misc.EditProfilePageController;
 
 
 /**
@@ -74,6 +77,64 @@ public class PageConfig {
         }
     }
     
+    public void loadUserPage(String targetFXML, String user, Node node, BorderPane pane) {
+        dbConnect db = new dbConnect();
+        Stage currentStage = (Stage) node.getScene().getWindow();
+        
+        String sql = "SELECT first_name, middle_name, last_name, email, phone_number, username, role, status FROM user WHERE username='" + user + "'";
+        try{
+            ResultSet result = db.getData(sql);
+            if(result.next()) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
+                Parent root = loader.load();
+                
+                String first_name = result.getString("first_name");
+                String middle_name = result.getString("middle_name");
+                String last_name = result.getString("last_name");
+                String email = result.getString("email");
+                String phone_number = result.getString("phone_number");
+                String role = result.getString("role");
+                String status = result.getString("status");
+                
+                AdminUserPageController.getInstance().loadUser(first_name, middle_name, last_name, email, phone_number, user, role, status);
+                pane.setCenter(root);   
+            }
+            result.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+        }
+    }
+    
+    public void loadEditUserPage(String targetFXML, String user, Node node, BorderPane pane) {
+        dbConnect db = new dbConnect();
+        Stage currentStage = (Stage) node.getScene().getWindow();
+        
+        String sql = "SELECT first_name, middle_name, last_name, email, phone_number, username, role, status FROM user WHERE username='" + user + "'";
+        try{
+            ResultSet result = db.getData(sql);
+            if(result.next()) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
+                Parent root = loader.load();
+                
+                String first_name = result.getString("first_name");
+                String middle_name = result.getString("middle_name");
+                String last_name = result.getString("last_name");
+                String email = result.getString("email");
+                String phone_number = result.getString("phone_number");
+                String role = result.getString("role");
+                String status = result.getString("status");
+                
+                EditUserPageController.getInstance().loadUserContents(first_name, middle_name, last_name, email, phone_number, user, role, status);
+                pane.setCenter(root);   
+            }
+            result.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+        }
+    }
+    
     public void loadDashboardPage(String targetFXML, String user, Node node, BorderPane pane) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
         Parent root = loader.load();
@@ -87,6 +148,13 @@ public class PageConfig {
                 AdminDashboardPageController.getInstance().loadUsername(user);
             break;
         }
+        pane.setCenter(root);
+    }
+    
+    public void loadEditProfilePage(String targetFXML, Node node, BorderPane pane, String...info) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
+        Parent root = loader.load();
+        EditProfilePageController.getInstance().loadUserContents(info[0], info[1], info[2], info[3], info[4], info[5], info[6]);
         pane.setCenter(root);
     }
 }

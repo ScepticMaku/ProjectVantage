@@ -164,13 +164,15 @@ public class AdminPageController implements Initializable {
         return rootPane;
     }
     
+    public Label getTitlebarLabel() {
+        return titlebarLabel;
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
-    }    
-    
-    
+    }
     
     public void loadPage(String targetFXML) {
         Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
@@ -258,18 +260,13 @@ public class AdminPageController implements Initializable {
     }
 
     @FXML
-    private void dashboardButtonMouseClickHandler(MouseEvent event) {
-//        String user = getInstance().getUsername();
+    private void dashboardButtonMouseClickHandler(MouseEvent event) throws Exception {
+        String user = getInstance().getUsername();
         String fxmlLocation = "/projectvantage/fxml/admin/AdminDashboardPage.fxml";
         
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlLocation));
-//        AdminDashboardPageController dashboardController = loader.getController();
-        
         elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        loadPage(fxmlLocation);
+        pageConf.loadDashboardPage(fxmlLocation, user, backgroundPane, rootPane);
         titlebarLabel.setText("Dashboard");
-//        dashboardController.getUsernameLabel().setText(user);
-//        dashboardController.getWelcomeMessageLabel().setOpacity(1);
         
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);

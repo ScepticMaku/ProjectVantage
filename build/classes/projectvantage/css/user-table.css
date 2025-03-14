@@ -1,15 +1,15 @@
 .table-view {
 	-fx-background-color: transparent;
-	-fx-font-size: 14px;	
+	-fx-font-size: 14px;
 }
 
 .table-view .column-header-background {
 	-fx-background-color: transparent;
-	
 }
 
 .table-view .column-header {
 	-fx-background-color: transparent;
+	
 }
 
 .column-header .label {
@@ -18,7 +18,7 @@
 
 .table-cell {
 	-fx-padding: 10px;
-	-fx-alignment: center;
+	-fx-text-alignment: center;
 }
 
 .table-row-cell:hover {

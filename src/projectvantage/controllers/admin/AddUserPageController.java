@@ -82,12 +82,16 @@ public class AddUserPageController implements Initializable {
             config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
         }
     }
-
-    @FXML
-    private void backButtonMouseClickHandler(MouseEvent event) {
+    
+    private void returnToPreviousPage() {
         String FXML = "/projectvantage/fxml/admin/UserManagementPage.fxml";
         AdminPageController admin = AdminPageController.getInstance();
         admin.loadPage(FXML);
+    }
+
+    @FXML
+    private void backButtonMouseClickHandler(MouseEvent event) {
+        returnToPreviousPage();
     }
 
     @FXML
@@ -103,7 +107,7 @@ public class AddUserPageController implements Initializable {
         String password = passwordField.getText();
         String passwordConfirm = confirmPasswordField.getText();
         
-        String role = "team member";
+        String role;
         
         if(teamMemberRadioButton.isSelected()) {
             role = "team member";
@@ -123,59 +127,52 @@ public class AddUserPageController implements Initializable {
         String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, password, role, status) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'inactive')";
         
-        if(!register.verifyUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm)) {
+        if(!register.verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm)) {
 //            activateUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password, role, status);
             insertUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password, role);
+            returnToPreviousPage();
         }
     }
 
     @FXML
     private void teamMemberButtonMouseClickHandler(MouseEvent event) {
-        if(teamMemberRadioButton.isSelected()) {
             teamLeaderRadioButton.setSelected(false);
             teamManagerRadioButton.setSelected(false);
             projectManagerRadioButton.setSelected(false);
             adminRadioButton.setSelected(false);
-        }
     }
 
     @FXML
     private void teamLeaderButtonMouseClickHandler(MouseEvent event) {
-        if(teamLeaderRadioButton.isSelected()) {
             teamMemberRadioButton.setSelected(false);
             teamManagerRadioButton.setSelected(false);
             projectManagerRadioButton.setSelected(false);
             adminRadioButton.setSelected(false);
-        }
     }
 
     @FXML
     private void teamManagerMouseClickHandler(MouseEvent event) {
-        if(teamManagerRadioButton.isSelected()) {
             teamLeaderRadioButton.setSelected(false);
             teamMemberRadioButton.setSelected(false);
             projectManagerRadioButton.setSelected(false);
             adminRadioButton.setSelected(false);
-        }
+        
     }
 
     @FXML
     private void projectManagerMouseClickHandler(MouseEvent event) {
-        if(projectManagerRadioButton.isSelected()) {
             teamLeaderRadioButton.setSelected(false);
             teamManagerRadioButton.setSelected(false);
             teamMemberRadioButton.setSelected(false);
             adminRadioButton.setSelected(false);
-        }
     }
 
     @FXML
     private void adminButtonMouseClickHandler(MouseEvent event) {
-        if(adminRadioButton.isSelected()) {
             teamLeaderRadioButton.setSelected(false);
             teamManagerRadioButton.setSelected(false);
             projectManagerRadioButton.setSelected(false);
             teamMemberRadioButton.setSelected(false);
-        }
+        
     }
 }

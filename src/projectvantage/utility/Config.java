@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -43,7 +44,7 @@ public class Config {
         alert.setHeaderText(header);
         alert.setContentText(message);
         alert.initStyle(StageStyle.UNDECORATED);
-        alert.initOwner(owner);
+        alert.initOwner(owner); 
 
         if(alertType == AlertType.CONFIRMATION && header.contains("Exit")) {
             showExitConfirmationAlert(alert);

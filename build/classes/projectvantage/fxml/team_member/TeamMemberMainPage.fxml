@@ -27,7 +27,7 @@
                               <Image url="@../../resources/img/ProjectLogo.png" />
                            </image>
                         </ImageView>
-                        <Label layoutX="35.0" layoutY="-3.0" prefHeight="30.0" prefWidth="101.0" text="Dashboard" />
+                        <Label fx:id="titlebarLabel" layoutX="35.0" layoutY="-3.0" prefHeight="30.0" prefWidth="101.0" text="Dashboard" />
                         <Group fx:id="closeButton" layoutX="945.0" layoutY="-5.0" onMouseClicked="#closeButtonMouseClickHandler" onMouseEntered="#closeButtonMouseEnterHandler" onMouseExited="#closeButtonMouseExitHandler" onMousePressed="#closeButtonMousePressHandler" onMouseReleased="#closeButtonMouseReleaseHandler">
                            <children>
                               <Rectangle fx:id="closeButtonBG" arcHeight="5.0" arcWidth="5.0" fill="#d71515" height="30.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="55.0" />

@@ -109,7 +109,7 @@ public class RegisterController implements Initializable {
         pageConf.switchScene(getClass(), event, FXML);
     }
     
-    public boolean verifyUser(Stage currentStage, String query, String firstName, String middleName, String lastName, String emailAddress, String phoneNumber, String username, String password, String passwordConfirm) throws Exception {
+    public boolean verifyUser(Stage currentStage, String firstName, String lastName, String emailAddress, String phoneNumber, String username, String password, String passwordConfirm) throws Exception {
         if(firstName.isEmpty()) {
             config.showErrorMessage("First name must not be empty", "Field Error", currentStage);
             return true;
@@ -203,7 +203,7 @@ public class RegisterController implements Initializable {
         String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, password, role, status) "
                 + "VALUES ( ?, ?, ?, ?, ?, ? ,? , 'team member' , 'inactive')";
         
-        if(!verifyUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm)) {
+        if(!verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm)) {
            if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password)) {
                 System.out.println("User added to database!");
                 config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);

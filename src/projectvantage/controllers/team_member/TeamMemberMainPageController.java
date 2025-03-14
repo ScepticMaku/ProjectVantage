@@ -110,6 +110,14 @@ public class TeamMemberMainPageController implements Initializable {
     private ImageView profileButton;
     @FXML
     private ImageView notificationButton;
+    @FXML
+    private Label titlebarLabel;
+    @FXML
+    private AnchorPane rootPane1;
+    @FXML
+    private Group welcomeMessageLabel;
+    @FXML
+    private Label usernameLabel;
 
     /**
      * Initializes the controller class.
@@ -150,6 +158,10 @@ public class TeamMemberMainPageController implements Initializable {
     
     public BorderPane getRootPane() {
         return rootPane;
+    }
+    
+    public Label getTitlebarLabel() {
+        return titlebarLabel;
     }
     
     private void hoverIcon(ImageView image) {
@@ -226,8 +238,13 @@ public class TeamMemberMainPageController implements Initializable {
     }
 
     @FXML
-    private void dashboardButtonMouseClickHandler(MouseEvent event) {
+    private void dashboardButtonMouseClickHandler(MouseEvent event) throws Exception {
+        String fxmlLocation = "/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml";
+        String user = getInstance().getUsername();
+        
         elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        pageConf.loadDashboardPage(fxmlLocation, user, backgroundPane, rootPane);
+        titlebarLabel.setText("Dashboard");
         
         elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
@@ -353,9 +370,13 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void profileButtonMouseClickHandler(MouseEvent event) {
+//        String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
+//        String user = getInstance().getUsername();
+//        pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
         String user = getInstance().getUsername();
         pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
+        titlebarLabel.setText("Profile");
     }
 
     @FXML
