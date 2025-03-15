@@ -9,6 +9,7 @@ import projectvantage.utility.Config;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.dbConnect;
+import projectvantage.utility.AuthenticationConfig;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -39,6 +40,8 @@ public class RegisterController implements Initializable {
     ElementConfig elementConf = new ElementConfig();
     PageConfig pageConf = new PageConfig();
     dbConnect connect = new dbConnect();
+    AuthenticationConfig authConf = new AuthenticationConfig();
+    
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
     
@@ -84,27 +87,6 @@ public class RegisterController implements Initializable {
     }
     
     private void switchToLogin(MouseEvent event) throws Exception {
-        /*AuthenticationController authControl = AuthenticationController.getInstance();
-        
-        if(authControl != null) {
-            Pane loginPane = authControl.getLoginPane();
-            Pane otherPane = authControl.getOtherPane();
-            Pane title = authControl.getTitlePane();
-            
-            otherPane.setVisible(false);
-            firstNameField.setText("");
-            lastNameField.setText("");
-            emailAddressField.setText("");
-            phoneNumberField.setText("");
-            usernameField.setText("");
-            passwordField.setText("");
-            passwordConfirmField.setText("");
-            
-            title.setLayoutY(150);
-            title.setLayoutX(500);
-            
-            loginPane.setVisible(true);
-        }*/
         String FXML = "/projectvantage/fxml/authentication/Login.fxml";
         pageConf.switchScene(getClass(), event, FXML);
     }
@@ -200,16 +182,20 @@ public class RegisterController implements Initializable {
         String password = passwordField.getText();
         String passwordConfirm = passwordConfirmField.getText();
         
-        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, password, role, status) "
-                + "VALUES ( ?, ?, ?, ?, ?, ? ,? , 'team member' , 'inactive')";
+        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, role, status) "
+                + "VALUES ( ?, ?, ?, ?, ?, ? ,?, ?, 'team member' , 'inactive')";
         
-        if(!verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm)) {
-           if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password)) {
-                System.out.println("User added to database!");
-                config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
-                switchToLogin(event);
-            } 
-        }  
+        if(verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
+            return;
+        
+        String salt = authConf.generateSalt();
+        String hashedPassword = authConf.hashPassword(password, salt);
+            
+        if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword)) {
+             System.out.println("User added to database!");
+             config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
+             switchToLogin(event);
+         }
     }
 
     @FXML

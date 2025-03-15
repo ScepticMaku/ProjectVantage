@@ -8,6 +8,7 @@ package projectvantage.controllers.admin;
 import projectvantage.controllers.authentication.RegisterController;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.Config;
+import projectvantage.utility.AuthenticationConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,6 +31,11 @@ import javafx.stage.StageStyle;
  * @author Mark Work Account
  */
 public class AddUserPageController implements Initializable {
+    
+    RegisterController register = new RegisterController();
+    dbConnect connect = new dbConnect();
+    Config config = new Config();
+    AuthenticationConfig authConf = new AuthenticationConfig();
 
     @FXML
     private AnchorPane rootPane;
@@ -60,8 +66,6 @@ public class AddUserPageController implements Initializable {
     @FXML
     private RadioButton projectManagerRadioButton;
     @FXML
-    private RadioButton adminRadioButton;
-    @FXML
     private Button addUserButton;
 
     /**
@@ -70,14 +74,10 @@ public class AddUserPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
     
-    RegisterController register = new RegisterController();
-    dbConnect connect = new dbConnect();
-    Config config = new Config();
-    
-    private void insertUser(Stage currentStage, String query, String firstName, String middleName, String lastName, String emailAddress, String phoneNumber, String username, String password, String role) {
-        if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password, role)) {
+    private void insertUser(Stage currentStage, String query, String firstName, String middleName, String lastName, String emailAddress, String phoneNumber, String username, String salt, String password, String role) {
+        if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, password, role)) {
             System.out.println("User added to database!");
             config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
         }
@@ -117,21 +117,25 @@ public class AddUserPageController implements Initializable {
             role = "team manager";
         } else if(projectManagerRadioButton.isSelected()) {
             role = "project manager";
-        } else if(adminRadioButton.isSelected()) {
-            role = "admin";
         } else {
             config.showErrorMessage("You must select a type of user", "User type error", currentStage);
             return;
         }
         
-        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, password, role, status) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'inactive')";
+        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, role, status) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'inactive')";
         
-        if(!register.verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm)) {
+        if(register.verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
+            return;
+        
+        String salt = authConf.generateSalt();
+        String hashedPassword = authConf.hashPassword(password, salt);
+        
 //            activateUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password, role, status);
-            insertUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password, role);
-            returnToPreviousPage();
-        }
+
+        insertUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword, role);
+        returnToPreviousPage();
+        
     }
 
     @FXML
@@ -139,7 +143,6 @@ public class AddUserPageController implements Initializable {
             teamLeaderRadioButton.setSelected(false);
             teamManagerRadioButton.setSelected(false);
             projectManagerRadioButton.setSelected(false);
-            adminRadioButton.setSelected(false);
     }
 
     @FXML
@@ -147,7 +150,6 @@ public class AddUserPageController implements Initializable {
             teamMemberRadioButton.setSelected(false);
             teamManagerRadioButton.setSelected(false);
             projectManagerRadioButton.setSelected(false);
-            adminRadioButton.setSelected(false);
     }
 
     @FXML
@@ -155,7 +157,6 @@ public class AddUserPageController implements Initializable {
             teamLeaderRadioButton.setSelected(false);
             teamMemberRadioButton.setSelected(false);
             projectManagerRadioButton.setSelected(false);
-            adminRadioButton.setSelected(false);
         
     }
 
@@ -164,15 +165,5 @@ public class AddUserPageController implements Initializable {
             teamLeaderRadioButton.setSelected(false);
             teamManagerRadioButton.setSelected(false);
             teamMemberRadioButton.setSelected(false);
-            adminRadioButton.setSelected(false);
-    }
-
-    @FXML
-    private void adminButtonMouseClickHandler(MouseEvent event) {
-            teamLeaderRadioButton.setSelected(false);
-            teamManagerRadioButton.setSelected(false);
-            projectManagerRadioButton.setSelected(false);
-            teamMemberRadioButton.setSelected(false);
-        
     }
 }

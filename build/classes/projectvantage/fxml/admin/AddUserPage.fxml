@@ -26,42 +26,37 @@
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="firstNameField" layoutX="17.0" layoutY="117.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
+      <TextField fx:id="firstNameField" layoutX="17.0" layoutY="117.0" prefHeight="30.0" prefWidth="167.0" promptText="Ex. Arl" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
       <Label layoutX="17.0" layoutY="93.0" text="First name:" textFill="#575757" />
-      <TextField fx:id="middleNameField" layoutX="212.0" layoutY="117.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
+      <TextField fx:id="middleNameField" layoutX="212.0" layoutY="117.0" prefHeight="30.0" prefWidth="167.0" promptText="Ex. Samayo" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
       <Label layoutX="212.0" layoutY="94.0" text="Middle name (optional):" textFill="#575757" />
-      <TextField fx:id="lastNameField" layoutX="17.0" layoutY="181.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
+      <TextField fx:id="lastNameField" layoutX="17.0" layoutY="181.0" prefHeight="30.0" prefWidth="167.0" promptText="Ex. Sison" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
       <Label layoutX="17.0" layoutY="157.0" text="Last name:" textFill="#575757" />
-      <TextField fx:id="emailAddressField" layoutX="18.0" layoutY="242.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
+      <TextField fx:id="emailAddressField" layoutX="18.0" layoutY="242.0" prefHeight="30.0" prefWidth="167.0" promptText="Ex. arl.sison@gmail.com" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
       <Label layoutX="18.0" layoutY="218.0" text="Email address:" textFill="#575757" />
-      <TextField fx:id="phoneNumberField" layoutX="212.0" layoutY="181.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
+      <TextField fx:id="phoneNumberField" layoutX="212.0" layoutY="181.0" prefHeight="30.0" prefWidth="167.0" promptText="Ex. 9546621352" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
       <Label layoutX="212.0" layoutY="157.0" text="Phone number:" textFill="#575757" />
       <TextField fx:id="usernameField" layoutX="212.0" layoutY="242.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" stylesheets="@../../css/text-field-style.css" />
       <Label layoutX="212.0" layoutY="218.0" text="Username:" textFill="#575757" />
       <Label layoutX="18.0" layoutY="279.0" text="Password" textFill="#575757" />
       <Label layoutX="212.0" layoutY="279.0" text="Confirm password:" textFill="#575757" />
       <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#2f9efe" height="242.0" layoutX="395.0" layoutY="97.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="184.0" />
-      <RadioButton fx:id="teamMemberRadioButton" layoutX="415.0" layoutY="122.0" mnemonicParsing="false" onMouseClicked="#teamMemberButtonMouseClickHandler" text="Team member" textFill="WHITE">
+      <RadioButton fx:id="teamMemberRadioButton" layoutX="419.0" layoutY="145.0" mnemonicParsing="false" onMouseClicked="#teamMemberButtonMouseClickHandler" text="Team member" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </RadioButton>
-      <RadioButton fx:id="teamLeaderRadioButton" layoutX="415.0" layoutY="164.0" mnemonicParsing="false" onMouseClicked="#teamLeaderButtonMouseClickHandler" text="Team Leader" textFill="WHITE">
+      <RadioButton fx:id="teamLeaderRadioButton" layoutX="419.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#teamLeaderButtonMouseClickHandler" text="Team Leader" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </RadioButton>
-      <RadioButton fx:id="teamManagerRadioButton" layoutX="416.0" layoutY="208.0" mnemonicParsing="false" onMouseClicked="#teamManagerMouseClickHandler" text="Team Manager" textFill="WHITE">
+      <RadioButton fx:id="teamManagerRadioButton" layoutX="420.0" layoutY="231.0" mnemonicParsing="false" onMouseClicked="#teamManagerMouseClickHandler" text="Team Manager" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </RadioButton>
-      <RadioButton fx:id="projectManagerRadioButton" layoutX="416.0" layoutY="249.0" mnemonicParsing="false" onMouseClicked="#projectManagerMouseClickHandler" text="Project Manager" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </RadioButton>
-      <RadioButton fx:id="adminRadioButton" layoutX="417.0" layoutY="290.0" mnemonicParsing="false" onMouseClicked="#adminButtonMouseClickHandler" text="Admin" textFill="WHITE">
+      <RadioButton fx:id="projectManagerRadioButton" layoutX="420.0" layoutY="272.0" mnemonicParsing="false" onMouseClicked="#projectManagerMouseClickHandler" text="Project Manager" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

@@ -10,6 +10,7 @@ import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
 import projectvantage.controllers.admin.AdminPageController;
+import projectvantage.utility.AuthenticationConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -48,7 +49,7 @@ public class LoginController implements Initializable {
     Config config = new Config();
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
-    
+    AuthenticationConfig authConfig = new AuthenticationConfig();
     AdminPageController adminController = AdminPageController.getInstance();
     
     private static LoginController instance;
@@ -85,9 +86,9 @@ public class LoginController implements Initializable {
         return instance;
     }
     
-    private boolean locateUser(String user, String pass) {
+    private boolean locateUser(String user) {
         dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT username, password FROM user  WHERE username = '" + user + "' AND password = '" + pass + "'")) {
+        try(ResultSet result = db.getData("SELECT username, password FROM user  WHERE username = '" + user + "'")) {
             return result.next();
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
@@ -95,13 +96,23 @@ public class LoginController implements Initializable {
         return false;
     }
     
+    private String getPassword(String user) {
+        dbConnect db = new dbConnect();
+        try(ResultSet result = db.getData("SELECT password FROM user  WHERE username = '" + user + "'")) {
+            if(result.next())
+                return result.getString("password");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return null;
+    }
+    
     public String getRole(String user) {
         dbConnect db = new dbConnect();
         try(ResultSet result = db.getData("SELECT role FROM user WHERE username = '" + user + "'")) {
-            if(result.next()) {
-                String role = result.getString("role");
-                return role;
-            }
+            if(result.next())
+                return result.getString("role");
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
         }
@@ -119,10 +130,26 @@ public class LoginController implements Initializable {
         return null;
     }
     
+    public String getSalt(String user) {
+        dbConnect db = new dbConnect();
+        try(ResultSet result = db.getData("SELECT salt FROM user WHERE username = '" + user + "'")) {
+            if(result.next())
+                return result.getString("salt");
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return null;
+    }
+    
     private void loginUser(Event event) throws Exception {
         Stage currentStage = (Stage)loginButton.getScene().getWindow();
+        
         String username = usernameField.getText();
         String password = passwordField.getText();
+        String userRole = getRole(username);
+        String userPassword = getPassword(username);
+        String salt = getSalt(username);
+
         
         if(username.isEmpty()) {
             config.showErrorMessage("Username must not be empty.", "Login error", currentStage);
@@ -134,19 +161,30 @@ public class LoginController implements Initializable {
             return;
         }
         
-        if(!locateUser(username, password)) {
+        boolean isUsernameFound = locateUser(username);
+        
+        if(!isUsernameFound) {
             config.showErrorMessage("Username not found.", "Login error", currentStage);
             return;
         }
         
-        if(!getStatus(username).equals("active")) {
+        boolean doesPasswordMatch = authConfig.verifyPassword(password, userPassword, salt);
+        
+        if(!doesPasswordMatch) {
+            config.showErrorMessage("Password does not match.", "Login Error", currentStage);
+            return;
+        }
+        
+        boolean isStatusInactive = getStatus(username).equals("inactive");
+        
+        if(isStatusInactive) {
             config.showErrorMessage("Your account isn't active yet.", "Account Status Error", currentStage);
             return;
         }
         
         config.showAlert(Alert.AlertType.INFORMATION, "Login Message.", "Successfully Logged In", currentStage);
         
-        switch(getRole(username)) {
+        switch(userRole) {
             case "team member": 
                 switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
                 break;
@@ -198,9 +236,9 @@ public class LoginController implements Initializable {
         Stage currentStage = (Stage) titlePane.getScene().getWindow();
         
         String user = usernameField.getText();
-        String pass = passwordField.getText();
+        String userRole = getRole(user);
         
-        switch(getRole(user)){
+        switch(userRole){
             case "team member":
                 TeamMemberMainPageController teamMemberController = loader.getController();
                 teamMemberController.setUsername(user);
@@ -221,26 +259,14 @@ public class LoginController implements Initializable {
         config.showAlert(Alert.AlertType.INFORMATION, "Login Sucessful!", "Welcome " + user + "!",currentStage);
     }
     
+    private boolean isEnterPressed(KeyEvent event) throws Exception {
+        return event.getCode() == KeyCode.ENTER;
+    }
+    
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws Exception {
         String FXML = "/projectvantage/fxml/authentication/Register.fxml";
         pageConf.switchScene(getClass(), event, FXML);
-        /*AuthenticationController authControl = AuthenticationController.getInstance();
-        
-        if(authControl != null) {
-            Pane loginPane = authControl.getLoginPane();
-            Pane otherPane = authControl.getOtherPane();
-            Pane title = authControl.getTitlePane();
-            
-            loginPane.setVisible(false);
-            usernameField.setText("");
-            passwordField.setText("");
-            
-            title.setLayoutY(75);
-            title.setLayoutX(275);
-            
-            otherPane.setVisible(true);
-        }*/
     }
 
     @FXML
@@ -265,16 +291,14 @@ public class LoginController implements Initializable {
 
     @FXML
     private void usernameFieldOnKeyPressedHandler(KeyEvent event) throws Exception {
-        if(event.getCode() == KeyCode.ENTER) {
+        if(isEnterPressed(event))
             loginUser(event);
-        }
     }
 
     @FXML
     private void registerFieldOnKeyPressedHandler(KeyEvent event) throws Exception{
-        if(event.getCode() == KeyCode.ENTER) {
+        if(isEnterPressed(event))
             loginUser(event);
-        }
     }
 
     @FXML
