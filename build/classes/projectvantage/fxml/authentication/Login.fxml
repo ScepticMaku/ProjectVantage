@@ -29,11 +29,11 @@
             <Group layoutY="218.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="241.0" layoutY="-13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="350.0" />
-                  <TextField fx:id="usernameField" alignment="CENTER" layoutX="45.0" layoutY="55.0" onKeyPressed="#usernameFieldOnKeyPressedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Username" styleClass="textfield" stylesheets="@../../css/text-field-style.css">
+                  <TextField fx:id="usernameField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="55.0" onKeyPressed="#usernameFieldOnKeyPressedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Username" styleClass="textfield" stylesheets="@../../css/text-field-style.css">
                      <font>
                         <Font size="14.0" />
                      </font></TextField>
-                  <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="45.0" layoutY="108.0" onKeyPressed="#registerFieldOnKeyPressedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Password" styleClass="textfield" stylesheets="@../../css/text-field-style.css">
+                  <PasswordField fx:id="passwordField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="108.0" onKeyPressed="#registerFieldOnKeyPressedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Password" styleClass="textfield" stylesheets="@../../css/text-field-style.css">
                      <font>
                         <Font size="14.0" />
                      </font></PasswordField>

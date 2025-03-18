@@ -12,6 +12,7 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/utility/AuthenticationConfig.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/utility/PageConfig.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/AdminUserPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/UserManagementPageController.java</file>
@@ -31,7 +32,6 @@
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/utility/Config.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/AdminDashboardPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/ChangePasswordPageController.java</file>
-            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/EditProfilePageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/authentication/AuthenticationController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/AdminPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/team_member/TeamMemberDashboardPageController.java</file>

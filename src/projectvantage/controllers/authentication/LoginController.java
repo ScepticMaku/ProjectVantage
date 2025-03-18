@@ -263,6 +263,10 @@ public class LoginController implements Initializable {
         return event.getCode() == KeyCode.ENTER;
     }
     
+    private boolean isTabPressed(KeyEvent event) throws Exception {
+        return event.getCode() == KeyCode.TAB;
+    }
+    
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws Exception {
         String FXML = "/projectvantage/fxml/authentication/Register.fxml";
@@ -291,6 +295,10 @@ public class LoginController implements Initializable {
 
     @FXML
     private void usernameFieldOnKeyPressedHandler(KeyEvent event) throws Exception {
+        if(isTabPressed(event)) {
+            passwordField.setFocusTraversable(true);
+        }
+        
         if(isEnterPressed(event))
             loginUser(event);
     }
