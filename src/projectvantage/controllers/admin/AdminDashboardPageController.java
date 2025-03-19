@@ -12,6 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -43,6 +45,6 @@ public class AdminDashboardPageController implements Initializable {
     }
     
     public void loadUsername(String username) {
-        usernameLabel.setText(username);
+        usernameLabel.setText(username); 
     }
 }

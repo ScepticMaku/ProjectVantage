@@ -50,6 +50,7 @@ public class PageConfig {
     }
     
     public void loadProfilePage(String targetFXML, String user, Node node, BorderPane pane) {
+        
         dbConnect db = new dbConnect();
         Stage currentStage = (Stage) node.getScene().getWindow();
         

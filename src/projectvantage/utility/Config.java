@@ -9,10 +9,14 @@ package projectvantage.utility;
 import java.sql.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.event.Event;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -43,9 +47,13 @@ public class Config {
         Alert alert = new Alert(alertType);
         alert.setHeaderText(header);
         alert.setContentText(message);
-        alert.initStyle(StageStyle.UNDECORATED);
+//        alert.initStyle(StageStyle.UNDECORATED);
         alert.initOwner(owner); 
-
+         
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/projectvantage/css/alert-style.css").toExternalForm());
+        dialogPane.getStyleClass().add("alert");
+        
         if(alertType == AlertType.CONFIRMATION && header.contains("Exit")) {
             showExitConfirmationAlert(alert);
             return;

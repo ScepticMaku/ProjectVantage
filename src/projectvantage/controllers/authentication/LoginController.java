@@ -108,6 +108,17 @@ public class LoginController implements Initializable {
         return null;
     }
     
+    public String getSalt(String user) {
+        dbConnect db = new dbConnect();
+        try(ResultSet result = db.getData("SELECT salt FROM user WHERE username = '" + user + "'")) {
+            if(result.next())
+                return result.getString("salt");
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return null;
+    }
+    
     public String getRole(String user) {
         dbConnect db = new dbConnect();
         try(ResultSet result = db.getData("SELECT role FROM user WHERE username = '" + user + "'")) {
@@ -124,17 +135,6 @@ public class LoginController implements Initializable {
         try(ResultSet result = db.getData("SELECT status FROM user WHERE username = '" + user + "'")) {
             if(result.next())
                 return result.getString("status");
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return null;
-    }
-    
-    public String getSalt(String user) {
-        dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT salt FROM user WHERE username = '" + user + "'")) {
-            if(result.next())
-                return result.getString("salt");
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
         }

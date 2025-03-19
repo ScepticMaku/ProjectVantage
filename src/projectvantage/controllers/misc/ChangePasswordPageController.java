@@ -8,6 +8,7 @@ package projectvantage.controllers.misc;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.Config;
 import projectvantage.utility.PageConfig;
+import projectvantage.utility.AuthenticationConfig;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -40,6 +41,7 @@ public class ChangePasswordPageController implements Initializable {
     dbConnect db = new dbConnect();
     Config config = new Config();
     PageConfig pageConf = new PageConfig();
+    AuthenticationConfig authConfig = new AuthenticationConfig();
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
     
@@ -114,6 +116,17 @@ public class ChangePasswordPageController implements Initializable {
         return null;
     }
     
+    public String getSalt(String user) {
+        dbConnect db = new dbConnect();
+        try(ResultSet result = db.getData("SELECT salt FROM user WHERE username = '" + user + "'")) {
+            if(result.next())
+                return result.getString("salt");
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return null;
+    }
+    
     private boolean checkFields(Stage currentStage, String currentField, String newField, String confirmField) {
         
         if(currentField.isEmpty()) {
@@ -136,10 +149,20 @@ public class ChangePasswordPageController implements Initializable {
             return true;
         }
         
-        if(!getPassword(username).equals(currentField)) {
-            config.showErrorMessage("Incorrect password", "Password Error", currentStage);
+        String userPassword = getPassword(username);
+        String salt = getSalt(username);
+        
+        boolean doesPasswordMatch = authConfig.verifyPassword(currentField, userPassword, salt);
+        
+        if(!doesPasswordMatch) {
+            config.showErrorMessage("Password does not match.", "Login Error", currentStage);
             return true;
         }
+        
+//        if(!getPassword(username).equals(currentField)) {
+//            config.showErrorMessage("Incorrect password", "Password Error", currentStage);
+//            return true;
+//        }
         
         if(!confirmField.equals(newField)){
             config.showErrorMessage("Passwords does not match", "Password Error", currentStage);
@@ -159,16 +182,20 @@ public class ChangePasswordPageController implements Initializable {
     private void submitButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         
+        String salt = getSalt(username);
+        
         String currentF = currentPasswordField.getText();
         String newF = newPasswordField.getText();
         String confirmF = confirmPasswordField.getText();
+        
+        String newPass = authConfig.hashPassword(newPasswordField.getText(), salt);
         
         String sql = "UPDATE user SET password = ? WHERE username = ?";
         
         if(checkFields(currentStage, currentF , newF , confirmF))
             return;
         
-        if(db.updateData(sql, newF, username)) {
+        if(db.updateData(sql, newPass, username)) {
             System.out.println("User updated successfully!");
             config.showAlert(Alert.AlertType.INFORMATION, "Change Password", "Password Changed Succesfully!", currentStage);
             returnToPreviousPage();
