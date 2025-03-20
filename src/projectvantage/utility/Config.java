@@ -7,6 +7,7 @@
 package projectvantage.utility;
 
 import java.sql.*;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.event.Event;
@@ -36,10 +37,42 @@ public class Config {
         showAlert(Alert.AlertType.ERROR, errorType, errorMessage, owner);
     }
     
-    public void showExitConfirmationAlert(Alert alert) {
+    public void showExitConfirmationAlert(Stage stage) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Exit Confirmation");
+        alert.setContentText("Are you sure you want to exit?");
+        alert.initOwner(stage);
+        
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/projectvantage/css/alert-style.css").toExternalForm());
+        dialogPane.getStyleClass().add("alert");
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK) {
+            stage.close();
+        }
+    }
+    
+    public void showLogoutConfirmationAlert(Node node, Event event) {
+        PageConfig pageConf = new PageConfig();
+        
+        Stage currentStage = (Stage) node.getScene().getWindow();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Log out Confirmation.");
+        alert.setContentText("Are you sure you want to log out?");
+        alert.initOwner(currentStage);
+        
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/projectvantage/css/alert-style.css").toExternalForm());
+        dialogPane.getStyleClass().add("alert");
+        
         alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK)
-                System.exit(0);
+            if(response == ButtonType.OK)
+                try {
+                    pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
     }
     
@@ -47,17 +80,11 @@ public class Config {
         Alert alert = new Alert(alertType);
         alert.setHeaderText(header);
         alert.setContentText(message);
-//        alert.initStyle(StageStyle.UNDECORATED);
         alert.initOwner(owner); 
          
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(getClass().getResource("/projectvantage/css/alert-style.css").toExternalForm());
         dialogPane.getStyleClass().add("alert");
-        
-        if(alertType == AlertType.CONFIRMATION && header.contains("Exit")) {
-            showExitConfirmationAlert(alert);
-            return;
-        }
         
         alert.showAndWait();
     }

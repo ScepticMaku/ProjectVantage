@@ -159,11 +159,6 @@ public class ChangePasswordPageController implements Initializable {
             return true;
         }
         
-//        if(!getPassword(username).equals(currentField)) {
-//            config.showErrorMessage("Incorrect password", "Password Error", currentStage);
-//            return true;
-//        }
-        
         if(!confirmField.equals(newField)){
             config.showErrorMessage("Passwords does not match", "Password Error", currentStage);
             return true;

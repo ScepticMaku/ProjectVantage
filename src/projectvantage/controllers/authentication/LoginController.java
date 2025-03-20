@@ -11,6 +11,8 @@ import projectvantage.utility.PageConfig;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
 import projectvantage.controllers.admin.AdminPageController;
 import projectvantage.utility.AuthenticationConfig;
+import projectvantage.utility.DatabaseConfig;
+import projectvantage.controllers.misc.AuthenticationController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,14 +32,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -51,6 +50,9 @@ public class LoginController implements Initializable {
     ElementConfig elementConf = new ElementConfig();
     AuthenticationConfig authConfig = new AuthenticationConfig();
     AdminPageController adminController = AdminPageController.getInstance();
+    DatabaseConfig dbConf = new DatabaseConfig();
+    dbConnect db = new dbConnect();
+    AuthenticationController authController = new AuthenticationController();
     
     private static LoginController instance;
 
@@ -69,9 +71,9 @@ public class LoginController implements Initializable {
     @FXML
     private Rectangle exitButtonBG;
     @FXML
-    private ImageView closeButton;
-    @FXML
     private AnchorPane rootPane;
+    @FXML
+    private Label passwordResetButton;
 
     /**
      * Initializes the controller class.
@@ -86,59 +88,15 @@ public class LoginController implements Initializable {
         return instance;
     }
     
-    private boolean locateUser(String user) {
-        dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT username, password FROM user  WHERE username = '" + user + "'")) {
-            return result.next();
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return false;
-    }
-    
-    private String getPassword(String user) {
-        dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT password FROM user  WHERE username = '" + user + "'")) {
+    private boolean findUsername(String user) {
+        try(ResultSet result = db.getData("SELECT username FROM user  WHERE username = '" + user + "'")) {
             if(result.next())
-                return result.getString("password");
+                return true;
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Database error: " + e.getMessage());
         }
-        return null;
-    }
-    
-    public String getSalt(String user) {
-        dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT salt FROM user WHERE username = '" + user + "'")) {
-            if(result.next())
-                return result.getString("salt");
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return null;
-    }
-    
-    public String getRole(String user) {
-        dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT role FROM user WHERE username = '" + user + "'")) {
-            if(result.next())
-                return result.getString("role");
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return null;
-    }
-    
-    public String getStatus(String user) {
-        dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT status FROM user WHERE username = '" + user + "'")) {
-            if(result.next())
-                return result.getString("status");
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return null;
+        return false;
     }
     
     private void loginUser(Event event) throws Exception {
@@ -146,9 +104,10 @@ public class LoginController implements Initializable {
         
         String username = usernameField.getText();
         String password = passwordField.getText();
-        String userRole = getRole(username);
-        String userPassword = getPassword(username);
-        String salt = getSalt(username);
+        String userRole = dbConf.getRole(username);
+        String userPassword = dbConf.getPassword(username);
+        String salt = dbConf.getSalt(username);
+        String email = dbConf.getEmail(username);
 
         
         if(username.isEmpty()) {
@@ -161,7 +120,7 @@ public class LoginController implements Initializable {
             return;
         }
         
-        boolean isUsernameFound = locateUser(username);
+        boolean isUsernameFound = findUsername(username);
         
         if(!isUsernameFound) {
             config.showErrorMessage("Username not found.", "Login error", currentStage);
@@ -175,7 +134,7 @@ public class LoginController implements Initializable {
             return;
         }
         
-        boolean isStatusInactive = getStatus(username).equals("inactive");
+        boolean isStatusInactive = dbConf.getStatus(username).equals("inactive");
         
         if(isStatusInactive) {
             config.showErrorMessage("Your account isn't active yet.", "Account Status Error", currentStage);
@@ -185,49 +144,17 @@ public class LoginController implements Initializable {
         config.showAlert(Alert.AlertType.INFORMATION, "Login Message.", "Successfully Logged In", currentStage);
         
         switch(userRole) {
-            case "team member": 
-                switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
+            case "team member":
+                pageConf.switchToAuthenticator(event, getClass(), rootPane, email);
                 break;
             case "admin":
                 switchScene(getClass(), event, "/projectvantage/fxml/admin/AdminPage.fxml");
+                currentStage.setTitle("Admin Dashboard");
                 break;
             default:
                 config.showErrorMessage("Role not found", "Role error", currentStage);
         }
     }
-    
-    /*
-    public void loginToDashboard(Class getClass, Event evt, String targetFXML, String dashboardFXML) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
-        FXMLLoader dashboardLoader = new FXMLLoader(getClass.getResource(dashboardFXML));
-        Parent root = loader.load();
-        Parent dashboardRoot = dashboardLoader.load();
-        
-        Stage currentStage = (Stage) titlePane.getScene().getWindow();
-        
-        String user = usernameField.getText();
-        String pass = passwordField.getText();
-        
-        switch(getRole(user, pass)){
-            case "team member":
-                TeamMemberMainPageController teamMemberController = loader.getController();
-                teamMemberController.setUsername(user);
-            break;
-            case "admin":
-                AdminPageController adminController = loader.getController();
-                AdminDashboardPageController dashboardController = dashboardLoader.getController();
-                adminController.setUsername(user);
-                dashboardController.loadUsername(user);
-            break;
-        }
-        
-        Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        pageConf.setCenterAlignment(stage);
-        stage.show();
-        config.showAlert(Alert.AlertType.INFORMATION, "Login Sucessful!", "Welcome " + user + "!",currentStage);
-    }*/
     
     public void switchScene(Class getClass, Event evt, String targetFXML) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
@@ -236,7 +163,7 @@ public class LoginController implements Initializable {
         Stage currentStage = (Stage) titlePane.getScene().getWindow();
         
         String user = usernameField.getText();
-        String userRole = getRole(user);
+        String userRole = dbConf.getRole(user);
         
         switch(userRole){
             case "team member":
@@ -269,28 +196,15 @@ public class LoginController implements Initializable {
     
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage) rootPane.getScene().getWindow();
         String FXML = "/projectvantage/fxml/authentication/Register.fxml";
         pageConf.switchScene(getClass(), event, FXML);
+        currentStage.setTitle("Register");
     }
 
     @FXML
     private void loginButtonMouseClickHandler(MouseEvent event) throws Exception {
         loginUser(event);
-    }
-
-    @FXML
-    private void registerButtonMouseExitHandler(MouseEvent event) {
-        registerButton.setStyle("-fx-text-fill: #0593ff");
-    }
-
-    @FXML
-    private void registerButtonMouseEnterHandler(MouseEvent event) {
-        registerButton.setStyle("-fx-text-fill: #0676c6");
-    }
-
-    @FXML
-    private void registerButtonMousePressHandler(MouseEvent event) {
-        registerButton.setStyle("-fx-text-fill: #01528d");
     }
 
     @FXML
@@ -310,29 +224,15 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void closeButtonMouseReleaseHandler(MouseEvent event) {
-        exitButtonBG.setFill(Color.web("#d71515"));
+    private void rootPaneKeyPressedHandler(KeyEvent event) throws Exception {
+        if(isTabPressed(event)) {
+            usernameField.setFocusTraversable(true);
+        }
     }
 
     @FXML
-    private void closeButtonMouseExitHandler(MouseEvent event) {
-        elementConf.fadeOut(exitButtonBG);
-    }
-
-    @FXML
-    private void closeButtonMouseEnterHandler(MouseEvent event) {
-        elementConf.fadeIn(exitButtonBG);
-    }
-
-    @FXML
-    private void closeButtonMouseClickHandler(MouseEvent event) {
-        Stage currentStage = (Stage) rootPane.getScene().getWindow();
-        config.showAlert(Alert.AlertType.CONFIRMATION, "Exit Confirmtaion.", "Do you want to exit?", currentStage);
-    }
-
-    @FXML
-    private void closeButtonMousePressHandler(MouseEvent event) {
-        exitButtonBG.setFill(Color.web("#971111"));
+    private void passwordResetButtonMouseClickHandler(MouseEvent event) {
+        
     }
     
 }

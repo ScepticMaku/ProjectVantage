@@ -41,6 +41,7 @@ public class RegisterController implements Initializable {
     PageConfig pageConf = new PageConfig();
     dbConnect connect = new dbConnect();
     AuthenticationConfig authConf = new AuthenticationConfig();
+    GoogleAuthenticationController googleAuth = GoogleAuthenticationController.getInstance();
     
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
@@ -72,8 +73,6 @@ public class RegisterController implements Initializable {
     @FXML
     private Rectangle exitButtonBG;
     @FXML
-    private ImageView closeButton;
-    @FXML
     private AnchorPane rootPane;
     @FXML
     private TextField middleNameField;
@@ -84,11 +83,6 @@ public class RegisterController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }
-    
-    private void switchToLogin(MouseEvent event) throws Exception {
-        String FXML = "/projectvantage/fxml/authentication/Login.fxml";
-        pageConf.switchScene(getClass(), event, FXML);
     }
     
     public boolean verifyUser(Stage currentStage, String firstName, String lastName, String emailAddress, String phoneNumber, String username, String password, String passwordConfirm) throws Exception {
@@ -166,7 +160,10 @@ public class RegisterController implements Initializable {
 
     @FXML
     private void loginButtonMouseClickHandler(MouseEvent event) throws Exception {
-        switchToLogin(event);
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        String FXML = "/projectvantage/fxml/authentication/Login.fxml";
+        pageConf.switchScene(getClass(), event, FXML);
+        currentStage.setTitle("Login");
     }
 
     @FXML
@@ -182,20 +179,17 @@ public class RegisterController implements Initializable {
         String password = passwordField.getText();
         String passwordConfirm = passwordConfirmField.getText();
         
-        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, role, status) "
-                + "VALUES ( ?, ?, ?, ?, ?, ? ,?, ?, 'team member' , 'inactive')";
+        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, role, status) "
+                + "VALUES ( ?, ?, ?, ?, ?, ? ,?, ?, ?, 'team member' , 'inactive')";
         
         if(verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
             return;
         
         String salt = authConf.generateSalt();
         String hashedPassword = authConf.hashPassword(password, salt);
-            
-        if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword)) {
-             System.out.println("User added to database!");
-             config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
-             switchToLogin(event);
-         }
+        
+        pageConf.switchToVerifyAuthenticator(event, getClass(), rootPane,
+                query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword);
     }
 
     @FXML
@@ -212,31 +206,4 @@ public class RegisterController implements Initializable {
     private void loginButtonMousePressHandler(MouseEvent event) {
         loginButton.setStyle("-fx-text-fill: #01528d");
     }
-
-    @FXML
-    private void closeButtonMouseReleaseHandler(MouseEvent event) {
-        exitButtonBG.setFill(Color.web("#d71515"));
-    }
-
-    @FXML
-    private void closeButtonMouseExitHandler(MouseEvent event) {
-        elementConf.fadeOut(exitButtonBG);
-    }
-
-    @FXML
-    private void closeButtonMouseEnterHandler(MouseEvent event) {
-        elementConf.fadeIn(exitButtonBG);
-    }
-
-    @FXML
-    private void closeButtonMouseClickHandler(MouseEvent event) {
-        Stage currentStage = (Stage) rootPane.getScene().getWindow();
-        config.showAlert(Alert.AlertType.CONFIRMATION, "Exit Confirmtaion.", "Do you want to exit?", currentStage);
-    }
-
-    @FXML
-    private void closeButtonMousePressHandler(MouseEvent event) {
-        exitButtonBG.setFill(Color.web("#971111"));
-    }
-    
 }

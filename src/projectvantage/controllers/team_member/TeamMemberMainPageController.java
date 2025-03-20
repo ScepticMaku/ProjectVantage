@@ -330,21 +330,7 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void logoutButtonMouseClickHandler(MouseEvent event) {
-        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Log out Confirmation.");
-        alert.setContentText("are you sure you want to log out?");
-        alert.initStyle(StageStyle.UNDECORATED);
-        alert.initOwner(currentStage);
-        
-        alert.showAndWait().ifPresent(response -> {
-            if(response == ButtonType.OK)
-                try {
-                    pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        config.showLogoutConfirmationAlert(rootPane, event);
     }
 
     @FXML

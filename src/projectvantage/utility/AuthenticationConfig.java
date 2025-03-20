@@ -35,7 +35,7 @@ public class AuthenticationConfig {
             e.printStackTrace();
             throw new RuntimeException("SHA-256 algorithm not found!", e);
         }
-    }
+    } 
     
     public boolean verifyPassword(String enteredPassword, String storedHash, String storedSalt) {
         String newHash = hashPassword(enteredPassword, storedSalt);

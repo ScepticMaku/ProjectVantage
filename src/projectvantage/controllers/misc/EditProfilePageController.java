@@ -189,10 +189,10 @@ public class EditProfilePageController implements Initializable {
             return true;
         }
         
-        if(!getPassword(username).equals(password)) {
-            config.showErrorMessage("Incorrect password", "Password Error", currentStage);
-            return true;
-        }
+//        if(!getPassword(username).equals(password)) {
+//            config.showErrorMessage("Incorrect password", "Password Error", currentStage);
+//            return true;
+//        }
         
         if(!confirmPassword.equals(password)) {
             config.showErrorMessage("Passwords does not match", "Password Error", currentStage);

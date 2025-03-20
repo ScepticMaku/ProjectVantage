@@ -1,0 +1,49 @@
+.textfield {
+	-fx-prompt-text-fill: #8a8a8a;
+	-fx-background-color: transparent;
+	-fx-border-width: 2 2 2	2;
+	-fx-border-color: #9F9F9F;
+}
+
+.button {
+    -fx-background-color: #2f9efe;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 5 5 5 5;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #0177DD;
+}
+
+.button:pressed {
+    -fx-background-color: #02559E;
+    -fx-effect: none;
+}
+
+.text-button {
+	-fx-text-fill: #2f9efe;
+}
+
+.text-button:hover {
+	-fx-text-fill: #0676c6;
+}
+
+.text-button:pressed {
+	-fx-text-fill: #01528d;
+}
+
+.forgot-password-button {
+	-fx-text-fill: #575757;
+}
+
+.forgot-password-button:hover {
+	-fx-text-fill: #4d4d4d;
+}
+
+.forgot-password-button:pressed {
+	-fx-text-fill: #323232;
+}

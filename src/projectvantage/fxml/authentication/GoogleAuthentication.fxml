@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="600.0" prefWidth="400.0" stylesheets="@../../css/authentication-style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="projectvantage.controllers.authentication.GoogleAuthenticationController">
+   <children>
+      <Pane prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: white;">
+         <children>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="DODGERBLUE" height="64.0" layoutX="20.0" layoutY="47.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="360.0" />
+            <Label layoutX="99.0" layoutY="67.0" text="Two-Factor Authentication" textFill="WHITE">
+               <font>
+                  <Font name="Segoe UI Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="122.0" prefHeight="50.0" prefWidth="280.0" text="Scan this QR code with Google Authenticator to authenticate your account." textAlignment="CENTER" textFill="#192b4b" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="qrImageView" fitHeight="200.0" fitWidth="200.0" layoutX="100.0" layoutY="179.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="73.0" fitWidth="50.0" layoutX="49.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../resources/icons/lock-icon.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="92.0" layoutY="430.0" text="Enter verification code to continue." textFill="#192b4b">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#192b4b" height="1.0" layoutX="50.0" layoutY="404.0" opacity="0.24" stroke="#192b4b" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
+            <TextField fx:id="otpField" alignment="CENTER" layoutX="73.0" layoutY="466.0" prefHeight="39.0" prefWidth="253.0" promptText="Verification Code" styleClass="textfield">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <Button fx:id="submitButton" layoutX="138.0" layoutY="523.0" mnemonicParsing="false" onMouseClicked="#submitButtonMouseClickHandler" prefHeight="27.0" prefWidth="123.0" style="-fx-font-size: 14;" text="Submit">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

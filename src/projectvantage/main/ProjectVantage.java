@@ -6,6 +6,7 @@
 package projectvantage.main;
 
 import projectvantage.utility.PageConfig;
+import projectvantage.utility.Config;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,11 +23,11 @@ import javafx.stage.StageStyle;
 public class ProjectVantage extends Application {
     
     PageConfig pageConf = new PageConfig();
+    Config config = new Config();
     
     private static ProjectVantage instance;
     private static Stage primaryStage;
     
-//    String authFXML = "/projectvantage/fxml/authentication/Authentication.fxml";
     String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
     
     public static ProjectVantage getInstance() {
@@ -44,10 +45,18 @@ public class ProjectVantage extends Application {
         
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Login");
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.initStyle(StageStyle.UNIFIED);
+        primaryStage.setResizable(false);
+        primaryStage.sizeToScene();
         primaryStage.getIcons().add(new Image("/projectvantage/resources/img/ProjectLogo.png"));
+        
+        primaryStage.setOnCloseRequest(event -> {
+            event.consume();
+            config.showExitConfirmationAlert(primaryStage);
+        });
+        
         primaryStage.show();
-        pageConf.setCenterAlignment(primaryStage);
+        pageConf.setCenterAlignment(primaryStage);  
     }
     /**
      * @param args the command line arguments

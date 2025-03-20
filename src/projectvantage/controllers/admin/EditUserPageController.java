@@ -223,14 +223,12 @@ public class EditUserPageController implements Initializable {
         AdminPageController adminController = AdminPageController.getInstance();
         String fxmlLocation = "/projectvantage/fxml/admin/AdminUserPage.fxml";
         pageConf.loadUserPage(fxmlLocation, user ,adminController.getBackgroundPane(), adminController.getRootPane());
-        adminController.getTitlebarLabel().setText("User");
     }
     
     private void refreshPage() {
         AdminPageController adminController = AdminPageController.getInstance();
         String FXML = "/projectvantage/fxml/admin/EditUserPage.fxml";
         pageConf.loadEditUserPage(FXML, username, adminController.getBackgroundPane(), adminController.getRootPane());
-        adminController.getTitlebarLabel().setText("Edit User");
     }
             
     @FXML

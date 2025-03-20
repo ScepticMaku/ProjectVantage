@@ -11,6 +11,9 @@ import projectvantage.controllers.authentication.LoginController;
 import projectvantage.controllers.team_member.TeamMemberDashboardPageController;
 import projectvantage.controllers.admin.AdminUserPageController;
 import projectvantage.controllers.admin.EditUserPageController;
+import projectvantage.controllers.authentication.GoogleAuthenticationController;
+import projectvantage.controllers.misc.EditProfilePageController;
+
 
 import java.sql.ResultSet;
 import javafx.event.Event;
@@ -19,10 +22,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import projectvantage.controllers.misc.EditProfilePageController;
+import projectvantage.controllers.misc.AuthenticationController;
 
 
 /**
@@ -31,6 +35,7 @@ import projectvantage.controllers.misc.EditProfilePageController;
  */
 public class PageConfig {
     Config config = new Config();
+    DatabaseConfig dbConf = new DatabaseConfig();
     
     public void setCenterAlignment(Stage stage) {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
@@ -141,7 +146,7 @@ public class PageConfig {
         Parent root = loader.load();
         
         
-        switch(LoginController.getInstance().getRole(user)) {
+        switch(dbConf.getRole(user)) {
             case "team member":
                 TeamMemberDashboardPageController.getInstance().loadUsername(user);
                 break;
@@ -157,5 +162,36 @@ public class PageConfig {
         Parent root = loader.load();
         EditProfilePageController.getInstance().loadUserContents(info[0], info[1], info[2], info[3], info[4], info[5], info[6]);
         pane.setCenter(root);
+    }
+    
+     public void switchToVerifyAuthenticator(MouseEvent event, Class getClass, Node node, String sql, String...info) throws Exception {
+        Stage currentStage = (Stage)node.getScene().getWindow();
+        String FXML = "/projectvantage/fxml/authentication/GoogleAuthentication.fxml";
+        Parent root = FXMLLoader.load(getClass.getResource(FXML));
+        
+        currentStage.setScene(new Scene(root));
+        currentStage.setResizable(false);
+        setCenterAlignment(currentStage);
+        
+        GoogleAuthenticationController.getInstance().loadContent(sql, info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7]);
+        
+        currentStage.setTitle("Google Authentication");
+        currentStage.show();
+    }
+     
+    public void switchToAuthenticator(Event event, Class getClass, Node node, String email) throws Exception {
+        Stage currentStage = (Stage)node.getScene().getWindow();
+        
+        String FXML = "/projectvantage/fxml/misc/Authentication.fxml";
+        Parent root = FXMLLoader.load(getClass.getResource(FXML));
+        
+        currentStage.setScene(new Scene(root));
+        currentStage.setResizable(false);
+        setCenterAlignment(currentStage);
+        
+        AuthenticationController.getInstance().loadContent("/projectvantage/fxml/team_member/TeamMemberMainPage.fxml", "Team Member Dashboard", email);
+        
+        currentStage.setTitle("Google Authentication");
+        currentStage.show();
     }
 }

@@ -8,6 +8,7 @@ package projectvantage.controllers.misc;
 import projectvantage.controllers.authentication.LoginController;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.PageConfig;
+import projectvantage.utility.DatabaseConfig;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -37,6 +38,8 @@ import projectvantage.models.User;
 public class ProfilePageController implements Initializable {
     
     PageConfig pageConf = new PageConfig();
+    DatabaseConfig dbConf = new DatabaseConfig();
+            
     private static ProfilePageController instance;
     
     private String username;
@@ -122,7 +125,7 @@ public class ProfilePageController implements Initializable {
     private void editProfileMouseClickHandler(MouseEvent event) throws Exception {
         String FXML = "/projectvantage/fxml/misc/EditProfilePage.fxml";
         
-        switch(LoginController.getInstance().getRole(username)) {
+        switch(dbConf.getRole(username)) {
             case "team member":
                 TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
                 pageConf.loadEditProfilePage(FXML, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane(),
@@ -142,16 +145,14 @@ public class ProfilePageController implements Initializable {
     private void changePasswordMouseClickHandler(MouseEvent event) throws Exception {
         String FXML = "/projectvantage/fxml/misc/ChangePasswordPage.fxml";
         
-        switch(LoginController.getInstance().getRole(username)) {
+        switch(dbConf.getRole(username)) {
             case "team member":
                 TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
                 loadChangePasswordPage(FXML, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane(), username, role);
-                teamMemberController.getTitlebarLabel().setText("Change Password");
                 break;
             case "admin":
                 AdminPageController adminController = AdminPageController.getInstance();
                 loadChangePasswordPage(FXML, adminController.getBackgroundPane(), adminController.getRootPane(), username, role);
-                adminController.getTitlebarLabel().setText("Change Password");
                 break;
         }
     }

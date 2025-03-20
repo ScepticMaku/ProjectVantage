@@ -266,7 +266,6 @@ public class AdminPageController implements Initializable {
         
         elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
         pageConf.loadDashboardPage(fxmlLocation, user, backgroundPane, rootPane);
-        titlebarLabel.setText("Dashboard");
         
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
@@ -329,21 +328,7 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void logoutButtonMouseClickHandler(MouseEvent event) throws Exception {
-        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Log out Confirmation.");
-        alert.setContentText("are you sure you want to log out?");
-        alert.initStyle(StageStyle.UNDECORATED);
-        alert.initOwner(currentStage);
-        
-        alert.showAndWait().ifPresent(response -> {
-            if(response == ButtonType.OK)
-                try {
-                    pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        config.showLogoutConfirmationAlert(rootPane, event);
     }
 
     @FXML
@@ -434,7 +419,6 @@ public class AdminPageController implements Initializable {
         
         elementConf.setSelected("projectvantage/resources/icons/user-icon-selected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
         loadPage("/projectvantage/fxml/admin/UserManagementPage.fxml");
-        titlebarLabel.setText("Users");
         
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
@@ -499,7 +483,6 @@ public class AdminPageController implements Initializable {
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
         String user = getInstance().username;
         pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
-        titlebarLabel.setText("Profile");
     }
 
     @FXML
