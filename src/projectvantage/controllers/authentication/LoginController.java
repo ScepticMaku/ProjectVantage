@@ -13,6 +13,7 @@ import projectvantage.controllers.admin.AdminPageController;
 import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.controllers.misc.AuthenticationController;
+import projectvantage.utility.AlertConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -52,6 +53,7 @@ public class LoginController implements Initializable {
     AdminPageController adminController = AdminPageController.getInstance();
     DatabaseConfig dbConf = new DatabaseConfig();
     dbConnect db = new dbConnect();
+    AlertConfig alertConf = new AlertConfig();
     AuthenticationController authController = new AuthenticationController();
     
     private static LoginController instance;
@@ -100,7 +102,7 @@ public class LoginController implements Initializable {
     }
     
     private void loginUser(Event event) throws Exception {
-        Stage currentStage = (Stage)loginButton.getScene().getWindow();
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
         
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -108,52 +110,54 @@ public class LoginController implements Initializable {
         String userPassword = dbConf.getPassword(username);
         String salt = dbConf.getSalt(username);
         String email = dbConf.getEmail(username);
+        int userId = dbConf.getUserId(username);
 
         
         if(username.isEmpty()) {
-            config.showErrorMessage("Username must not be empty.", "Login error", currentStage);
+            alertConf.showLoginErrorAlert(currentStage, "Username must not be empty.");
             return;
         }
         
         if (password.isEmpty()) {
-            config.showErrorMessage("Password must not be empty.", "Login error", currentStage);
+            alertConf.showLoginErrorAlert(currentStage, "Passowrd must not be empty.");
             return;
         }
         
         boolean isUsernameFound = findUsername(username);
         
         if(!isUsernameFound) {
-            config.showErrorMessage("Username not found.", "Login error", currentStage);
+            alertConf.showLoginErrorAlert(currentStage, "Username not found.");
             return;
         }
         
         boolean doesPasswordMatch = authConfig.verifyPassword(password, userPassword, salt);
         
         if(!doesPasswordMatch) {
-            config.showErrorMessage("Password does not match.", "Login Error", currentStage);
+            alertConf.showLoginErrorAlert(currentStage, "Password does not match.");
             return;
         }
         
-        boolean isStatusInactive = dbConf.getStatus(username).equals("inactive");
+        boolean isStatusActive = dbConf.getStatus(username).equals("active");
         
-        if(isStatusInactive) {
-            config.showErrorMessage("Your account isn't active yet.", "Account Status Error", currentStage);
+        if(!isStatusActive) {
+            alertConf.showLoginErrorAlert(currentStage, "Account is not active yet.");
             return;
         }
         
-        config.showAlert(Alert.AlertType.INFORMATION, "Login Message.", "Successfully Logged In", currentStage);
+        alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Successfully Logged In", currentStage);
         
+                
         switch(userRole) {
             case "team member":
-                pageConf.switchToAuthenticator(event, getClass(), rootPane, email);
+                switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
                 break;
             case "admin":
-                switchScene(getClass(), event, "/projectvantage/fxml/admin/AdminPage.fxml");
-                currentStage.setTitle("Admin Dashboard");
+                switchScene(getClass(),event, "/projectvantage/fxml/admin/AdminPage.fxml");
                 break;
             default:
-                config.showErrorMessage("Role not found", "Role error", currentStage);
+                alertConf.showLoginErrorAlert(currentStage, "Role not found.");
         }
+        alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Alert", "Welcome " + username + "!", currentStage);
     }
     
     public void switchScene(Class getClass, Event evt, String targetFXML) throws Exception {
@@ -165,16 +169,19 @@ public class LoginController implements Initializable {
         String user = usernameField.getText();
         String userRole = dbConf.getRole(user);
         
+        String teamMemberPageFXML = "/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml";
+        String adminPageFXML = "/projectvantage/fxml/admin/AdminDashboardPage.fxml";
+        
         switch(userRole){
             case "team member":
                 TeamMemberMainPageController teamMemberController = loader.getController();
                 teamMemberController.setUsername(user);
-                pageConf.loadDashboardPage("/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml", user, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane());
+                pageConf.loadDashboardPage(teamMemberPageFXML, user, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane());
             break;
             case "admin":
                 AdminPageController adminController = loader.getController();
                 adminController.setUsername(user);
-                pageConf.loadDashboardPage("/projectvantage/fxml/admin/AdminDashboardPage.fxml", user, adminController.getBackgroundPane(), adminController.getRootPane());
+                pageConf.loadDashboardPage(adminPageFXML, user, adminController.getBackgroundPane(), adminController.getRootPane());
             break;
         }
         
@@ -183,7 +190,6 @@ public class LoginController implements Initializable {
         stage.setResizable(false);
         pageConf.setCenterAlignment(stage);
         stage.show();
-        config.showAlert(Alert.AlertType.INFORMATION, "Login Sucessful!", "Welcome " + user + "!",currentStage);
     }
     
     private boolean isEnterPressed(KeyEvent event) throws Exception {
@@ -197,8 +203,9 @@ public class LoginController implements Initializable {
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) rootPane.getScene().getWindow();
-        String FXML = "/projectvantage/fxml/authentication/Register.fxml";
-        pageConf.switchScene(getClass(), event, FXML);
+        String registerFXML = "/projectvantage/fxml/authentication/Register.fxml";
+        
+        pageConf.switchScene(getClass(), event, registerFXML);
         currentStage.setTitle("Register");
     }
 

@@ -9,6 +9,7 @@ import projectvantage.controllers.misc.ProfilePageController;
 import projectvantage.utility.Config;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
+import projectvantage.utility.AlertConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,7 +31,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
@@ -40,6 +40,7 @@ import javafx.util.Duration;
  */
 public class AdminPageController implements Initializable {
     
+    AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
     Config config = new Config();
@@ -54,13 +55,8 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private AnchorPane backgroundPane;
-    @FXML
     private Pane titleBar;
-    @FXML
     private Label titlebarLabel;
-    @FXML
-    private Group closeButton;
-    @FXML
     private Rectangle closeButtonBG;
     @FXML
     private Rectangle rectangle;
@@ -147,6 +143,12 @@ public class AdminPageController implements Initializable {
     public static AdminPageController getInstance() {
         return instance;
     }
+    @FXML
+    private AnchorPane rootPane1;
+    @FXML
+    private Group welcomeMessageLabel;
+    @FXML
+    private Label usernameLabel;
     
     public void setUsername(String username) {
         this.username = username;
@@ -174,15 +176,15 @@ public class AdminPageController implements Initializable {
         instance = this;
     }
     
-    public void loadPage(String targetFXML) {
+    public void loadPage(String targetFXML, String title) {
         Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
         
         try{
             Parent root = FXMLLoader.load(getClass().getResource(targetFXML));
             rootPane.setCenter(root);
+            currentStage.setTitle(title);
         } catch (Exception e) {
-            e.printStackTrace();
-            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+            alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
         }
     }
     
@@ -202,46 +204,6 @@ public class AdminPageController implements Initializable {
         scaleTransition.setToX(1.0);
         scaleTransition.setToY(1.0);
         scaleTransition.play();
-    }
-
-
-    @FXML
-    private void titleBarOnMousePressedHandler(MouseEvent event) {
-        xOffset = event.getSceneX();
-        yOffset = event.getSceneY();
-    }
-
-    @FXML
-    private void titleBarOnMouseDraggedHandler(MouseEvent event) {
-        Stage stage = (Stage)titleBar.getScene().getWindow();
-        stage.setX(event.getScreenX() - xOffset);
-        stage.setY(event.getScreenY() - yOffset);
-    }
-
-    @FXML
-    private void closeButtonMouseExitHandler(MouseEvent event) {
-        elementConf.fadeOut(closeButtonBG);
-    }
-
-    @FXML
-    private void closeButtonMouseEnterHandler(MouseEvent event) {
-        elementConf.fadeIn(closeButtonBG);
-    }
-
-    @FXML
-    private void closeButtonMouseClickHandler(MouseEvent event) {
-        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
-        config.showAlert(Alert.AlertType.CONFIRMATION, "Exit Confirmtaion.", "Do you want to exit?", currentStage);
-    }
-    
-    @FXML
-    private void closeButtonMousePressHandler(MouseEvent event) {
-        closeButtonBG.setFill(Color.web("#971111"));
-    }
-    
-    @FXML
-    private void closeButtonMouseReleaseHandler(MouseEvent event) {
-        closeButtonBG.setFill(Color.web("#d71515"));
     }
 
     @FXML
@@ -328,7 +290,7 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void logoutButtonMouseClickHandler(MouseEvent event) throws Exception {
-        config.showLogoutConfirmationAlert(rootPane, event);
+        alertConf.showLogoutConfirmationAlert(rootPane, event);
     }
 
     @FXML
@@ -416,9 +378,10 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void userButtonMouseClickHandler(MouseEvent event) throws Exception {
+        String userManagementPageFXML = "/projectvantage/fxml/admin/UserManagementPage.fxml";
         
         elementConf.setSelected("projectvantage/resources/icons/user-icon-selected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
-        loadPage("/projectvantage/fxml/admin/UserManagementPage.fxml");
+        loadPage(userManagementPageFXML, "Users");
         
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);

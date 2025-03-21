@@ -9,16 +9,19 @@ import projectvantage.utility.Config;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.GoogleAuthenticationConfig;
 import projectvantage.utility.dbConnect;
-
+import projectvantage.utility.AlertConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -36,6 +39,7 @@ public class GoogleAuthenticationController implements Initializable {
     PageConfig pageConf = new PageConfig();
     Config config = new Config();
     GoogleAuthenticationConfig googleAuthConf = new GoogleAuthenticationConfig();
+    AlertConfig alertConf = new AlertConfig();
     
     private String query;
     private String firstName;
@@ -87,31 +91,46 @@ public class GoogleAuthenticationController implements Initializable {
         
         googleAuthConf.generateQRCode(secretKey, email, issuer, qrImageView);
     }
-
-    @FXML
-    private void submitButtonMouseClickHandler(MouseEvent event) throws Exception {
+    
+    private boolean isEnterPressed(KeyEvent event) throws Exception {
+        return event.getCode() == KeyCode.ENTER;
+    }
+    
+    private void registerUser(Event event) throws Exception {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         String OTP = otpField.getText();
         
         if(OTP.isEmpty()) {
-            config.showErrorMessage("Verification field must not be empty", "Verification Error", currentStage);
+            alertConf.showAuthenticationErrorAlert(currentStage, "You must enter a verification code.");
             return;
         }
         
         if(!googleAuthConf.verifyOTP(currentStage, OTP, secretKey)) {
-            config.showErrorMessage("Incorrect verification code.", "Verification Error", currentStage);
+            alertConf.showAuthenticationErrorAlert(currentStage, "Incorrect verification code.");
             return;
         }
         
-        config.showAlert(Alert.AlertType.INFORMATION, "Verification Alert", "Account successfully verified!", currentStage);
+        alertConf.showAlert(Alert.AlertType.INFORMATION, "Authentication Successful", "Account successfully verified!", currentStage);
         
         if(connect.insertData(query, firstName, middleName, lastName, email, phoneNumber, username, salt, hashedPassword, secretKey)) {
              System.out.println("User added to database!");
-             config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
+             alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
          }
         
-        String FXML = "/projectvantage/fxml/authentication/Login.fxml";
-        pageConf.switchScene(getClass(), event, FXML);
+        String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
+        
+        pageConf.switchScene(getClass(), event, loginFXML);
         currentStage.setTitle("Login");
+    }
+
+    @FXML
+    private void submitButtonMouseClickHandler(MouseEvent event) throws Exception {
+        registerUser(event);
+    }
+
+    @FXML
+    private void otpFieldKeyPressedHandler(KeyEvent event) throws Exception {
+        if(isEnterPressed(event))
+            registerUser(event);
     }
 }

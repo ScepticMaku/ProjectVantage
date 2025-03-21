@@ -7,7 +7,6 @@ package projectvantage.utility;
 
 import projectvantage.controllers.misc.ProfilePageController;
 import projectvantage.controllers.admin.AdminDashboardPageController;
-import projectvantage.controllers.authentication.LoginController;
 import projectvantage.controllers.team_member.TeamMemberDashboardPageController;
 import projectvantage.controllers.admin.AdminUserPageController;
 import projectvantage.controllers.admin.EditUserPageController;
@@ -28,13 +27,14 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import projectvantage.controllers.misc.AuthenticationController;
 
-
 /**
  *
  * @author Mark Work Account
  */
 public class PageConfig {
+    
     Config config = new Config();
+    AlertConfig alertConf = new AlertConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
     
     public void setCenterAlignment(Stage stage) {
@@ -59,7 +59,7 @@ public class PageConfig {
         dbConnect db = new dbConnect();
         Stage currentStage = (Stage) node.getScene().getWindow();
         
-        String sql = "SELECT first_name, middle_name, last_name, email, phone_number, username, role FROM user WHERE username='" + user + "'";
+        String sql = "SELECT first_name, middle_name, last_name, email, phone_number, username, role.name FROM user INNER JOIN role ON user.role_id = role.id WHERE username='" + user + "'";
         try{
             ResultSet result = db.getData(sql);
             if(result.next()) {
@@ -71,15 +71,14 @@ public class PageConfig {
                 String last_name = result.getString("last_name");
                 String email = result.getString("email");
                 String phone_number = result.getString("phone_number");
-                String role = result.getString("role");
+                String role = result.getString("role.name");
                 
                 ProfilePageController.getInstance().loadUser(first_name, middle_name, last_name, email, phone_number, user, role);
                 pane.setCenter(root);   
             }
             result.close();
         } catch (Exception e) {
-            e.printStackTrace();
-            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+            alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
         }
     }
     
@@ -107,8 +106,7 @@ public class PageConfig {
             }
             result.close();
         } catch (Exception e) {
-            e.printStackTrace();
-            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+            alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
         }
     }
     
@@ -136,8 +134,7 @@ public class PageConfig {
             }
             result.close();
         } catch (Exception e) {
-            e.printStackTrace();
-            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+            alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
         }
     }
     
@@ -179,7 +176,7 @@ public class PageConfig {
         currentStage.show();
     }
      
-    public void switchToAuthenticator(Event event, Class getClass, Node node, String email) throws Exception {
+    public void switchToAuthenticator(Event event, Class getClass, Node node, String targetFXML, String title, String email) throws Exception {
         Stage currentStage = (Stage)node.getScene().getWindow();
         
         String FXML = "/projectvantage/fxml/misc/Authentication.fxml";
@@ -189,7 +186,7 @@ public class PageConfig {
         currentStage.setResizable(false);
         setCenterAlignment(currentStage);
         
-        AuthenticationController.getInstance().loadContent("/projectvantage/fxml/team_member/TeamMemberMainPage.fxml", "Team Member Dashboard", email);
+        AuthenticationController.getInstance().loadContent(targetFXML, title, email);
         
         currentStage.setTitle("Google Authentication");
         currentStage.show();

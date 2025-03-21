@@ -7,13 +7,17 @@ package projectvantage.controllers.misc;
 
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.Config;
+import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.AuthenticationConfig;
+import projectvantage.utility.DatabaseConfig;
+import projectvantage.controllers.team_member.TeamMemberMainPageController;
 
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,12 +25,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import projectvantage.controllers.admin.AdminPageController;
+import projectvantage.controllers.authentication.LoginController;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
 
 /**
@@ -38,13 +44,16 @@ public class ChangePasswordPageController implements Initializable {
     
     private static ChangePasswordPageController instance;
     
+    AlertConfig alertConf = new AlertConfig();
     dbConnect db = new dbConnect();
     Config config = new Config();
     PageConfig pageConf = new PageConfig();
     AuthenticationConfig authConfig = new AuthenticationConfig();
+    DatabaseConfig dbConfig = new DatabaseConfig();
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
     
+    private String email;
     private String username;
     private String role;
 
@@ -60,6 +69,8 @@ public class ChangePasswordPageController implements Initializable {
     private Button submitButton;
     @FXML
     private AnchorPane rootPane;
+    @FXML
+    private Label usernamePlaceholder;
     
     
 
@@ -78,31 +89,42 @@ public class ChangePasswordPageController implements Initializable {
     
     public void setUsername(String username) {
         this.username = username;
-    }
-    
-    public void setRole(String role) {
-        this.role = role;
+        
+        usernamePlaceholder.setText(username);
     }
     
     public String getUsername() {
         return username;
     }
     
-    private void returnToPreviousPage() {
-        String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
-        TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
-        AdminPageController adminController = AdminPageController.getInstance();
-        
-        switch(role) {
-            case "team member":
-                pageConf.loadProfilePage(fxmlLocation, username, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane());
-                teamMemberController.getTitlebarLabel().setText("Profile");
-                break;
-            case "admin":
-                pageConf.loadProfilePage(fxmlLocation, username, adminController.getBackgroundPane(), adminController.getRootPane());
-                adminController.getTitlebarLabel().setText("Profile");
-                break;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    private void returnToPreviousPage(Event event) {
+        try {
+            String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
+            String adminFXML = "/projectvantage/fxml/admin/AdminPage.fxml";
+            String teamMemberFXML = "/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml";
+            
+            role = dbConfig.getRole(username);
+
+    //        TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
+            AdminPageController adminController = AdminPageController.getInstance();
+            LoginController loginController = LoginController.getInstance();
+
+            switch(role) {
+                case "team member":
+                    loginController.switchScene(getClass(), event, teamMemberFXML);
+                    break;
+                case "admin":
+                    loginController.switchScene(getClass(), event, adminFXML);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        
     }
     
     private String getPassword(String user) {
@@ -130,22 +152,22 @@ public class ChangePasswordPageController implements Initializable {
     private boolean checkFields(Stage currentStage, String currentField, String newField, String confirmField) {
         
         if(currentField.isEmpty()) {
-            config.showErrorMessage("Current password field must not be empty", "Password Error", currentStage);
+            alertConf.showChangePasswordErrorAlert(currentStage, "Current password field must not be empty.");
             return true;
         }
         
         if(newField.length() < MINIMUM_PASSWORD_LENGTH) {
-            config.showErrorMessage("Password must be at least 8 characters.", "Password Error", currentStage);
+            alertConf.showChangePasswordErrorAlert(currentStage, "Password must be at least 8 characters.");
             return true;
         }
         
         if(newField.isEmpty()) {
-            config.showErrorMessage("New password field must not be empty", "Password Error", currentStage);
+            alertConf.showChangePasswordErrorAlert(currentStage, "New password field must not be empty.");
             return true;
         }
         
         if(confirmField.isEmpty()) {
-            config.showErrorMessage("Confirm password field must not be empty", "Password Error", currentStage);
+            alertConf.showChangePasswordErrorAlert(currentStage, "Confirm password field must not be empty.");
             return true;
         }
         
@@ -155,12 +177,12 @@ public class ChangePasswordPageController implements Initializable {
         boolean doesPasswordMatch = authConfig.verifyPassword(currentField, userPassword, salt);
         
         if(!doesPasswordMatch) {
-            config.showErrorMessage("Password does not match.", "Login Error", currentStage);
+            alertConf.showChangePasswordErrorAlert(currentStage, "Password doesn't exists.");
             return true;
         }
         
         if(!confirmField.equals(newField)){
-            config.showErrorMessage("Passwords does not match", "Password Error", currentStage);
+            alertConf.showChangePasswordErrorAlert(currentStage, "Password does not match.");
             return true;
         }
         return false;
@@ -170,7 +192,7 @@ public class ChangePasswordPageController implements Initializable {
 
     @FXML
     private void backButtonMouseClickHandler(MouseEvent event) {
-        returnToPreviousPage();
+        returnToPreviousPage(event);
     }
 
     @FXML
@@ -192,8 +214,8 @@ public class ChangePasswordPageController implements Initializable {
         
         if(db.updateData(sql, newPass, username)) {
             System.out.println("User updated successfully!");
-            config.showAlert(Alert.AlertType.INFORMATION, "Change Password", "Password Changed Succesfully!", currentStage);
-            returnToPreviousPage();
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "Change Password Successful", "Password Changed Succesfully!", currentStage);
+            returnToPreviousPage(event);
         }
     }
     

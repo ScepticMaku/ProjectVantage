@@ -7,20 +7,24 @@ package projectvantage.controllers.misc;
 
 import projectvantage.utility.GoogleAuthenticationConfig;
 import projectvantage.utility.Config;
+import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.DatabaseConfig;
-import projectvantage.controllers.authentication.LoginController;
 
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -34,17 +38,18 @@ public class AuthenticationController implements Initializable {
     
     private static AuthenticationController instance;
     
-    LoginController loginController = LoginController.getInstance();
     GoogleAuthenticationConfig googleAuthConf = new GoogleAuthenticationConfig();
     PageConfig pageConf = new PageConfig();
     Config config = new Config();
+    AlertConfig alertConf = new AlertConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
     dbConnect db = new dbConnect();
+    ProfilePageController profileController = ProfilePageController.getInstance();
 
     private String secretKey;
     private String targetFXML;
     private String title;
-    private String username;
+//    private String username;
     private String email;
     
     @FXML
@@ -54,7 +59,7 @@ public class AuthenticationController implements Initializable {
     @FXML
     private Button submitButton;
     @FXML
-    private TextField emailField;
+    private Label emailPlaceholder;
 
     /**
      * Initializes the controller class.
@@ -75,6 +80,7 @@ public class AuthenticationController implements Initializable {
         this.title = title;
         this.email = email;
         
+        emailPlaceholder.setText(email);
         secretKey = getSecretKey(email);
     }
     
@@ -87,33 +93,40 @@ public class AuthenticationController implements Initializable {
         }
         return null;
     }
-
-    @FXML
-    private void submitButtonMouseClickHandler(MouseEvent event) throws Exception {
+    
+    private boolean isEnterPressed(KeyEvent event) throws Exception {
+        return event.getCode() == KeyCode.ENTER;
+    }
+    
+    private void verifyUser(Event event) throws Exception {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
-        
-        String emailInput = emailField.getText();
         String OTP = otpField.getText();
         
-        if(emailInput.isEmpty()) {
-            config.showErrorMessage("Email field must not be empty", "Verification Error", currentStage);
-            return;
-        }
-        
         if(OTP.isEmpty()) {
-            config.showErrorMessage("Verification field must not be empty", "Verification Error", currentStage);
+            alertConf.showAuthenticationErrorAlert(currentStage, "You must enter a verificaiton code.");
             return;
         }
         
         if(!googleAuthConf.verifyOTP(currentStage, OTP, secretKey)) {
-            config.showErrorMessage("Incorrect verification code.", "Verification Error", currentStage);
+            alertConf.showAuthenticationErrorAlert(currentStage, "Incorrect verification code.");
             return;
         }
         
-        config.showAlert(Alert.AlertType.INFORMATION, "Verification Alert", "Account successfully verified!", currentStage);
+        alertConf.showAlert(Alert.AlertType.INFORMATION, "Authentication Successful", "Account successfully verified!", currentStage);
         
-        loginController.switchScene(getClass(), event, targetFXML);
+        profileController.loadChangePasswordPage(getClass(), event, targetFXML);
         currentStage.setTitle(title);
+    }
+
+    @FXML
+    private void submitButtonMouseClickHandler(MouseEvent event) throws Exception {
+        verifyUser(event);
+    }
+
+    @FXML
+    private void otpFieldKeyPressedHandler(KeyEvent event) throws Exception {
+        if(isEnterPressed(event))
+            verifyUser(event);
     }
     
 }

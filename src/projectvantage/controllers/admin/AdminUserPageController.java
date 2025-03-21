@@ -97,6 +97,6 @@ public class AdminUserPageController implements Initializable {
     @FXML
     private void backButtonMouseClickHandler(MouseEvent event) {
         AdminPageController adminController = AdminPageController.getInstance();
-        adminController.loadPage("/projectvantage/fxml/admin/UserManagementPage.fxml");
+        adminController.loadPage("/projectvantage/fxml/admin/UserManagementPage.fxml", "Users");
     }
 }

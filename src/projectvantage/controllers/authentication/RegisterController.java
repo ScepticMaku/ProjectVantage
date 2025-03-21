@@ -10,6 +10,7 @@ import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.AuthenticationConfig;
+import projectvantage.utility.AlertConfig;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -42,6 +43,7 @@ public class RegisterController implements Initializable {
     dbConnect connect = new dbConnect();
     AuthenticationConfig authConf = new AuthenticationConfig();
     GoogleAuthenticationController googleAuth = GoogleAuthenticationController.getInstance();
+    AlertConfig alertConf = new AlertConfig();
     
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
@@ -87,72 +89,72 @@ public class RegisterController implements Initializable {
     
     public boolean verifyUser(Stage currentStage, String firstName, String lastName, String emailAddress, String phoneNumber, String username, String password, String passwordConfirm) throws Exception {
         if(firstName.isEmpty()) {
-            config.showErrorMessage("First name must not be empty", "Field Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "First name field must not be empty.");
             return true;
         }
         
         if(lastName.isEmpty()) {
-            config.showErrorMessage("Last name must not be empty", "Field Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Last name must field not be empty.");
             return true;
         }
         
         if(emailAddress.isEmpty()) {
-            config.showErrorMessage("Email address must not be empty", "Field Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Email address field must not be empty.");
             return true;
         }
         
         if(phoneNumber.isEmpty()) {
-            config.showErrorMessage("Phone number must not be empty", "Field Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Phone number field must not be empty.");
             return true;
         }
         
         if(username.isEmpty()) {
-            config.showErrorMessage("username must not be empty", "Field Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Username field must not be empty.");
             return true;
         }
         
         if(password.isEmpty()) {
-            config.showErrorMessage("password must not be empty", "Field Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Password field must not be empty.");
             return true;
         }
         
         if(passwordConfirm.isEmpty()) {
-            config.showErrorMessage("confirm password must not be empty", "Field Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Confim password field must not be empty.");
             return true;
         }
         
         if(!config.isValidEmailFormat(emailAddress)) {
-            config.showErrorMessage("Email format is invalid", "Email Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Email format is invalid.");
             return true;
         }
         
         if(config.isValidPhoneNumber(phoneNumber)) {
-            config.showErrorMessage("Phone number must only be numbers.", "Phone Number Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Phone number is invalid.");
             return true;
         }
         
-        if(config.isValidPhoneNumberFormat(phoneNumber)) {
-            config.showErrorMessage("Phone number format is invalid, must start with 9", "Phone Number Error", currentStage);
+        if(!config.isValidPhoneNumberFormat(phoneNumber)) {
+            alertConf.showRegisterErrorAlert(currentStage, "Phone number is invalid.");
             return true;
         }
         
         if(password.length() < MINIMUM_PASSWORD_LENGTH) {
-            config.showErrorMessage("Password must be at least 8 characters.", "Password Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Password must be at least 8 characters.");
             return true;
         }
         
         if(!password.equals(passwordConfirm)) {
-            config.showErrorMessage("Password doesn't match.", "Password Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Password does not match.");
             return true;
         }
         
         if(config.isDuplicated("username", username)) {
-            config.showErrorMessage("Username already exists", "Username Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Username already exists.");
             return true;
         }
         
         if(config.isDuplicated("email", emailAddress)) {
-            config.showErrorMessage("Email already exist.", "Email Error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "Password already exists.");
             return true;
         }
         return false;
@@ -162,6 +164,7 @@ public class RegisterController implements Initializable {
     private void loginButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         String FXML = "/projectvantage/fxml/authentication/Login.fxml";
+        
         pageConf.switchScene(getClass(), event, FXML);
         currentStage.setTitle("Login");
     }
@@ -179,14 +182,14 @@ public class RegisterController implements Initializable {
         String password = passwordField.getText();
         String passwordConfirm = passwordConfirmField.getText();
         
-        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, role, status) "
-                + "VALUES ( ?, ?, ?, ?, ?, ? ,?, ?, ?, 'team member' , 'inactive')";
+        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key) "
+                + "VALUES ( ?, ?, ?, ?, ?, ? ,?, ?, ?)";
         
         if(verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
             return;
         
         String salt = authConf.generateSalt();
-        String hashedPassword = authConf.hashPassword(password, salt);
+        String hashedPassword = authConf.hashPassword(passwordConfirm, salt);
         
         pageConf.switchToVerifyAuthenticator(event, getClass(), rootPane,
                 query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword);

@@ -6,7 +6,8 @@
 package projectvantage.main;
 
 import projectvantage.utility.PageConfig;
-import projectvantage.utility.Config;
+import projectvantage.utility.AlertConfig;
+import projectvantage.utility.DatabaseConfig;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  *
@@ -22,8 +22,10 @@ import javafx.stage.StageStyle;
  */
 public class ProjectVantage extends Application {
     
+    DatabaseConfig dbConf = new DatabaseConfig();
     PageConfig pageConf = new PageConfig();
-    Config config = new Config();
+    AlertConfig alertConf = new AlertConfig();
+    
     
     private static ProjectVantage instance;
     private static Stage primaryStage;
@@ -45,14 +47,13 @@ public class ProjectVantage extends Application {
         
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Login");
-        primaryStage.initStyle(StageStyle.UNIFIED);
         primaryStage.setResizable(false);
         primaryStage.sizeToScene();
         primaryStage.getIcons().add(new Image("/projectvantage/resources/img/ProjectLogo.png"));
         
         primaryStage.setOnCloseRequest(event -> {
             event.consume();
-            config.showExitConfirmationAlert(primaryStage);
+            alertConf.showExitConfirmationAlert(primaryStage);
         });
         
         primaryStage.show();

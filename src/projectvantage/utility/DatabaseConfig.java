@@ -49,7 +49,6 @@ public class DatabaseConfig {
     }
     
     public String getSalt(String user) {
-        dbConnect db = new dbConnect();
         try(ResultSet result = db.getData("SELECT salt FROM user WHERE username = '" + user + "'")) {
             if(result.next())
                 return result.getString("salt");
@@ -60,9 +59,9 @@ public class DatabaseConfig {
     }
     
     public String getRole(String user) {
-        try(ResultSet result = db.getData("SELECT role FROM user WHERE username = '" + user + "'")) {
+        try(ResultSet result = db.getData("SELECT role.name FROM user INNER JOIN role ON user.role_id = role.id WHERE username = '" + user + "'")) {
             if(result.next())
-                return result.getString("role");
+                return result.getString("role.name");
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
         }
@@ -70,12 +69,33 @@ public class DatabaseConfig {
     }
     
     public String getStatus(String user) {
-        try(ResultSet result = db.getData("SELECT status FROM user WHERE username = '" + user + "'")) {
+        try(ResultSet result = db.getData("SELECT status.name FROM user INNER JOIN status ON user.status_id = status.id WHERE username = '" + user + "'")) {
             if(result.next())
-                return result.getString("status");
+                return result.getString("status.name");
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public int getUserId(String user) {
+        try(ResultSet result = db.getData("SELECT id FROM user WHERE username = '" + user + "'")) {
+            if(result.next())
+                return result.getInt("id");
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+        return 0;
+    }
+    
+    public String getSessionToken(int userId) {
+        try(ResultSet result = db.getData("SELECT session_token FROM session WHERE user_id = '" + userId + "'")) {
+            if(result.next())
+                return result.getString("session_token");
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
         }
         return null;
     }
 }
+

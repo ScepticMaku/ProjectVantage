@@ -8,6 +8,7 @@ package projectvantage.controllers.admin;
 import projectvantage.controllers.authentication.RegisterController;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.Config;
+import projectvantage.utility.AlertConfig;
 import projectvantage.utility.AuthenticationConfig;
 
 import java.net.URL;
@@ -32,10 +33,11 @@ import javafx.stage.StageStyle;
  */
 public class AddUserPageController implements Initializable {
     
-    RegisterController register = new RegisterController();
+    RegisterController registerController = new RegisterController();
     dbConnect connect = new dbConnect();
     Config config = new Config();
     AuthenticationConfig authConf = new AuthenticationConfig();
+    AlertConfig alertConf = new AlertConfig();
 
     @FXML
     private AnchorPane rootPane;
@@ -79,14 +81,15 @@ public class AddUserPageController implements Initializable {
     private void insertUser(Stage currentStage, String query, String firstName, String middleName, String lastName, String emailAddress, String phoneNumber, String username, String salt, String password, String role) {
         if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, password, role)) {
             System.out.println("User added to database!");
-            config.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Successful", currentStage);
         }
     }
     
     private void returnToPreviousPage() {
         String FXML = "/projectvantage/fxml/admin/UserManagementPage.fxml";
+        
         AdminPageController admin = AdminPageController.getInstance();
-        admin.loadPage(FXML);
+        admin.loadPage(FXML, "Users");
     }
 
     @FXML
@@ -118,20 +121,18 @@ public class AddUserPageController implements Initializable {
         } else if(projectManagerRadioButton.isSelected()) {
             role = "project manager";
         } else {
-            config.showErrorMessage("You must select a type of user", "User type error", currentStage);
+            alertConf.showRegisterErrorAlert(currentStage, "You must select a type of user.");
             return;
         }
         
         String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, role, status) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'inactive')";
         
-        if(register.verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
+        if(registerController.verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
             return;
         
         String salt = authConf.generateSalt();
         String hashedPassword = authConf.hashPassword(password, salt);
-        
-//            activateUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, password, role, status);
 
         insertUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword, role);
         returnToPreviousPage();

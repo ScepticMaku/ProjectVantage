@@ -9,16 +9,19 @@ import projectvantage.controllers.authentication.LoginController;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.DatabaseConfig;
+import projectvantage.utility.Config;
 
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -39,6 +42,7 @@ public class ProfilePageController implements Initializable {
     
     PageConfig pageConf = new PageConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
+    Config config = new Config();
             
     private static ProfilePageController instance;
     
@@ -113,12 +117,17 @@ public class ProfilePageController implements Initializable {
         rolePlaceholder.setText(role);
     }
     
-    public void loadChangePasswordPage(String targetFXML, Node node, BorderPane pane, String username, String role) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
-        Parent root = loader.load();
+    public void loadChangePasswordPage(Class getClass, Event evt, String targetFXML) throws Exception {
+        Parent root = FXMLLoader.load(getClass.getResource(targetFXML));
+        Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        pageConf.setCenterAlignment(stage);
+        
+        ChangePasswordPageController.getInstance().setEmail(emailAddress);
         ChangePasswordPageController.getInstance().setUsername(username);
-        ChangePasswordPageController.getInstance().setRole(role);
-        pane.setCenter(root);
+        
+        stage.show();
     }
 
     @FXML
@@ -130,13 +139,11 @@ public class ProfilePageController implements Initializable {
                 TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
                 pageConf.loadEditProfilePage(FXML, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane(),
                         firstName, middleName, lastName, emailAddress, phoneNumber, username, role);
-                teamMemberController.getTitlebarLabel().setText("Edit Profile");
                 break;
             case "admin":
                 AdminPageController adminController = AdminPageController.getInstance();
                 pageConf.loadEditProfilePage(FXML,adminController.getBackgroundPane(), adminController.getRootPane(),
                         firstName, middleName, lastName, emailAddress, phoneNumber, username, role);
-                adminController.getTitlebarLabel().setText("Edit Profile");
                 break;
         }
     }
@@ -144,17 +151,19 @@ public class ProfilePageController implements Initializable {
     @FXML
     private void changePasswordMouseClickHandler(MouseEvent event) throws Exception {
         String FXML = "/projectvantage/fxml/misc/ChangePasswordPage.fxml";
+//        TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
+//        AdminPageController adminController = AdminPageController.getInstance();
         
-        switch(dbConf.getRole(username)) {
-            case "team member":
-                TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
-                loadChangePasswordPage(FXML, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane(), username, role);
-                break;
-            case "admin":
-                AdminPageController adminController = AdminPageController.getInstance();
-                loadChangePasswordPage(FXML, adminController.getBackgroundPane(), adminController.getRootPane(), username, role);
-                break;
-        }
+        pageConf.switchToAuthenticator(event, getClass(), rootPane, FXML, "Change Password", emailAddress);
+        
+//        switch(dbConf.getRole(username)) {
+//            case "team member":
+////                loadChangePasswordPage(FXML, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane(), username, role);
+//                break;
+//            case "admin":
+//                loadChangePasswordPage(FXML, adminController.getBackgroundPane(), adminController.getRootPane(), username, role);
+//                break;
+//        }
     }
 
 }

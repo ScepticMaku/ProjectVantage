@@ -6,10 +6,11 @@
 package projectvantage.controllers.team_member;
 
 import projectvantage.utility.Config;
-import projectvantage.utility.dbConnect;
+import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.ElementConfig;
 import projectvantage.controllers.misc.ProfilePageController;
+
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -42,6 +43,7 @@ import javafx.util.Duration;
  */
 public class TeamMemberMainPageController implements Initializable {
     
+    AlertConfig alertConf = new AlertConfig();
     Config config = new Config();
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
@@ -139,8 +141,7 @@ public class TeamMemberMainPageController implements Initializable {
             Parent root = FXMLLoader.load(getClass().getResource(targetFXML));
             rootPane.setCenter(root);
         } catch (Exception e) {
-            System.out.println(e);
-            config.showErrorMessage("There was a problem with the database", "Database Error:", currentStage);
+            alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
         }
     }
     
@@ -199,8 +200,8 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void closeButtonMouseClickHandler(MouseEvent event) {
-        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
-        config.showAlert(Alert.AlertType.CONFIRMATION, "Exit Confirmtaion.", "Do you want to exit?", currentStage);
+//        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
+//        config.showAlert(Alert.AlertType.CONFIRMATION, "Exit Confirmtaion.", "Do you want to exit?", currentStage);
     }
 
     @FXML
@@ -330,7 +331,7 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void logoutButtonMouseClickHandler(MouseEvent event) {
-        config.showLogoutConfirmationAlert(rootPane, event);
+        alertConf.showLogoutConfirmationAlert(rootPane, event);
     }
 
     @FXML

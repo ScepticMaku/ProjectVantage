@@ -24,6 +24,10 @@ import javafx.stage.Stage;
 public class GoogleAuthenticationConfig {
     
     Config config = new Config();
+    AlertConfig alertConf = new AlertConfig();
+    
+    private static final int QR_CODE_WIDTH = 200;
+    private static final int QR_CODE_HEIGHT = 200;
     
     public String generateSecretKey() {
         GoogleAuthenticator gAuth = new GoogleAuthenticator();
@@ -38,7 +42,7 @@ public class GoogleAuthenticationConfig {
                 issuer, user, secret, issuer
             );
             
-            BitMatrix matrix = new MultiFormatWriter().encode(otpAuthUrl, BarcodeFormat.QR_CODE, 200, 200);
+            BitMatrix matrix = new MultiFormatWriter().encode(otpAuthUrl, BarcodeFormat.QR_CODE, QR_CODE_WIDTH, QR_CODE_HEIGHT);
             BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(matrix);
             
             Image fxImage = SwingFXUtils.toFXImage(qrImage, null);
@@ -55,14 +59,10 @@ public class GoogleAuthenticationConfig {
             GoogleAuthenticator gAuth = new GoogleAuthenticator();
             boolean isValid = gAuth.authorize(secretKey, otpCode);
             
-            if(!isValid) {
-                return false;
-            }
-            
-            return true;
+            return isValid;
             
         } catch(Exception e) {
-            config.showErrorMessage("Enter a valid number.", "Verification Error", stage);
+            alertConf.showAuthenticationErrorAlert(stage, "You must enter enter only numbers.");
             return false;
         }
     }

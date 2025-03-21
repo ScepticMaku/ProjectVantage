@@ -5,8 +5,7 @@
  */
 package projectvantage.controllers.admin;
 
-import projectvantage.controllers.authentication.LoginController;
-import projectvantage.controllers.admin.AdminPageController;
+import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.Config;
 import projectvantage.utility.dbConnect;
@@ -37,6 +36,7 @@ public class EditUserPageController implements Initializable {
     private static EditUserPageController instance;
     
     dbConnect db = new dbConnect();
+    AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
     Config config = new Config();
     
@@ -135,7 +135,6 @@ public class EditUserPageController implements Initializable {
     }
     
     private boolean isUsernameDuplicated(String column, String value) throws SQLException {
-        dbConnect db = new dbConnect();
         
         try(ResultSet result = db.getData("SELECT " + column + " FROM user WHERE NOT username = '" + username + "'")) {    
             while(result.next()) {
@@ -147,7 +146,6 @@ public class EditUserPageController implements Initializable {
     }
     
     private boolean isEmailDuplicated(String column, String value) throws SQLException {
-        dbConnect db = new dbConnect();
         
         try(ResultSet result = db.getData("SELECT " + column + " FROM user WHERE NOT email = '" + emailAddress + "'")) {    
             while(result.next()) {
@@ -160,52 +158,52 @@ public class EditUserPageController implements Initializable {
     
     private boolean verifyInput(Stage currentStage, String firstName, String lastName, String phoneNumber, String emailAddress, String user) throws Exception {
         if(firstName.isEmpty()) {
-            config.showErrorMessage("First name must not be empty", "Field Error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "First name field must not be empty.");
             return true;
         }
         
         if(lastName.isEmpty()) {
-            config.showErrorMessage("Last name must not be empty", "Field Error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "Last name field must not be empty.");
             return true;
         }
         
         if(emailAddress.isEmpty()) {
-            config.showErrorMessage("Email address must not be empty", "Field Error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "Email address field must not be empty.");
             return true;
         }
         
         if(phoneNumber.isEmpty()) {
-            config.showErrorMessage("Phone number must not be empty", "Field Error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "Phone number field must not be empty.");
             return true;
         }
         
         if(username.isEmpty()) {
-            config.showErrorMessage("username must not be empty", "Field Error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "Username field must not be empty.");
             return true;
         }
         
         if(!config.isValidEmailFormat(emailAddress)) {
-            config.showErrorMessage("Email format is invalid", "Email Error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "Email format is invalid.");
             return true;
         }
         
         if(config.isValidPhoneNumber(phoneNumber)) {
-            config.showErrorMessage("Phone number must only be numbers.", "Phone Number Error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "Phone number is invalid.");
             return true;
         }
         
-        if(config.isValidPhoneNumberFormat(phoneNumber)) {
-            config.showErrorMessage("Phone number format is invalid, must start with 9", "Phone Number Error", currentStage);
+        if(!config.isValidPhoneNumberFormat(phoneNumber)) {
+            alertConf.showEditEUserErrorAlert(currentStage, "Phone number is invalid.");
             return true;
         }
         
         if(isUsernameDuplicated("username", user)) {
-            config.showErrorMessage("Username already exists", "Username Error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "Username already exists.");
             return true;
         }
         
         if(isEmailDuplicated("email", emailAddress)) {
-            config.showErrorMessage("Email already exist.", "Email Error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "Username already exists.");
             return true;
         }
         return false;
@@ -263,11 +261,11 @@ public class EditUserPageController implements Initializable {
         String sql = "UPDATE user SET status = 'inactive' WHERE username = '" + username + "'";
         
         if(!updateUserStatus(sql)) {
-            config.showErrorMessage("User deactivation failed", "User Dectivation Error", currentStage);
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "User Deactivation Failed", "There was a problem deactivating the user.", currentStage);
             return;
         }
         
-        config.showAlert(Alert.AlertType.INFORMATION, "User Deactivation", "User successfully deactivated!", currentStage);
+        alertConf.showAlert(Alert.AlertType.INFORMATION, "User Deactivation Successful", "User successfully deactivated!", currentStage);
         refreshPage();
     }
 
@@ -277,11 +275,11 @@ public class EditUserPageController implements Initializable {
         String sql = "UPDATE user SET status = 'active' WHERE username = '" + username + "'";
         
         if(!updateUserStatus(sql)) {
-            config.showErrorMessage("User activation failed", "User Activation Error", currentStage);
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "User Activation Failed", "There was a problem activating the user.", currentStage);
             return;
         }
         
-        config.showAlert(Alert.AlertType.INFORMATION, "User Activation", "User successfully activated!", currentStage);
+        alertConf.showAlert(Alert.AlertType.INFORMATION, "User Activation", "User successfully activated!", currentStage);
         refreshPage();
     }
 
@@ -309,7 +307,7 @@ public class EditUserPageController implements Initializable {
         } else if(adminRadioButton.isSelected()) {
             userRole = "admin";
         } else {
-            config.showErrorMessage("You must select a type of user", "User type error", currentStage);
+            alertConf.showEditEUserErrorAlert(currentStage, "You must select a type of user.");
             return;
         }
         
@@ -318,7 +316,7 @@ public class EditUserPageController implements Initializable {
         if(!verifyInput(currentStage, fName, lName, pNumber, eAddress, uName)) {
             if(db.updateData(sql, fName, mName, lName, pNumber, eAddress, uName, username)) {
                 System.out.println("User updated successfully!");
-                config.showAlert(Alert.AlertType.INFORMATION, "User Update", "User Updated Succesfully!", currentStage);
+                alertConf.showAlert(Alert.AlertType.INFORMATION, "User Update Successful", "User Updated Succesfully!", currentStage);
                 returnToPreviousPage(uName);
             }
         }

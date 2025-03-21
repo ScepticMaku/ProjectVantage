@@ -7,7 +7,7 @@ package projectvantage.controllers.admin;
 
 import projectvantage.models.User;
 
-import projectvantage.controllers.admin.AdminPageController;
+import projectvantage.utility.AlertConfig;
 import projectvantage.utility.Config;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.ElementConfig;
@@ -24,6 +24,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableCell;
@@ -51,6 +52,7 @@ public class UserManagementPageController implements Initializable {
     private static final int ROWS_PER_PAGE = 10;
     
     ObservableList<User> userList = FXCollections.observableArrayList();
+    AlertConfig alertConf = new AlertConfig();
     Config config = new Config();
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
@@ -194,7 +196,7 @@ public class UserManagementPageController implements Initializable {
     private void addButtonMouseClickHandler(MouseEvent event) throws Exception {
         String FXML = "/projectvantage/fxml/admin/AddUserPage.fxml";
         AdminPageController admin = AdminPageController.getInstance();
-        admin.loadPage(FXML);
+        admin.loadPage(FXML, "Add User");
     }
 
     @FXML
@@ -205,13 +207,12 @@ public class UserManagementPageController implements Initializable {
         User selectedRow = userTable.getSelectionModel().getSelectedItem();
         
         if(selectedRow == null) {
-            config.showErrorMessage("You must select a row.", "Selection Error", currentStage);
+            alertConf.showAlert(Alert.AlertType.ERROR, "User View Failed", "You must select a user.", currentStage);
             return;
         }
         
         String fxmlLocation = "/projectvantage/fxml/admin/AdminUserPage.fxml";
         String user = selectedRow.getUsername();
         pageConf.loadUserPage(fxmlLocation, user ,adminController.getBackgroundPane(), adminController.getRootPane());
-        adminController.getTitlebarLabel().setText("User");
     }
 }

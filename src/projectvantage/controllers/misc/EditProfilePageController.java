@@ -9,6 +9,7 @@ import projectvantage.utility.PageConfig;
 import projectvantage.controllers.admin.AdminPageController;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
 import projectvantage.utility.Config;
+import projectvantage.utility.AlertConfig;
 import projectvantage.utility.dbConnect;
 
 import java.net.URL;
@@ -36,6 +37,7 @@ public class EditProfilePageController implements Initializable {
     private static EditProfilePageController instance;
     
     dbConnect db = new dbConnect();
+    AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
     Config config = new Config();
     
@@ -145,47 +147,42 @@ public class EditProfilePageController implements Initializable {
     
     private boolean verifyInput(Stage currentStage, String fName, String lName, String eAddress, String pNumber, String password, String confirmPassword) throws Exception {
         if(fName.isEmpty()) {
-            config.showErrorMessage("First name must not be empty", "Field Error", currentStage);
+            alertConf.showEditProfileErrorAlert(currentStage, "First name field must not be empty.");
             return true;
         }
         
         if(lName.isEmpty()) {
-            config.showErrorMessage("Last name must not be empty", "Field Error", currentStage);
+            alertConf.showEditProfileErrorAlert(currentStage, "Last name field must not be empty.");
             return true;
         }
         
         if(eAddress.isEmpty()) {
-            config.showErrorMessage("Email address must not be empty", "Field Error", currentStage);
+            alertConf.showEditProfileErrorAlert(currentStage, "Email address field must not be empty.");
             return true;
         }
         
         if(pNumber.isEmpty()) {
-            config.showErrorMessage("Phone number must not be empty", "Field Error", currentStage);
+            alertConf.showEditProfileErrorAlert(currentStage, "Phone number field must not be empty.");
             return true;
         }
         
         if(!config.isValidEmailFormat(eAddress)) {
-            config.showErrorMessage("Email format is invalid", "Email Error", currentStage);
+            alertConf.showEditProfileErrorAlert(currentStage, "Email format is invalid.");
             return true;
         }
         
-        if(config.isValidPhoneNumber(pNumber)) {
-            config.showErrorMessage("Phone number must only be numbers", "Phone Number Error", currentStage);
-            return true;
-        }
-        
-        if(config.isValidPhoneNumberFormat(pNumber)) {
-            config.showErrorMessage("Phone number format is invalid, must start with 9", "Phone Number Error", currentStage);
+        if(config.isValidPhoneNumber(pNumber) || !config.isValidPhoneNumberFormat(pNumber)) {
+            alertConf.showEditProfileErrorAlert(currentStage, "Phone number is invalid.");
             return true;
         }
         
         if(isEmailDuplicated("email", eAddress)) {
-            config.showErrorMessage("Email already exist", "Email Error", currentStage);
+            alertConf.showEditProfileErrorAlert(currentStage, "Email already exists.");
             return true;
         }
         
         if(password.isEmpty()) {
-            config.showErrorMessage("You must enter your password to submit changes", "Edit Error", currentStage);
+            alertConf.showEditProfileErrorAlert(currentStage, "You must enter password to submit changes.");
             return true;
         }
         
@@ -195,10 +192,9 @@ public class EditProfilePageController implements Initializable {
 //        }
         
         if(!confirmPassword.equals(password)) {
-            config.showErrorMessage("Passwords does not match", "Password Error", currentStage);
+            alertConf.showEditProfileErrorAlert(currentStage, "Password does not match.");
             return true;
         }
-        
         return false;
     }
     
@@ -231,7 +227,7 @@ public class EditProfilePageController implements Initializable {
         
         if(db.updateData(sql, fName, mName, lName, pNumber, eAddress, username)) {
                 System.out.println("User updated successfully!");
-                config.showAlert(Alert.AlertType.INFORMATION, "User Update", "User Updated Succesfully!", currentStage);
+                alertConf.showAlert(Alert.AlertType.INFORMATION, "User Update Successful", "User Updated Succesfully!", currentStage);
                 returnToPreviousPage();
         }
         

@@ -7,19 +7,8 @@
 package projectvantage.utility;
 
 import java.sql.*;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javafx.event.Event;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  *
@@ -32,62 +21,6 @@ public class Config {
     
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile(PHONE_NUMBER_REGEX);
-    
-    public void showErrorMessage(String errorMessage, String errorType, Stage owner) {
-        showAlert(Alert.AlertType.ERROR, errorType, errorMessage, owner);
-    }
-    
-    public void showExitConfirmationAlert(Stage stage) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Exit Confirmation");
-        alert.setContentText("Are you sure you want to exit?");
-        alert.initOwner(stage);
-        
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("/projectvantage/css/alert-style.css").toExternalForm());
-        dialogPane.getStyleClass().add("alert");
-        
-        Optional<ButtonType> result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.OK) {
-            stage.close();
-        }
-    }
-    
-    public void showLogoutConfirmationAlert(Node node, Event event) {
-        PageConfig pageConf = new PageConfig();
-        
-        Stage currentStage = (Stage) node.getScene().getWindow();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Log out Confirmation.");
-        alert.setContentText("Are you sure you want to log out?");
-        alert.initOwner(currentStage);
-        
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("/projectvantage/css/alert-style.css").toExternalForm());
-        dialogPane.getStyleClass().add("alert");
-        
-        alert.showAndWait().ifPresent(response -> {
-            if(response == ButtonType.OK)
-                try {
-                    pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-    }
-    
-    public void showAlert(Alert.AlertType alertType, String header, String message, Stage owner) {
-        Alert alert = new Alert(alertType);
-        alert.setHeaderText(header);
-        alert.setContentText(message);
-        alert.initOwner(owner); 
-         
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("/projectvantage/css/alert-style.css").toExternalForm());
-        dialogPane.getStyleClass().add("alert");
-        
-        alert.showAndWait();
-    }
     
     public boolean isValidPhoneNumber(String phoneNumber) {
         boolean hasAlpha = false;
