@@ -12,6 +12,7 @@ import projectvantage.controllers.admin.AdminUserPageController;
 import projectvantage.controllers.admin.EditUserPageController;
 import projectvantage.controllers.authentication.GoogleAuthenticationController;
 import projectvantage.controllers.misc.EditProfilePageController;
+import projectvantage.models.User;
 
 
 import java.sql.ResultSet;
@@ -26,6 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import projectvantage.controllers.misc.AuthenticationController;
+import projectvantage.controllers.misc.ResetPasswordPageController;
 
 /**
  *
@@ -54,60 +56,18 @@ public class PageConfig {
         stage.show();
     }
     
-    public void loadProfilePage(String targetFXML, String user, Node node, BorderPane pane) {
-        
-        dbConnect db = new dbConnect();
-        Stage currentStage = (Stage) node.getScene().getWindow();
-        
-        String sql = "SELECT first_name, middle_name, last_name, email, phone_number, username, role.name FROM user INNER JOIN role ON user.role_id = role.id WHERE username='" + user + "'";
-        try{
-            ResultSet result = db.getData(sql);
-            if(result.next()) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
-                Parent root = loader.load();
-                
-                String first_name = result.getString("first_name");
-                String middle_name = result.getString("middle_name");
-                String last_name = result.getString("last_name");
-                String email = result.getString("email");
-                String phone_number = result.getString("phone_number");
-                String role = result.getString("role.name");
-                
-                ProfilePageController.getInstance().loadUser(first_name, middle_name, last_name, email, phone_number, user, role);
-                pane.setCenter(root);   
-            }
-            result.close();
-        } catch (Exception e) {
-            alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
-        }
+    public void loadProfilePage(String targetFXML, String user, Node node, BorderPane pane) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
+        Parent root = loader.load();
+        ProfilePageController.getInstance().loadUser(user);
+        pane.setCenter(root);
     }
     
-    public void loadUserPage(String targetFXML, String user, Node node, BorderPane pane) {
-        dbConnect db = new dbConnect();
-        Stage currentStage = (Stage) node.getScene().getWindow();
-        
-        String sql = "SELECT first_name, middle_name, last_name, email, phone_number, username, role, status FROM user WHERE username='" + user + "'";
-        try{
-            ResultSet result = db.getData(sql);
-            if(result.next()) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
-                Parent root = loader.load();
-                
-                String first_name = result.getString("first_name");
-                String middle_name = result.getString("middle_name");
-                String last_name = result.getString("last_name");
-                String email = result.getString("email");
-                String phone_number = result.getString("phone_number");
-                String role = result.getString("role");
-                String status = result.getString("status");
-                
-                AdminUserPageController.getInstance().loadUser(first_name, middle_name, last_name, email, phone_number, user, role, status);
-                pane.setCenter(root);   
-            }
-            result.close();
-        } catch (Exception e) {
-            alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
-        }
+    public void loadUserPage(String targetFXML, String user, Node node, BorderPane pane) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
+        Parent root = loader.load();
+        AdminUserPageController.getInstance().loadUser(user);
+        pane.setCenter(root);
     }
     
     public void loadEditUserPage(String targetFXML, String user, Node node, BorderPane pane) {
@@ -138,30 +98,33 @@ public class PageConfig {
         }
     }
     
-    public void loadDashboardPage(String targetFXML, String user, Node node, BorderPane pane) throws Exception {
+    public void loadDashboardPage(Stage stage, String targetFXML, String username, Node node, BorderPane pane) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
         Parent root = loader.load();
         
+        User user = dbConf.getUserByUsername(username);
         
-        switch(dbConf.getRole(user)) {
+        switch(user.getRole()) {
             case "team member":
-                TeamMemberDashboardPageController.getInstance().loadUsername(user);
+                TeamMemberDashboardPageController.getInstance().loadUsername(username);
                 break;
             case "admin":
-                AdminDashboardPageController.getInstance().loadUsername(user);
+                AdminDashboardPageController.getInstance().loadUsername(username);
             break;
         }
+        
+        stage.setTitle("Dashboard");
         pane.setCenter(root);
     }
     
-    public void loadEditProfilePage(String targetFXML, Node node, BorderPane pane, String...info) throws Exception {
+    public void loadEditProfilePage(String targetFXML, BorderPane pane, String username) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
         Parent root = loader.load();
-        EditProfilePageController.getInstance().loadUserContents(info[0], info[1], info[2], info[3], info[4], info[5], info[6]);
+        EditProfilePageController.getInstance().loadUserContents(username);
         pane.setCenter(root);
     }
     
-     public void switchToVerifyAuthenticator(MouseEvent event, Class getClass, Node node, String sql, String...info) throws Exception {
+     public void switchToVerifyAuthenticator(MouseEvent event, Class getClass, Node node, String sql, String username) throws Exception {
         Stage currentStage = (Stage)node.getScene().getWindow();
         String FXML = "/projectvantage/fxml/authentication/GoogleAuthentication.fxml";
         Parent root = FXMLLoader.load(getClass.getResource(FXML));
@@ -170,7 +133,7 @@ public class PageConfig {
         currentStage.setResizable(false);
         setCenterAlignment(currentStage);
         
-        GoogleAuthenticationController.getInstance().loadContent(sql, info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7]);
+        GoogleAuthenticationController.getInstance().loadContent(sql, username);
         
         currentStage.setTitle("Google Authentication");
         currentStage.show();
@@ -190,5 +153,17 @@ public class PageConfig {
         
         currentStage.setTitle("Google Authentication");
         currentStage.show();
+    }
+    
+    public void switchToResetPassword(Class getClass, Node node, String FXML, String username) throws Exception {
+        Parent root = FXMLLoader.load(getClass.getResource(FXML));
+        Stage stage = (Stage)node.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        setCenterAlignment(stage);
+        
+        ResetPasswordPageController.getInstance().setUsername(username);
+        
+        stage.show();
     }
 }

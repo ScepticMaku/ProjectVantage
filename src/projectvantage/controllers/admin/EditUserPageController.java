@@ -75,7 +75,6 @@ public class EditUserPageController implements Initializable {
     private RadioButton projectManagerRadioButton;
     @FXML
     private RadioButton adminRadioButton;
-    private PasswordField passwordField;
     @FXML
     private Button deactivateButton;
     @FXML
@@ -217,7 +216,7 @@ public class EditUserPageController implements Initializable {
         return false;
     }
     
-    private void returnToPreviousPage(String user) {
+    private void returnToPreviousPage(String user) throws Exception {
         AdminPageController adminController = AdminPageController.getInstance();
         String fxmlLocation = "/projectvantage/fxml/admin/AdminUserPage.fxml";
         pageConf.loadUserPage(fxmlLocation, user ,adminController.getBackgroundPane(), adminController.getRootPane());
@@ -230,7 +229,7 @@ public class EditUserPageController implements Initializable {
     }
             
     @FXML
-    private void backButtonMouseClickHandler(MouseEvent event) {
+    private void backButtonMouseClickHandler(MouseEvent event) throws Exception {
         returnToPreviousPage(username);
     }
 

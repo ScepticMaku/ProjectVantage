@@ -10,6 +10,8 @@ import projectvantage.utility.PageConfig;
 import projectvantage.utility.GoogleAuthenticationConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.AlertConfig;
+import projectvantage.utility.DatabaseConfig;
+import projectvantage.models.User;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -40,6 +42,7 @@ public class GoogleAuthenticationController implements Initializable {
     Config config = new Config();
     GoogleAuthenticationConfig googleAuthConf = new GoogleAuthenticationConfig();
     AlertConfig alertConf = new AlertConfig();
+    DatabaseConfig dbConf = new DatabaseConfig();
     
     private String query;
     private String firstName;
@@ -74,17 +77,19 @@ public class GoogleAuthenticationController implements Initializable {
         return instance;
     }
     
-    public void loadContent(String...info) {
+    public void loadContent(String sql, String userInput) {
         
-        query = info[0];
-        firstName = info[1];
-        middleName = info[2];
-        lastName = info[3];
-        email = info[4];
-        phoneNumber = info[5];
-        username = info[6];
-        salt = info[7];
-        hashedPassword = info[8];
+        User user = dbConf.getUserByUsername(userInput);
+        
+        query = sql;
+        firstName = user.getFirstName();
+        middleName = user.getMiddleName();
+        lastName = user.getLastName();
+        email = user.getEmail();
+        phoneNumber = user.getPhoneNumber();
+        username = user.getUsername();
+        salt = user.getSalt();
+        hashedPassword = user.getPassword();
         
         secretKey = googleAuthConf.generateSecretKey();
         String issuer = "ProjectVantage";

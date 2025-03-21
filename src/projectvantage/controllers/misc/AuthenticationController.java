@@ -11,6 +11,7 @@ import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.DatabaseConfig;
+import projectvantage.models.User;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -18,7 +19,11 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,6 +33,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
 
 /**
  * FXML Controller class
@@ -44,12 +50,11 @@ public class AuthenticationController implements Initializable {
     AlertConfig alertConf = new AlertConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
     dbConnect db = new dbConnect();
-    ProfilePageController profileController = ProfilePageController.getInstance();
 
     private String secretKey;
     private String targetFXML;
     private String title;
-//    private String username;
+    private String username;
     private String email;
     
     @FXML
@@ -60,6 +65,8 @@ public class AuthenticationController implements Initializable {
     private Button submitButton;
     @FXML
     private Label emailPlaceholder;
+    @FXML
+    private Button cancelButton;
 
     /**
      * Initializes the controller class.
@@ -80,18 +87,11 @@ public class AuthenticationController implements Initializable {
         this.title = title;
         this.email = email;
         
+        User user = dbConf.getUserByEmail(email);
+        
         emailPlaceholder.setText(email);
-        secretKey = getSecretKey(email);
-    }
-    
-    public String getSecretKey(String email) {
-         try(ResultSet result = db.getData("SELECT secret_key FROM user WHERE email = '" + email + "'")) {
-            if(result.next())
-                return result.getString("secret_key");
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return null;
+        secretKey = user.getSecretKey();
+        username = user.getUsername();
     }
     
     private boolean isEnterPressed(KeyEvent event) throws Exception {
@@ -103,7 +103,7 @@ public class AuthenticationController implements Initializable {
         String OTP = otpField.getText();
         
         if(OTP.isEmpty()) {
-            alertConf.showAuthenticationErrorAlert(currentStage, "You must enter a verificaiton code.");
+            alertConf.showAuthenticationErrorAlert(currentStage, "You must enter a verification code.");
             return;
         }
         
@@ -114,7 +114,8 @@ public class AuthenticationController implements Initializable {
         
         alertConf.showAlert(Alert.AlertType.INFORMATION, "Authentication Successful", "Account successfully verified!", currentStage);
         
-        profileController.loadChangePasswordPage(getClass(), event, targetFXML);
+//        profileController.loadResetPasswordPage(getClass(), event, targetFXML);
+        pageConf.switchToResetPassword(getClass(), rootPane, targetFXML, username);
         currentStage.setTitle(title);
     }
 
@@ -127,6 +128,11 @@ public class AuthenticationController implements Initializable {
     private void otpFieldKeyPressedHandler(KeyEvent event) throws Exception {
         if(isEnterPressed(event))
             verifyUser(event);
+    }
+
+    @FXML
+    private void cancelButtonMouseClickHandler(MouseEvent event) throws Exception {
+        pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
     }
     
 }

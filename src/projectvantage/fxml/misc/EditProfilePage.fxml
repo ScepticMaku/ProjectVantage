@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.EditProfilePageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" stylesheets="@../../css/authentication-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.EditProfilePageController">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Profile" textFill="#192b4b">
          <font>
@@ -48,7 +48,7 @@
             <Font name="Segoe UI Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="239.0" layoutY="103.0" text="First name:" textFill="#2f9efe">
+      <Label layoutX="239.0" layoutY="93.0" text="First name:" textFill="#2f9efe">
          <font>
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
@@ -58,12 +58,12 @@
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="239.0" layoutY="194.0" text="Last Name:" textFill="#2f9efe">
+      <Label layoutX="239.0" layoutY="200.0" text="Last Name:" textFill="#2f9efe">
          <font>
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="399.0" layoutY="103.0" text="Email address:" textFill="#2f9efe">
+      <Label layoutX="399.0" layoutY="93.0" text="Email address:" textFill="#2f9efe">
          <font>
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
@@ -73,17 +73,17 @@
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="398.0" layoutY="194.0" text="Role:" textFill="#2f9efe">
+      <Label layoutX="399.0" layoutY="200.0" text="Role:" textFill="#2f9efe">
          <font>
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
       </Label>
       <Button fx:id="backButton" layoutX="503.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#backButtonMouseClickHandler" prefHeight="27.0" prefWidth="83.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Back" />
-      <TextField fx:id="firstNameField" layoutX="239.0" layoutY="122.0" />
-      <TextField fx:id="emailAddressField" layoutX="399.0" layoutY="122.0" />
-      <TextField fx:id="phoneNumberField" layoutX="399.0" layoutY="167.0" />
-      <TextField fx:id="middleNameField" layoutX="239.0" layoutY="167.0" />
-      <TextField fx:id="lastNameField" layoutX="239.0" layoutY="213.0" />
+      <TextField fx:id="firstNameField" layoutX="239.0" layoutY="112.0" styleClass="textfield" />
+      <TextField fx:id="emailAddressField" layoutX="399.0" layoutY="112.0" styleClass="textfield" />
+      <TextField fx:id="phoneNumberField" layoutX="399.0" layoutY="167.0" styleClass="textfield" />
+      <TextField fx:id="middleNameField" layoutX="239.0" layoutY="167.0" styleClass="textfield" />
+      <TextField fx:id="lastNameField" layoutX="239.0" layoutY="219.0" styleClass="textfield" />
       <Label layoutX="238.0" layoutY="285.0" text="Password:" textFill="#2f9efe">
          <font>
             <Font name="Segoe UI Bold" size="16.0" />
@@ -94,10 +94,10 @@
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
       </Label>
-      <PasswordField fx:id="passwordField" layoutX="238.0" layoutY="305.0" />
-      <PasswordField fx:id="confirmPasswordField" layoutX="396.0" layoutY="305.0" />
-      <Button fx:id="submitButton" layoutX="462.0" layoutY="338.0" mnemonicParsing="false" onMouseClicked="#submitButtonMouseClickHandler" prefHeight="27.0" prefWidth="83.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Submit" />
-      <Label fx:id="rolePlaceholder" layoutX="400.0" layoutY="217.0" text="Placeholder" textFill="#575757">
+      <PasswordField fx:id="passwordField" layoutX="238.0" layoutY="305.0" styleClass="textfield" />
+      <PasswordField fx:id="confirmPasswordField" layoutX="396.0" layoutY="305.0" styleClass="textfield" />
+      <Button fx:id="submitButton" layoutX="462.0" layoutY="338.0" mnemonicParsing="false" onMouseClicked="#submitButtonMouseClickHandler" prefHeight="27.0" prefWidth="83.0" text="Submit" />
+      <Label fx:id="rolePlaceholder" layoutX="400.0" layoutY="225.0" text="Placeholder" textFill="#575757">
          <font>
             <Font name="Segoe UI" size="14.0" />
          </font>

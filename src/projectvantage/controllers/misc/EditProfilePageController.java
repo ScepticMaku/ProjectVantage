@@ -11,6 +11,8 @@ import projectvantage.controllers.team_member.TeamMemberMainPageController;
 import projectvantage.utility.Config;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.dbConnect;
+import projectvantage.utility.DatabaseConfig;
+import projectvantage.models.User;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -40,6 +42,7 @@ public class EditProfilePageController implements Initializable {
     AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
     Config config = new Config();
+    DatabaseConfig dbConf = new DatabaseConfig();
     
     private String firstName;
     private String middleName;
@@ -87,14 +90,17 @@ public class EditProfilePageController implements Initializable {
         return instance;
     }
     
-    public void loadUserContents(String...info) {
-        firstName = info[0];
-        middleName = info[1];
-        lastName = info[2];
-        emailAddress = info[3];
-        phoneNumber = info[4];
-        username = info[5];
-        role = info[6];
+    public void loadUserContents(String userInput) {
+        
+        User user = dbConf.getUserByUsername(userInput);
+        
+        firstName = user.getFirstName();
+        middleName = user.getMiddleName();
+        lastName = user.getLastName();
+        emailAddress = user.getEmail();
+        phoneNumber = user.getPhoneNumber();
+        username = user.getUsername();
+        role = user.getRole();
         
         firstNameField.setText(firstName);
         middleNameField.setText(middleName);
@@ -105,44 +111,25 @@ public class EditProfilePageController implements Initializable {
         rolePlaceholder.setText(role);
     }
     
-    private void returnToPreviousPage() {
+    private void returnToPreviousPage() throws Exception {
+        
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
+        
         TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
         AdminPageController adminController = AdminPageController.getInstance();
         
         switch(role) {
             case "team member":
                 pageConf.loadProfilePage(fxmlLocation, username, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane());
-                teamMemberController.getTitlebarLabel().setText("Profile");
                 break;
             case "admin":
                 pageConf.loadProfilePage(fxmlLocation, username, adminController.getBackgroundPane(), adminController.getRootPane());
-                adminController.getTitlebarLabel().setText("Profile");
                 break;
         }
     }
     
-    private boolean isEmailDuplicated(String column, String value) throws SQLException {
-        dbConnect db = new dbConnect();
-        
-        try(ResultSet result = db.getData("SELECT " + column + " FROM user WHERE NOT email = '" + emailAddress + "'")) {    
-            while(result.next()) {
-                if(value.equals(result.getString(column)))
-                    return true;
-            }
-        }
-        return false;
-    }
-    
-    private String getPassword(String user) {
-        try(ResultSet result = db.getData("SELECT password FROM user  WHERE username = '" + user + "'")) {
-            if(result.next()) {
-                return result.getString("password");
-            }
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return null;
+    private boolean isEmailDuplicated(String emailInput, String storedEmail) throws SQLException {
+        return emailInput.equals(storedEmail);
     }
     
     private boolean verifyInput(Stage currentStage, String fName, String lName, String eAddress, String pNumber, String password, String confirmPassword) throws Exception {
@@ -204,7 +191,7 @@ public class EditProfilePageController implements Initializable {
     }
 
     @FXML
-    private void backButtonMouseClickHandler(MouseEvent event) {
+    private void backButtonMouseClickHandler(MouseEvent event) throws Exception {
         returnToPreviousPage();
     }
 

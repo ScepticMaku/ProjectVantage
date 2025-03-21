@@ -17,13 +17,15 @@ public class User {
     private String email;
     private String phone_number;
     private String username;
+    private String salt;
     private String password;
+    private String secretKey;
     private String role;
     private String status;
     
     public User(int id, String first_name, String middle_name, String last_name,
-            String email, String phone_number, String username, String password, 
-            String role, String status) {
+            String email, String phone_number, String username, String salt,
+            String password, String secretKey, String role, String status) {
         this.id = id;
         this.first_name = first_name;
         this.middle_name = middle_name;
@@ -31,7 +33,9 @@ public class User {
         this.email = email;
         this.phone_number = phone_number;
         this.username = username;
+        this.salt = salt;
         this.password = password;
+        this.secretKey = secretKey;
         this.role = role;
         this.status = status;
     }
@@ -64,8 +68,16 @@ public class User {
         return username;
     }
     
+    public String getSalt() {
+        return salt;
+    }
+    
     public String getPassword() {
         return password;
+    }
+    
+    public String getSecretKey() {
+        return secretKey;
     }
     
     public String getRole() {

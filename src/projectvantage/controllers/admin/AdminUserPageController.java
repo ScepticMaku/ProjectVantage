@@ -6,6 +6,8 @@
 package projectvantage.controllers.admin;
 
 import projectvantage.utility.PageConfig;
+import projectvantage.utility.DatabaseConfig;
+import projectvantage.models.User;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,9 +28,16 @@ public class AdminUserPageController implements Initializable {
     private static AdminUserPageController instance;
     
     PageConfig pageConf = new PageConfig();
+    DatabaseConfig dbConf = new DatabaseConfig();
     
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
     private String username;
     private String role;
+    private String status;
     
     @FXML
     private AnchorPane rootPane;
@@ -66,9 +75,18 @@ public class AdminUserPageController implements Initializable {
         return instance;
     }
     
-    public void loadUser(String...info) {
-        username = info[5];
-        role = info[6];
+    public void loadUser(String userInput) {
+        
+        User user = dbConf.getUserByUsername(userInput);
+        
+        firstName = user.getFirstName();
+        middleName = user.getMiddleName();
+        lastName = user.getLastName();
+        email = user.getEmail();
+        phoneNumber = user.getPhoneNumber();
+        username = user.getUsername();
+        role = user.getRole();
+        status = user.getStatus();
         
         switch(role) {
             case "admin":
@@ -76,15 +94,14 @@ public class AdminUserPageController implements Initializable {
                 break;
         }
         
-        firstNamePlaceholder.setText(info[0]);
-        middleNamePlaceholder.setText(info[1]);
-        lastNamePlaceholder.setText(info[2]);
-        emailAddressPlaceholder.setText(info[3]);
-        phoneNumberPlaceholder.setText(info[4]);
-        usernamePlaceholder.setText(info[5]);
-        rolePlaceholder.setText(info[6]);
-        statusPlaceholder.setText(info[7]);
-        
+        firstNamePlaceholder.setText(firstName);
+        middleNamePlaceholder.setText(middleName);
+        lastNamePlaceholder.setText(lastName);
+        emailAddressPlaceholder.setText(email);
+        phoneNumberPlaceholder.setText(phoneNumber);
+        usernamePlaceholder.setText(username);
+        rolePlaceholder.setText(role);
+        statusPlaceholder.setText(status);
     }
 
     @FXML
