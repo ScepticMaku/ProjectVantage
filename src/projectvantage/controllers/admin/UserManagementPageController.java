@@ -119,7 +119,9 @@ public class UserManagementPageController implements Initializable {
     
     private void loadTableData() {
         dbConnect db = new dbConnect();
-        String sql = "SELECT id, first_name, middle_name, last_name, email, phone_number, username, password, role, status FROM user";
+        String sql = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, role.name AS role, user_status.name AS status "
+                + "FROM user INNER JOIN role ON user.role_id = role.id INNER JOIN user_status ON user.status_id = user_status.id ORDER BY user.id ASC";
+        
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {
                 userList.add(new User(
@@ -130,7 +132,9 @@ public class UserManagementPageController implements Initializable {
                         result.getString("email"),
                         result.getString("phone_number"),
                         result.getString("username"),
+                        result.getString("salt"),
                         result.getString("password"),
+                        result.getString("secret_key"),
                         result.getString("role"),
                         result.getString("status")
                 ));
@@ -200,7 +204,7 @@ public class UserManagementPageController implements Initializable {
     }
 
     @FXML
-    private void viewButtonMouseClickHandler(MouseEvent event) {
+    private void viewButtonMouseClickHandler(MouseEvent event) throws Exception {
         AdminPageController adminController = AdminPageController.getInstance();
         
         Stage currentStage = (Stage) rootPane.getScene().getWindow();

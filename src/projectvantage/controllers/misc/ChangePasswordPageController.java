@@ -11,7 +11,7 @@ import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.DatabaseConfig;
-import projectvantage.controllers.team_member.TeamMemberMainPageController;
+import projectvantage.models.User;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -48,12 +48,13 @@ public class ChangePasswordPageController implements Initializable {
     dbConnect db = new dbConnect();
     Config config = new Config();
     PageConfig pageConf = new PageConfig();
-    AuthenticationConfig authConfig = new AuthenticationConfig();
-    DatabaseConfig dbConfig = new DatabaseConfig();
+    AuthenticationConfig authConf = new AuthenticationConfig();
+    DatabaseConfig dbConf = new DatabaseConfig();
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
     
-    private String email;
+    private String password;
+    private String salt;
     private String username;
     private String role;
 
@@ -87,30 +88,24 @@ public class ChangePasswordPageController implements Initializable {
         return instance;
     }
     
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String userInput) {
         
-        usernamePlaceholder.setText(username);
-    }
-    
-    public String getUsername() {
-        return username;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
+        User user = dbConf.getUserByUsername(userInput);
+        
+        username = user.getUsername();
+        role = user.getRole();
+        password = user.getPassword();
+        salt = user.getSalt();
+        
+        usernamePlaceholder.setText(userInput);
     }
     
     private void returnToPreviousPage(Event event) {
+        
         try {
-            String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
             String adminFXML = "/projectvantage/fxml/admin/AdminPage.fxml";
-            String teamMemberFXML = "/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml";
+            String teamMemberFXML = "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml";
             
-            role = dbConfig.getRole(username);
-
-    //        TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
-            AdminPageController adminController = AdminPageController.getInstance();
             LoginController loginController = LoginController.getInstance();
 
             switch(role) {
@@ -125,28 +120,6 @@ public class ChangePasswordPageController implements Initializable {
             e.printStackTrace();
         }
         
-    }
-    
-    private String getPassword(String user) {
-        try(ResultSet result = db.getData("SELECT password FROM user WHERE username = '" + user + "'")) {
-            if(result.next()) {
-                return result.getString("password");
-            }
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return null;
-    }
-    
-    public String getSalt(String user) {
-        dbConnect db = new dbConnect();
-        try(ResultSet result = db.getData("SELECT salt FROM user WHERE username = '" + user + "'")) {
-            if(result.next())
-                return result.getString("salt");
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return null;
     }
     
     private boolean checkFields(Stage currentStage, String currentField, String newField, String confirmField) {
@@ -171,10 +144,7 @@ public class ChangePasswordPageController implements Initializable {
             return true;
         }
         
-        String userPassword = getPassword(username);
-        String salt = getSalt(username);
-        
-        boolean doesPasswordMatch = authConfig.verifyPassword(currentField, userPassword, salt);
+        boolean doesPasswordMatch = authConf.verifyPassword(currentField, password, salt);
         
         if(!doesPasswordMatch) {
             alertConf.showChangePasswordErrorAlert(currentStage, "Password doesn't exists.");
@@ -187,8 +157,6 @@ public class ChangePasswordPageController implements Initializable {
         }
         return false;
     }
-    
-    
 
     @FXML
     private void backButtonMouseClickHandler(MouseEvent event) {
@@ -199,13 +167,11 @@ public class ChangePasswordPageController implements Initializable {
     private void submitButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         
-        String salt = getSalt(username);
-        
         String currentF = currentPasswordField.getText();
         String newF = newPasswordField.getText();
         String confirmF = confirmPasswordField.getText();
         
-        String newPass = authConfig.hashPassword(newPasswordField.getText(), salt);
+        String newPass = authConf.hashPassword(confirmF, salt);
         
         String sql = "UPDATE user SET password = ? WHERE username = ?";
         

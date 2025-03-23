@@ -125,8 +125,8 @@ public class AddUserPageController implements Initializable {
             return;
         }
         
-        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, role, status) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'inactive')";
+        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, role) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         if(registerController.verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
             return;

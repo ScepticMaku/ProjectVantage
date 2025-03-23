@@ -9,6 +9,8 @@ import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.Config;
 import projectvantage.utility.dbConnect;
+import projectvantage.utility.DatabaseConfig;
+import projectvantage.models.User;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -39,6 +41,7 @@ public class EditUserPageController implements Initializable {
     AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
     Config config = new Config();
+    DatabaseConfig dbConf = new DatabaseConfig();
     
     private String firstName;
     private String middleName;
@@ -98,15 +101,18 @@ public class EditUserPageController implements Initializable {
         return instance;
     }
     
-    public void loadUserContents(String...info) {
-        firstName = info[0];
-        middleName = info[1];
-        lastName = info[2];
-        emailAddress = info[3];
-        phoneNumber = info[4];
-        username = info[5];
-        role = info[6];
-        status = info[7];
+    public void loadUserContents(String userInput) {
+        
+        User user = dbConf.getUserByUsername(userInput);
+        
+        firstName = user.getFirstName();
+        middleName = user.getMiddleName();
+        lastName = user.getLastName();
+        emailAddress = user.getEmail();
+        phoneNumber = user.getPhoneNumber();
+        username = user.getUsername();
+        role = user.getRole();
+        status = user.getStatus();
         
         firstNameField.setText(firstName);
         middleNameField.setText(middleName);
@@ -125,11 +131,13 @@ public class EditUserPageController implements Initializable {
                 break;
         }
         
-        if(status.equals("active")) {
+        boolean isActive = status.equals("active");
+        
+        if(isActive) {
             activateButton.setVisible(false);
         }
         
-        if(status.equals("inactive")) {
+        if(!isActive) {
             deactivateButton.setVisible(false);
         }
     }
@@ -217,20 +225,20 @@ public class EditUserPageController implements Initializable {
         return false;
     }
     
-    private void returnToPreviousPage(String user) {
+    private void returnToPreviousPage(String user) throws Exception {
         AdminPageController adminController = AdminPageController.getInstance();
         String fxmlLocation = "/projectvantage/fxml/admin/AdminUserPage.fxml";
         pageConf.loadUserPage(fxmlLocation, user ,adminController.getBackgroundPane(), adminController.getRootPane());
     }
     
-    private void refreshPage() {
+    private void refreshPage() throws Exception {
         AdminPageController adminController = AdminPageController.getInstance();
         String FXML = "/projectvantage/fxml/admin/EditUserPage.fxml";
         pageConf.loadEditUserPage(FXML, username, adminController.getBackgroundPane(), adminController.getRootPane());
     }
             
     @FXML
-    private void backButtonMouseClickHandler(MouseEvent event) {
+    private void backButtonMouseClickHandler(MouseEvent event) throws Exception {
         returnToPreviousPage(username);
     }
 
@@ -256,9 +264,9 @@ public class EditUserPageController implements Initializable {
 
 
     @FXML
-    private void deactivateButtonMouseClickHandler(MouseEvent event) {
+    private void deactivateButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) rootPane.getScene().getWindow();
-        String sql = "UPDATE user SET status = 'inactive' WHERE username = '" + username + "'";
+        String sql = "UPDATE user SET status_id = 1 WHERE username = '" + username + "'";
         
         if(!updateUserStatus(sql)) {
             alertConf.showAlert(Alert.AlertType.INFORMATION, "User Deactivation Failed", "There was a problem deactivating the user.", currentStage);
@@ -270,9 +278,9 @@ public class EditUserPageController implements Initializable {
     }
 
     @FXML
-    private void activateButtonMouseClickHandler(MouseEvent event) {
+    private void activateButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) rootPane.getScene().getWindow();
-        String sql = "UPDATE user SET status = 'active' WHERE username = '" + username + "'";
+        String sql = "UPDATE user SET status_id = 2 WHERE username = '" + username + "'";
         
         if(!updateUserStatus(sql)) {
             alertConf.showAlert(Alert.AlertType.INFORMATION, "User Activation Failed", "There was a problem activating the user.", currentStage);

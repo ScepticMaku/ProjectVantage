@@ -11,6 +11,7 @@ import projectvantage.utility.PageConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.AlertConfig;
+import projectvantage.models.User;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -191,8 +192,7 @@ public class RegisterController implements Initializable {
         String salt = authConf.generateSalt();
         String hashedPassword = authConf.hashPassword(passwordConfirm, salt);
         
-        pageConf.switchToVerifyAuthenticator(event, getClass(), rootPane,
-                query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword);
+        pageConf.switchToVerifyAuthenticator(event, getClass(), rootPane, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword);
     }
 
     @FXML

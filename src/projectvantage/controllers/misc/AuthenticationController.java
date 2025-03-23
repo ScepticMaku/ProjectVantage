@@ -60,6 +60,8 @@ public class AuthenticationController implements Initializable {
     private Button submitButton;
     @FXML
     private Label emailPlaceholder;
+    @FXML
+    private Button cancelButton;
 
     /**
      * Initializes the controller class.
@@ -103,7 +105,7 @@ public class AuthenticationController implements Initializable {
         String OTP = otpField.getText();
         
         if(OTP.isEmpty()) {
-            alertConf.showAuthenticationErrorAlert(currentStage, "You must enter a verificaiton code.");
+            alertConf.showAuthenticationErrorAlert(currentStage, "You must enter a verification code.");
             return;
         }
         
@@ -127,6 +129,11 @@ public class AuthenticationController implements Initializable {
     private void otpFieldKeyPressedHandler(KeyEvent event) throws Exception {
         if(isEnterPressed(event))
             verifyUser(event);
+    }
+
+    @FXML
+    private void cancelButtonMouseClickHandler(MouseEvent event) throws Exception {
+        pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
     }
     
 }

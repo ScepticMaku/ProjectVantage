@@ -19,8 +19,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -49,15 +47,9 @@ public class AdminPageController implements Initializable {
     
     private static AdminPageController instance;
     private String username;
-    
-    private double xOffset = 0;
-    private double yOffset = 0;
 
     @FXML
     private AnchorPane backgroundPane;
-    private Pane titleBar;
-    private Label titlebarLabel;
-    private Rectangle closeButtonBG;
     @FXML
     private Rectangle rectangle;
     @FXML
@@ -136,13 +128,6 @@ public class AdminPageController implements Initializable {
     private ImageView profileButton;
     @FXML
     private ImageView notificationButton;
-    
-    /**
-     * Initializes the controller class.
-     */
-    public static AdminPageController getInstance() {
-        return instance;
-    }
     @FXML
     private AnchorPane rootPane1;
     @FXML
@@ -166,15 +151,20 @@ public class AdminPageController implements Initializable {
         return rootPane;
     }
     
-    public Label getTitlebarLabel() {
-        return titlebarLabel;
-    }
+     /**
+     * Initializes the controller class.
+     */
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
     }
+    
+     public static AdminPageController getInstance() {
+        return instance;
+    }
+    
     
     public void loadPage(String targetFXML, String title) {
         Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
@@ -223,11 +213,12 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void dashboardButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
         String user = getInstance().getUsername();
         String fxmlLocation = "/projectvantage/fxml/admin/AdminDashboardPage.fxml";
         
         elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        pageConf.loadDashboardPage(fxmlLocation, user, backgroundPane, rootPane);
+        pageConf.loadDashboardPage(currentStage, fxmlLocation, user, backgroundPane, rootPane);
         
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
@@ -442,7 +433,7 @@ public class AdminPageController implements Initializable {
     }
 
     @FXML
-    private void profileButtonMouseClickHandler(MouseEvent event) {
+    private void profileButtonMouseClickHandler(MouseEvent event) throws Exception {
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
         String user = getInstance().username;
         pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);

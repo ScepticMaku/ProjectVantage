@@ -12,7 +12,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="383.0" prefWidth="400.0" stylesheets="@../../css/authentication-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.AuthenticationController">
    <children>
-      <Pane prefHeight="389.0" prefWidth="400.0">
+      <Pane prefHeight="400.0" prefWidth="400.0">
          <children>
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="DODGERBLUE" height="64.0" layoutX="20.0" layoutY="36.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="360.0" />
             <Label layoutX="99.0" layoutY="56.0" text="Two-Factor Authentication" textFill="WHITE">
@@ -36,12 +36,12 @@
                   <Font size="16.0" />
                </font>
             </TextField>
-            <Button fx:id="submitButton" layoutX="139.0" layoutY="319.0" mnemonicParsing="false" onMouseClicked="#submitButtonMouseClickHandler" prefHeight="27.0" prefWidth="123.0" style="-fx-font-size: 14;" text="Submit">
+            <Button fx:id="submitButton" layoutX="138.0" layoutY="320.0" mnemonicParsing="false" onMouseClicked="#submitButtonMouseClickHandler" prefHeight="27.0" prefWidth="123.0" style="-fx-font-size: 14;" text="Submit">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Label layoutX="36.0" layoutY="110.0" prefHeight="50.0" prefWidth="328.0" text="Enter your email address and enter the verification code that's registered in Google Authenticator" textAlignment="CENTER" textFill="#192b4b" wrapText="true">
+            <Label layoutX="36.0" layoutY="110.0" prefHeight="50.0" prefWidth="328.0" text="Enter verification code that's registered in Google Authenticator to continue." textAlignment="CENTER" textFill="#192b4b" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
@@ -52,6 +52,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
+            <Button fx:id="cancelButton" layoutX="167.0" layoutY="358.0" mnemonicParsing="false" onMouseClicked="#cancelButtonMouseClickHandler" prefHeight="28.0" prefWidth="65.0" text="Cancel" />
          </children>
       </Pane>
    </children>

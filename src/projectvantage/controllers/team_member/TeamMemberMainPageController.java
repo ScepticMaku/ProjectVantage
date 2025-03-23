@@ -240,11 +240,12 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void dashboardButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
         String fxmlLocation = "/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml";
         String user = getInstance().getUsername();
         
         elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        pageConf.loadDashboardPage(fxmlLocation, user, backgroundPane, rootPane);
+        pageConf.loadDashboardPage(currentStage, fxmlLocation, user, backgroundPane, rootPane);
         titlebarLabel.setText("Dashboard");
         
         elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
@@ -356,10 +357,7 @@ public class TeamMemberMainPageController implements Initializable {
     }
 
     @FXML
-    private void profileButtonMouseClickHandler(MouseEvent event) {
-//        String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
-//        String user = getInstance().getUsername();
-//        pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
+    private void profileButtonMouseClickHandler(MouseEvent event) throws Exception {
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
         String user = getInstance().getUsername();
         pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);

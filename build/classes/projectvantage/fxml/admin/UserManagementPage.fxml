@@ -15,19 +15,19 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="488.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.UserManagementPageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="600.0" prefWidth="600.0" stylesheets="@../../css/authentication-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.UserManagementPageController">
    <children>
-      <StackPane prefHeight="570.0" prefWidth="600.0">
+      <StackPane prefHeight="600.0" prefWidth="600.0">
          <children>
             <Pane prefHeight="528.0" prefWidth="600.0">
                <children>
-                  <Pagination fx:id="tablePage" layoutY="45.0" onMouseClicked="#tablePageOnMouseClickHandler" pageCount="50" prefHeight="497.0" prefWidth="600.0" stylesheets="@../../css/pagitation-style.css">
+                  <Pagination fx:id="tablePage" layoutY="69.0" onMouseClicked="#tablePageOnMouseClickHandler" pageCount="50" prefHeight="497.0" prefWidth="600.0" stylesheets="@../../css/pagitation-style.css">
                      <styleClass>
                         <String fx:value="number-button" />
                         <String fx:value="pagitation" />
                      </styleClass>
                   </Pagination>
-                  <TableView fx:id="userTable" layoutX="14.0" layoutY="51.0" onMouseClicked="#userTableMouseClickHandler" prefHeight="449.0" prefWidth="572.0" stylesheets="@../../css/user-table.css">
+                  <TableView fx:id="userTable" layoutX="14.0" layoutY="75.0" onMouseClicked="#userTableMouseClickHandler" prefHeight="449.0" prefWidth="572.0" stylesheets="@../../css/user-table.css">
                      <columns>
                         <TableColumn fx:id="userId" editable="false" prefWidth="50.0" sortable="false" text="ID" />
                         <TableColumn fx:id="userFirstName" editable="false" prefWidth="135.0" sortable="false" text="First Name" />
@@ -47,7 +47,7 @@
                         <Font name="Segoe UI Bold" size="20.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="searchField" layoutX="82.0" layoutY="12.0" />
+                  <TextField fx:id="searchField" layoutX="77.0" layoutY="10.0" styleClass="textfield" />
                   <ImageView fx:id="searchButton" fitHeight="150.0" fitWidth="35.0" layoutX="231.0" layoutY="7.0" onMouseClicked="#searchButtonMouseClickHandler" onMousePressed="#searchButtonMousePressHandler" onMouseReleased="#searchButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../resources/icons/search-icon.png" />
@@ -56,12 +56,12 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </ImageView>
-                  <Button fx:id="addButton" layoutX="504.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#addButtonMouseClickHandler" prefHeight="27.0" prefWidth="82.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="Add User">
+                  <Button fx:id="addButton" layoutX="504.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#addButtonMouseClickHandler" prefHeight="27.0" prefWidth="82.0" text="Add User">
                      <font>
                         <Font name="Segoe UI" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="viewButton" layoutX="412.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#viewButtonMouseClickHandler" prefHeight="27.0" prefWidth="82.0" styleClass="modern-button" stylesheets="@../../css/modernButton.css" text="View User">
+                  <Button fx:id="viewButton" layoutX="412.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#viewButtonMouseClickHandler" prefHeight="27.0" prefWidth="82.0" text="View User">
                      <font>
                         <Font name="Segoe UI" size="12.0" />
                      </font>
