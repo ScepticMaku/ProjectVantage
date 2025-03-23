@@ -64,7 +64,7 @@ public class ForgotPasswordPageController implements Initializable {
         
         User user = dbConf.getUserByEmail(emailInput);
         
-        String targetFXML = "/projectvantage/fxml/misc/ChangePasswodPage.fxml";
+        String targetFXML = "/projectvantage/fxml/misc/ResetPasswordPage.fxml";
         
         if(user == null) {
             alertConf.showAlert(Alert.AlertType.ERROR, "Email Error", "Email not found.", currentStage);

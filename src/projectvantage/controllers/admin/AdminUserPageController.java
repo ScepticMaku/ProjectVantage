@@ -105,7 +105,7 @@ public class AdminUserPageController implements Initializable {
     }
 
     @FXML
-    private void editUserButtonMouseClickHandler(MouseEvent event) {
+    private void editUserButtonMouseClickHandler(MouseEvent event) throws Exception {
         AdminPageController adminController = AdminPageController.getInstance();
         String FXML = "/projectvantage/fxml/admin/EditUserPage.fxml";
         pageConf.loadEditUserPage(FXML, username, adminController.getBackgroundPane(), adminController.getRootPane());

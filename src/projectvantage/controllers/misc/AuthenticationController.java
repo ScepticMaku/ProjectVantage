@@ -11,6 +11,7 @@ import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.DatabaseConfig;
+import projectvantage.models.User;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -18,7 +19,11 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -49,7 +54,7 @@ public class AuthenticationController implements Initializable {
     private String secretKey;
     private String targetFXML;
     private String title;
-//    private String username;
+    private String username;
     private String email;
     
     @FXML
@@ -82,18 +87,23 @@ public class AuthenticationController implements Initializable {
         this.title = title;
         this.email = email;
         
+        User user = dbConf.getUserByEmail(email);
+        
         emailPlaceholder.setText(email);
-        secretKey = getSecretKey(email);
+        secretKey = user.getSecretKey();
+        username = user.getUsername();
     }
     
-    public String getSecretKey(String email) {
-         try(ResultSet result = db.getData("SELECT secret_key FROM user WHERE email = '" + email + "'")) {
-            if(result.next())
-                return result.getString("secret_key");
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
-        return null;
+    public void loadResetPasswordPage(Class getClass, Event evt, String targetFXML) throws Exception {
+        Parent root = FXMLLoader.load(getClass.getResource(targetFXML));
+        Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        pageConf.setCenterAlignment(stage);
+        
+        ResetPasswordPageController.getInstance().setUsername(username);
+        
+        stage.show();
     }
     
     private boolean isEnterPressed(KeyEvent event) throws Exception {
@@ -116,7 +126,7 @@ public class AuthenticationController implements Initializable {
         
         alertConf.showAlert(Alert.AlertType.INFORMATION, "Authentication Successful", "Account successfully verified!", currentStage);
         
-        profileController.loadChangePasswordPage(getClass(), event, targetFXML);
+        loadResetPasswordPage(getClass(), event, targetFXML);
         currentStage.setTitle(title);
     }
 

@@ -101,6 +101,8 @@ public class UserManagementPageController implements Initializable {
         userRole.setSortable(false);
         userStatus.setSortable(false);
         
+        
+        
         userId.setCellValueFactory(new PropertyValueFactory<>("id"));
         userFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         userLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));

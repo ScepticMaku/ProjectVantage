@@ -59,12 +59,6 @@ public class TeamMemberMainPageController implements Initializable {
     @FXML
     private AnchorPane backgroundPane;
     @FXML
-    private Pane titleBar;
-    @FXML
-    private Group closeButton;
-    @FXML
-    private Rectangle closeButtonBG;
-    @FXML
     private Rectangle rectangle;
     @FXML
     private Group dashboardButton;
@@ -112,7 +106,6 @@ public class TeamMemberMainPageController implements Initializable {
     private ImageView profileButton;
     @FXML
     private ImageView notificationButton;
-    @FXML
     private Label titlebarLabel;
     @FXML
     private AnchorPane rootPane1;
@@ -184,47 +177,7 @@ public class TeamMemberMainPageController implements Initializable {
     }
 
     @FXML
-    private void closeButtonMouseReleaseHandler(MouseEvent event) {
-        closeButtonBG.setFill(Color.web("#d71515"));
-    }
-
-    @FXML
-    private void closeButtonMouseExitHandler(MouseEvent event) {
-        elementConf.fadeOut(closeButtonBG);
-    }
-
-    @FXML
-    private void closeButtonMouseEnterHandler(MouseEvent event) {
-        elementConf.fadeIn(closeButtonBG);
-    }
-
-    @FXML
-    private void closeButtonMouseClickHandler(MouseEvent event) {
-//        Stage currentStage = (Stage) backgroundPane.getScene().getWindow();
-//        config.showAlert(Alert.AlertType.CONFIRMATION, "Exit Confirmtaion.", "Do you want to exit?", currentStage);
-    }
-
-    @FXML
-    private void closeButtonMousePressHandler(MouseEvent event) {
-        closeButtonBG.setFill(Color.web("#971111"));
-    }
-
-    @FXML
-    private void titleBarOnMouseDraggedHandler(MouseEvent event) {
-        Stage stage = (Stage)titleBar.getScene().getWindow();
-        stage.setX(event.getScreenX() - xOffset);
-        stage.setY(event.getScreenY() - yOffset);
-    }
-
-    @FXML
-    private void titleBarOnMousePressedHandler(MouseEvent event) {
-        xOffset = event.getSceneX();
-        yOffset = event.getSceneY();
-    }
-
-    @FXML
     private void dashboardMouseReleaseHandler(MouseEvent event) {
-        closeButtonBG.setFill(Color.web("#d71515"));
         
     }
 
@@ -254,7 +207,6 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void dashboardMousePressHandler(MouseEvent event) {
-        closeButtonBG.setFill(Color.web("#971111"));
     }
 
     @FXML

@@ -33,6 +33,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -84,6 +85,10 @@ public class LoginController implements Initializable {
     private AnchorPane rootPane;
     @FXML
     private Label passwordResetButton;
+    @FXML
+    private ImageView hidePasswordButton;
+    @FXML
+    private ImageView showPasswordButton;
 
     /**
      * Initializes the controller class.
@@ -224,6 +229,18 @@ public class LoginController implements Initializable {
 
     @FXML
     private void registerFieldOnKeyPressedHandler(KeyEvent event) throws Exception{
+        
+        boolean isPasswordFieldEmpty = passwordField.getText().isEmpty();
+        
+        if(!isPasswordFieldEmpty) {
+            hidePasswordButton.setVisible(true);
+            return;
+        }   
+        
+        if(isPasswordFieldEmpty) {
+            hidePasswordButton.setVisible(false);
+        }
+        
         if(isEnterPressed(event))
             loginUser(event);
     }
@@ -238,6 +255,59 @@ public class LoginController implements Initializable {
     @FXML
     private void passwordResetButtonMouseClickHandler(MouseEvent event) throws Exception {
         pageConf.switchScene(getClass(), event, "/projectvantage/fxml/misc/ForgotPasswordPage.fxml");
+    }
+
+    @FXML
+    private void hidePasswordButtonMouseClickHandler(MouseEvent event) {
+        hidePasswordButton.setVisible(false);
+        showPasswordButton.setVisible(true);
+    }
+
+    @FXML
+    private void showPaswordButtonMouseClickHandler(MouseEvent event) {
+        showPasswordButton.setVisible(false);
+        hidePasswordButton.setVisible(true);
+        
+    }
+
+    @FXML
+    private void hidePasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(hidePasswordButton);
+    }
+
+    @FXML
+    private void hidePasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(hidePasswordButton);
+    }
+
+    @FXML
+    private void hidePasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(hidePasswordButton);
+    }
+
+    @FXML
+    private void showPasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(showPasswordButton);
+    }
+
+    @FXML
+    private void showPasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(showPasswordButton);
+    }
+
+    @FXML
+    private void showPasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(showPasswordButton);
+    }
+
+    @FXML
+    private void showPasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(showPasswordButton);
+    }
+
+    @FXML
+    private void hidePasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(hidePasswordButton);
     }
     
 }

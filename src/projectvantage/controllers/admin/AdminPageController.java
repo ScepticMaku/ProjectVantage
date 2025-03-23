@@ -177,24 +177,6 @@ public class AdminPageController implements Initializable {
             alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
         }
     }
-    
-    private void hoverIcon(ImageView image) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
-        scaleTransition.setFromX(1.0);
-        scaleTransition.setFromY(1.0);
-        scaleTransition.setToX(1.1);
-        scaleTransition.setToY(1.1);
-        scaleTransition.play();
-    }
-    
-    private void unhoverIcon(ImageView image) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
-        scaleTransition.setFromX(1.1);
-        scaleTransition.setFromY(1.1);
-        scaleTransition.setToX(1.0);
-        scaleTransition.setToY(1.0);
-        scaleTransition.play();
-    }
 
     @FXML
     private void dashboardMouseReleaseHandler(MouseEvent event) {
@@ -419,12 +401,12 @@ public class AdminPageController implements Initializable {
     
     @FXML
     private void profileButtonMouseEnterHandler(MouseEvent event) {
-        hoverIcon(profileButton);
+        elementConf.hoverIcon(profileButton);
     }
     
     @FXML
     private void profileButtonMouseExitHandler(MouseEvent event) {
-        unhoverIcon(profileButton);
+        elementConf.unhoverIcon(profileButton);
     }
 
     @FXML
@@ -448,12 +430,12 @@ public class AdminPageController implements Initializable {
     
     @FXML
     private void notificationButtonMouseEnterHandler(MouseEvent event) {
-        hoverIcon(notificationButton);
+        elementConf.hoverIcon(notificationButton);
     }
     
     @FXML
     private void notificationButtonMouseExitHandler(MouseEvent event) {
-        unhoverIcon(notificationButton);
+        elementConf.unhoverIcon(notificationButton);
     }
 
     @FXML

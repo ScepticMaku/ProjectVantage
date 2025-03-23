@@ -53,18 +53,36 @@ public class ElementConfig {
     }
     
     public void pressIcon(ImageView image) {
-        /*ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), image);
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), image);
         scaleTransition.setFromX(1.0);
         scaleTransition.setFromY(1.0);
         scaleTransition.setToX(0.9);
         scaleTransition.setToY(0.9);
-        scaleTransition.play();*/
+        scaleTransition.play();
     }
     
     public void releaseIcon(ImageView image) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
         scaleTransition.setFromX(0.9);
         scaleTransition.setFromY(0.9);
+        scaleTransition.setToX(1.0);
+        scaleTransition.setToY(1.0);
+        scaleTransition.play();
+    }
+    
+    public void hoverIcon(ImageView image) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(1.1);
+        scaleTransition.setToY(1.1);
+        scaleTransition.play();
+    }
+    
+    public void unhoverIcon(ImageView image) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
+        scaleTransition.setFromX(1.1);
+        scaleTransition.setFromY(1.1);
         scaleTransition.setToX(1.0);
         scaleTransition.setToY(1.0);
         scaleTransition.play();

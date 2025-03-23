@@ -55,6 +55,22 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Label>
+                  <ImageView fx:id="hidePasswordButton" fitHeight="150.0" fitWidth="25.0" layoutX="270.0" layoutY="90.0" onMouseClicked="#hidePasswordButtonMouseClickHandler" onMouseEntered="#hidePasswordButtonMouseEnterHandler" onMouseExited="#hidePasswordButtonMouseExitHandler" onMousePressed="#hidePasswordButtonMousePressHandler" onMouseReleased="#hidePasswordButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../../resources/icons/hide-password-icon.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="showPasswordButton" fitHeight="150.0" fitWidth="25.0" layoutX="270.0" layoutY="90.0" onMouseClicked="#showPaswordButtonMouseClickHandler" onMouseEntered="#showPasswordButtonMouseEnterHandler" onMouseExited="#showPasswordButtonMouseExitHandler" onMousePressed="#showPasswordButtonMousePressHandler" onMouseReleased="#showPasswordButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../../resources/icons/show-password-icon.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
                </children>
             </Group>
             <Pane fx:id="titlePane" layoutX="6.0" layoutY="29.0" prefHeight="79.0" prefWidth="338.0">

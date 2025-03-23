@@ -102,4 +102,8 @@ public class AlertConfig {
     public void showChangePasswordErrorAlert(Stage stage, String errorMessage) {
         showAlert(Alert.AlertType.ERROR, "Change Password Error", errorMessage, stage);
     }
+    
+    public void showResetPasswordErrorAlert(Stage stage, String errorMessage) {
+        showAlert(Alert.AlertType.ERROR, "Reset Password Error", errorMessage, stage);
+    }
 }

@@ -23,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -100,37 +101,47 @@ public class ChangePasswordPageController implements Initializable {
         usernamePlaceholder.setText(userInput);
     }
     
-    private void returnToPreviousPage(Event event) {
+    public void switchScene(Class getClass, Event evt, String targetFXML) throws Exception {
+        Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
+        Parent root = loader.load();
         
-        try {
-            String adminFXML = "/projectvantage/fxml/admin/AdminPage.fxml";
-            String teamMemberFXML = "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml";
-            
-            LoginController loginController = LoginController.getInstance();
-
-            switch(role) {
-                case "team member":
-                    loginController.switchScene(getClass(), event, teamMemberFXML);
-                    break;
-                case "admin":
-                    loginController.switchScene(getClass(), event, adminFXML);
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
+        
+        switch(role){
+            case "team member":
+                TeamMemberMainPageController teamMemberController = loader.getController();
+                teamMemberController.setUsername(username);
+                pageConf.loadProfilePage(fxmlLocation, username, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane());
+            break;
+            case "admin":
+                AdminPageController adminController = loader.getController();
+                adminController.setUsername(username);
+               pageConf.loadProfilePage(fxmlLocation, username, adminController.getBackgroundPane(), adminController.getRootPane());
+            break;
         }
         
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        pageConf.setCenterAlignment(stage);
+        stage.show();
+    }
+    
+    private void returnToPreviousPage(Event event) throws Exception {
+        switch(role) {
+            case "team member":
+                switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
+                break;
+            case "admin":
+                switchScene(getClass(),event, "/projectvantage/fxml/admin/AdminPage.fxml");
+                break;
+        }
     }
     
     private boolean checkFields(Stage currentStage, String currentField, String newField, String confirmField) {
         
         if(currentField.isEmpty()) {
             alertConf.showChangePasswordErrorAlert(currentStage, "Current password field must not be empty.");
-            return true;
-        }
-        
-        if(newField.length() < MINIMUM_PASSWORD_LENGTH) {
-            alertConf.showChangePasswordErrorAlert(currentStage, "Password must be at least 8 characters.");
             return true;
         }
         
@@ -142,6 +153,17 @@ public class ChangePasswordPageController implements Initializable {
         if(confirmField.isEmpty()) {
             alertConf.showChangePasswordErrorAlert(currentStage, "Confirm password field must not be empty.");
             return true;
+        }
+        
+        if(newField.length() < MINIMUM_PASSWORD_LENGTH) {
+            alertConf.showChangePasswordErrorAlert(currentStage, "Password must be at least 8 characters.");
+            return true;
+        }
+        
+        boolean isSamePassword = currentField.equals(newField);
+        
+        if(isSamePassword) {
+            alertConf.showChangePasswordErrorAlert(currentStage, "Must not be an old password.");
         }
         
         boolean doesPasswordMatch = authConf.verifyPassword(currentField, password, salt);
@@ -159,12 +181,12 @@ public class ChangePasswordPageController implements Initializable {
     }
 
     @FXML
-    private void backButtonMouseClickHandler(MouseEvent event) {
+    private void backButtonMouseClickHandler(MouseEvent event) throws Exception {
         returnToPreviousPage(event);
     }
 
     @FXML
-    private void submitButtonMouseClickHandler(MouseEvent event) {
+    private void submitButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         
         String currentF = currentPasswordField.getText();
@@ -181,6 +203,7 @@ public class ChangePasswordPageController implements Initializable {
         if(db.updateData(sql, newPass, username)) {
             System.out.println("User updated successfully!");
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Change Password Successful", "Password Changed Succesfully!", currentStage);
+            
             returnToPreviousPage(event);
         }
     }

@@ -15,34 +15,9 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.team_member.TeamMemberMainPageController">
    <children>
-      <AnchorPane fx:id="backgroundPane" layoutX="5.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #ffffff;">
+      <AnchorPane fx:id="backgroundPane" layoutX="2.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #ffffff;">
          <children>
-            <VBox prefHeight="30.0" prefWidth="1000.0">
-               <children>
-                  <Pane fx:id="titleBar" onMouseDragged="#titleBarOnMouseDraggedHandler" onMousePressed="#titleBarOnMousePressedHandler" prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f5f5" height="30.0" layoutY="-5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
-                        <ImageView fitHeight="30.0" fitWidth="200.0" layoutX="-1.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../resources/img/ProjectLogo.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="titlebarLabel" layoutX="35.0" layoutY="-3.0" prefHeight="30.0" prefWidth="101.0" text="Dashboard" />
-                        <Group fx:id="closeButton" layoutX="945.0" layoutY="-5.0" onMouseClicked="#closeButtonMouseClickHandler" onMouseEntered="#closeButtonMouseEnterHandler" onMouseExited="#closeButtonMouseExitHandler" onMousePressed="#closeButtonMousePressHandler" onMouseReleased="#closeButtonMouseReleaseHandler">
-                           <children>
-                              <Rectangle fx:id="closeButtonBG" arcHeight="5.0" arcWidth="5.0" fill="#d71515" height="30.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="55.0" />
-                              <ImageView fitHeight="25.0" fitWidth="30.0" layoutX="15.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../resources/icons/cross-icon-black.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </Group>
-                     </children>
-                  </Pane>
-               </children>
-            </VBox>
-            <VBox layoutY="30.0" prefHeight="570.0" prefWidth="1000.0">
+            <VBox prefHeight="570.0" prefWidth="1000.0">
                <children>
                   <BorderPane prefHeight="571.0" prefWidth="1000.0">
                      <left>
@@ -68,7 +43,7 @@
                                     </ImageView>
                                  </children>
                               </Group>
-                              <VBox prefHeight="570.0" prefWidth="202.0">
+                              <VBox prefHeight="570.0" prefWidth="205.0">
                                  <children>
                                     <Pane prefHeight="82.0" prefWidth="202.0" />
                                     <Pane prefHeight="55.0" prefWidth="202.0">
@@ -191,12 +166,12 @@
                                        <children>
                                           <Group fx:id="welcomeMessageLabel" layoutX="24.0" layoutY="24.0">
                                              <children>
-                                                <Label text="Hello," textFill="#192b4b">
+                                                <Label layoutX="-11.0" layoutY="1.0" text="Hello," textFill="#192b4b">
                                                    <font>
                                                       <Font name="Segoe UI Bold" size="20.0" />
                                                    </font>
                                                 </Label>
-                                                <Label fx:id="usernameLabel" layoutX="62.0" text="Username" textFill="#2f9efe">
+                                                <Label fx:id="usernameLabel" layoutX="51.0" layoutY="1.0" text="Username" textFill="#2f9efe">
                                                    <font>
                                                       <Font name="Segoe UI Bold" size="20.0" />
                                                    </font>
