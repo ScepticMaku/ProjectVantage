@@ -56,6 +56,7 @@ public class LoginController implements Initializable {
     dbConnect db = new dbConnect();
     AlertConfig alertConf = new AlertConfig();
     AuthenticationController authController = new AuthenticationController();
+    StringBuilder storedPassword = new StringBuilder();
     
     private static LoginController instance;
     
@@ -70,7 +71,7 @@ public class LoginController implements Initializable {
     @FXML
     private TextField usernameField;
     @FXML
-    private PasswordField passwordField;
+    private TextField passwordField;
     @FXML
     private Label registerButton;
     @FXML
@@ -127,16 +128,16 @@ public class LoginController implements Initializable {
         }
         
         role= user.getRole();
-        password = user.getPassword();
+//        password = user.getPassword();
         username = user.getUsername();
         salt = user.getSalt();
         status = user.getStatus();
         
-        boolean doesPasswordMatch = authConfig.verifyPassword(passwordInput, password, salt);
+        boolean doesPasswordMatch = authConfig.verifyPassword(storedPassword.toString(), password, salt);
         
         if(!doesPasswordMatch) {
             alertConf.showLoginErrorAlert(currentStage, "Password does not match.");
-            return;
+            return; 
         }
         
         boolean isStatusActive = status.equals("active");
@@ -146,7 +147,7 @@ public class LoginController implements Initializable {
             return;
         }
         
-        alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Successfully Logged In", currentStage);
+        alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Successfully logged in", currentStage);
         
                 
         switch(role) {
@@ -203,6 +204,19 @@ public class LoginController implements Initializable {
         return event.getCode() == KeyCode.TAB;
     }
     
+    private String maskText(int length) {
+        StringBuilder maskedText = new StringBuilder();
+        
+        for(int i = 0; i < length; i++) {
+            maskedText.append('\u2022');
+        }
+        return maskedText.toString();
+    }
+    
+    private void maskLastChar(TextField field) {
+        field.setText(maskText(passwordField.getText().length()));
+    }
+    
     @FXML
     private void registerButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) rootPane.getScene().getWindow();
@@ -222,27 +236,6 @@ public class LoginController implements Initializable {
         if(isTabPressed(event)) {
             passwordField.setFocusTraversable(true);
         }
-        
-        if(isEnterPressed(event))
-            loginUser(event);
-    }
-
-    @FXML
-    private void registerFieldOnKeyPressedHandler(KeyEvent event) throws Exception{
-        
-        boolean isPasswordFieldEmpty = passwordField.getText().isEmpty();
-        
-        if(!isPasswordFieldEmpty) {
-            hidePasswordButton.setVisible(true);
-            return;
-        }   
-        
-        if(isPasswordFieldEmpty) {
-            hidePasswordButton.setVisible(false);
-        }
-        
-        if(isEnterPressed(event))
-            loginUser(event);
     }
 
     @FXML
@@ -250,6 +243,9 @@ public class LoginController implements Initializable {
         if(isTabPressed(event)) {
             usernameField.setFocusTraversable(true);
         }
+        
+        if(isEnterPressed(event))
+            loginUser(event);
     }
 
     @FXML
@@ -261,6 +257,9 @@ public class LoginController implements Initializable {
     private void hidePasswordButtonMouseClickHandler(MouseEvent event) {
         hidePasswordButton.setVisible(false);
         showPasswordButton.setVisible(true);
+        
+        passwordField.setText(storedPassword.toString());
+        passwordField.positionCaret(passwordField.getText().length());
     }
 
     @FXML
@@ -268,6 +267,8 @@ public class LoginController implements Initializable {
         showPasswordButton.setVisible(false);
         hidePasswordButton.setVisible(true);
         
+        passwordField.setText(maskText(storedPassword.toString().length()));
+        passwordField.positionCaret(passwordField.getText().length());
     }
 
     @FXML
@@ -309,5 +310,27 @@ public class LoginController implements Initializable {
     private void hidePasswordButtonMouseReleaseHandler(MouseEvent event) {
         elementConf.releaseIcon(hidePasswordButton);
     }
-    
+
+    @FXML
+    private void passwordFieldKeyPressHandler(KeyEvent event) {
+        boolean isPasswordFieldEmpty = passwordField.getText().isEmpty();
+        
+        if(!isPasswordFieldEmpty) {
+            hidePasswordButton.setVisible(true);
+            return;
+        }   
+        
+        if(isPasswordFieldEmpty) {
+            hidePasswordButton.setVisible(false);
+            storedPassword.delete(0, storedPassword.toString().length());
+        }
+    }
+
+    @FXML
+    private void passwordFieldKeyTypedHandler(KeyEvent event) {
+        storedPassword.append(event.getCharacter());
+        
+        passwordField.setText(maskText(passwordField.getText().length()));
+        passwordField.positionCaret(passwordField.getText().length());
+    }
 }

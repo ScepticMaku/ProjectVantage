@@ -4,7 +4,6 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
@@ -33,10 +32,6 @@
                      <font>
                         <Font size="14.0" />
                      </font></TextField>
-                  <PasswordField fx:id="passwordField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="83.0" onKeyPressed="#registerFieldOnKeyPressedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Password" styleClass="textfield">
-                     <font>
-                        <Font size="14.0" />
-                     </font></PasswordField>
                   <Label layoutX="87.0" layoutY="156.0" text="Don't have an account?" textFill="#575757" />
                   <Label fx:id="registerButton" layoutX="217.0" layoutY="156.0" onMouseClicked="#registerButtonMouseClickHandler" styleClass="text-button" text="Register." textFill="#0593ff">
                      <cursor>
@@ -55,6 +50,11 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Label>
+                  <TextField fx:id="passwordField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="83.0" onKeyPressed="#passwordFieldKeyPressHandler" onKeyTyped="#passwordFieldKeyTypedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Password" styleClass="textfield">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </TextField>
                   <ImageView fx:id="hidePasswordButton" fitHeight="150.0" fitWidth="25.0" layoutX="270.0" layoutY="90.0" onMouseClicked="#hidePasswordButtonMouseClickHandler" onMouseEntered="#hidePasswordButtonMouseEnterHandler" onMouseExited="#hidePasswordButtonMouseExitHandler" onMousePressed="#hidePasswordButtonMousePressHandler" onMouseReleased="#hidePasswordButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../../resources/icons/hide-password-icon.png" />
