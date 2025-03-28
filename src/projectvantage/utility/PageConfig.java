@@ -5,6 +5,7 @@
  */
 package projectvantage.utility;
 
+import java.io.IOException;
 import projectvantage.controllers.misc.ProfilePageController;
 import projectvantage.controllers.admin.AdminDashboardPageController;
 import projectvantage.controllers.team_member.TeamMemberDashboardPageController;
@@ -16,16 +17,23 @@ import projectvantage.models.User;
 
 
 import java.sql.ResultSet;
+import javafx.animation.FadeTransition;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import projectvantage.controllers.misc.AuthenticationController;
 
 /**
@@ -69,38 +77,26 @@ public class PageConfig {
         pane.setCenter(root);
     }
     
-    public void loadEditUserPage(String targetFXML, String user, Node node, BorderPane pane) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
-        Parent root = loader.load();
-        
-        EditUserPageController.getInstance().loadUserContents(user);
-        pane.setCenter(root);
-    }
-    
-    public void loadDashboardPage(Stage stage, String targetFXML, String username, Node node, BorderPane pane) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
-        Parent root = loader.load();
-        
-        User user = dbConf.getUserByUsername(username);
-        
-        switch(user.getRole()) {
-            case "team member":
-                TeamMemberDashboardPageController.getInstance().loadUsername(username);
-                break;
-            case "admin":
-                AdminDashboardPageController.getInstance().loadUsername(username);
-            break;
-        }
-        
-        stage.setTitle("Dashboard");
-        pane.setCenter(root);
-    }
-    
     public void loadEditProfilePage(String targetFXML, BorderPane pane, String username) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(targetFXML));
         Parent root = loader.load();
         EditProfilePageController.getInstance().loadUserContents(username);
         pane.setCenter(root);
+    }
+    
+    public void loadWindow(String FXML, String title, Node node) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML));
+        Parent child = loader.load();
+        
+        Stage stage = new Stage();
+        stage.setScene(new Scene(child));
+        stage.setTitle(title);
+        stage.setResizable(false);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(node.getScene().getWindow());
+        stage.getIcons().add(new Image("/projectvantage/resources/img/ProjectLogo.png"));
+        stage.show();
+        setCenterAlignment(stage);
     }
     
      public void switchToVerifyAuthenticator(MouseEvent event, Class getClass, Node node, String sql, String...info) throws Exception {

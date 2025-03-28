@@ -7,13 +7,12 @@ package projectvantage.controllers.admin;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -23,7 +22,7 @@ import javafx.stage.StageStyle;
 public class AdminDashboardPageController implements Initializable {
     
     private static AdminDashboardPageController instance;
-
+    
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -44,7 +43,7 @@ public class AdminDashboardPageController implements Initializable {
         return instance;
     }
     
-    public void loadUsername(String username) {
-        usernameLabel.setText(username); 
+    public void loadContent(String user) {
+        usernameLabel.setText(user);
     }
 }

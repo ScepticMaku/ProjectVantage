@@ -38,8 +38,8 @@ public class DatabaseConfig {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -66,6 +66,20 @@ public class DatabaseConfig {
                 );
             }
         } catch (SQLException e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public String getImagePath(String username) {
+        String query = "SELECT user.username AS username, image_path FROM user_image INNER JOIN user ON user_image.user_id = user.id WHERE username = '" + username + "'";
+        
+        try(ResultSet result = db.getData(query)) {
+            if(result.next()) {
+                return result.getString("image_path");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Database Error: " + e.getMessage());
         }

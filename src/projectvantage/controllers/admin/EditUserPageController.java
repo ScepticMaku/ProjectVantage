@@ -225,21 +225,16 @@ public class EditUserPageController implements Initializable {
         return false;
     }
     
-    private void returnToPreviousPage(String user) throws Exception {
-        AdminPageController adminController = AdminPageController.getInstance();
-        String fxmlLocation = "/projectvantage/fxml/admin/AdminUserPage.fxml";
-        pageConf.loadUserPage(fxmlLocation, user ,adminController.getBackgroundPane(), adminController.getRootPane());
-    }
-    
     private void refreshPage() throws Exception {
-        AdminPageController adminController = AdminPageController.getInstance();
         String FXML = "/projectvantage/fxml/admin/EditUserPage.fxml";
-        pageConf.loadEditUserPage(FXML, username, adminController.getBackgroundPane(), adminController.getRootPane());
+        pageConf.loadWindow(FXML, "Edit user", rootPane);
+        EditUserPageController.getInstance().loadUserContents(username);
     }
             
     @FXML
     private void backButtonMouseClickHandler(MouseEvent event) throws Exception {
-        returnToPreviousPage(username);
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -325,7 +320,7 @@ public class EditUserPageController implements Initializable {
             if(db.updateData(sql, fName, mName, lName, pNumber, eAddress, uName, username)) {
                 System.out.println("User updated successfully!");
                 alertConf.showAlert(Alert.AlertType.INFORMATION, "User Update Successful", "User Updated Succesfully!", currentStage);
-                returnToPreviousPage(uName);
+                currentStage.close();
             }
         }
     }

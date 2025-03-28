@@ -83,9 +83,9 @@ public class ResetPasswordPageController implements Initializable {
         salt = user.getSalt();
     }
     
-    private void returnToLogin(Event event) throws Exception {
-        pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
-    }
+//    private void returnToLogin(Event event) throws Exception {
+//        pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
+//    }
     
     private boolean verifyInput(Stage stage, String newPassword, String confirmPassword) throws Exception {
         
@@ -138,13 +138,14 @@ public class ResetPasswordPageController implements Initializable {
             System.out.println("User updated successfully!");
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Change Password Successful", "Password Changed Succesfully!", currentStage);
             
-            returnToLogin(event);
+            currentStage.close();
         }
     }
 
     @FXML
     private void cancelButtonMouseClickHandler(MouseEvent event) throws Exception {
-        returnToLogin(event);
+        Stage currentStage = (Stage) rootPane.getScene().getWindow();
+        currentStage.close();
     }
     
 }

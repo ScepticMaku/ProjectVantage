@@ -16,15 +16,12 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -84,17 +81,11 @@ public class AddUserPageController implements Initializable {
             alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Successful", currentStage);
         }
     }
-    
-    private void returnToPreviousPage() {
-        String FXML = "/projectvantage/fxml/admin/UserManagementPage.fxml";
-        
-        AdminPageController admin = AdminPageController.getInstance();
-        admin.loadPage(FXML, "Users");
-    }
 
     @FXML
     private void backButtonMouseClickHandler(MouseEvent event) {
-        returnToPreviousPage();
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -135,8 +126,7 @@ public class AddUserPageController implements Initializable {
         String hashedPassword = authConf.hashPassword(password, salt);
 
         insertUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword, role);
-        returnToPreviousPage();
-        
+        currentStage.close();
     }
 
     @FXML

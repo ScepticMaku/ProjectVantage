@@ -32,8 +32,6 @@ public class LogConfig {
         }
         
         insertLog(userId, action, description);
-        
-        
     }
     
 }

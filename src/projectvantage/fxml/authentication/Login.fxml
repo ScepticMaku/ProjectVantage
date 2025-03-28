@@ -4,6 +4,7 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
@@ -28,10 +29,6 @@
             <Group layoutY="218.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="260.0" layoutY="-36.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="350.0" />
-                  <TextField fx:id="usernameField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="30.0" onKeyPressed="#usernameFieldOnKeyPressedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Username" styleClass="textfield">
-                     <font>
-                        <Font size="14.0" />
-                     </font></TextField>
                   <Label layoutX="87.0" layoutY="156.0" text="Don't have an account?" textFill="#575757" />
                   <Label fx:id="registerButton" layoutX="217.0" layoutY="156.0" onMouseClicked="#registerButtonMouseClickHandler" styleClass="text-button" text="Register." textFill="#0593ff">
                      <cursor>
@@ -45,34 +42,43 @@
                      </font>
                   </Label>
                   <Label layoutX="162.0" layoutY="31.0" />
+                  <TextField fx:id="usernameField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="30.0" onKeyPressed="#usernameFieldOnKeyPressedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Username" styleClass="textfield">
+                     <font>
+                        <Font size="14.0" />
+                     </font></TextField>
                   <Label fx:id="passwordResetButton" layoutX="128.0" layoutY="132.0" onMouseClicked="#passwordResetButtonMouseClickHandler" styleClass="forgot-password-button" text="Forgot password?" textFill="#575757">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Label>
-                  <TextField fx:id="passwordField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="83.0" onKeyPressed="#passwordFieldKeyPressHandler" onKeyTyped="#passwordFieldKeyTypedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Password" styleClass="textfield">
+                  <TextField fx:id="revealedPasswordField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="83.0" opacity="0.0" prefHeight="40.0" prefWidth="261.0" promptText="Password" styleClass="textfield">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </TextField>
-                  <ImageView fx:id="hidePasswordButton" fitHeight="150.0" fitWidth="25.0" layoutX="270.0" layoutY="90.0" onMouseClicked="#hidePasswordButtonMouseClickHandler" onMouseEntered="#hidePasswordButtonMouseEnterHandler" onMouseExited="#hidePasswordButtonMouseExitHandler" onMousePressed="#hidePasswordButtonMousePressHandler" onMouseReleased="#hidePasswordButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true" visible="false">
-                     <image>
-                        <Image url="@../../resources/icons/hide-password-icon.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
-                  <ImageView fx:id="showPasswordButton" fitHeight="150.0" fitWidth="25.0" layoutX="270.0" layoutY="90.0" onMouseClicked="#showPaswordButtonMouseClickHandler" onMouseEntered="#showPasswordButtonMouseEnterHandler" onMouseExited="#showPasswordButtonMouseExitHandler" onMousePressed="#showPasswordButtonMousePressHandler" onMouseReleased="#showPasswordButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true" visible="false">
-                     <image>
-                        <Image url="@../../resources/icons/show-password-icon.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
+                  <PasswordField fx:id="passwordField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="83.0" onKeyTyped="#passwordFieldKeyTypedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Password" styleClass="textfield">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </PasswordField>
                </children>
             </Group>
+            <ImageView fx:id="hidePasswordButton" fitHeight="150.0" fitWidth="25.0" layoutX="270.0" layoutY="309.0" onMouseClicked="#hidePasswordButtonMouseClickHandler" onMouseEntered="#hidePasswordButtonMouseEnterHandler" onMouseExited="#hidePasswordButtonMouseExitHandler" onMousePressed="#hidePasswordButtonMousePressHandler" onMouseReleased="#hidePasswordButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../../resources/icons/hide-password-icon.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="showPasswordButton" fitHeight="150.0" fitWidth="25.0" layoutX="270.0" layoutY="309.0" onMouseClicked="#showPaswordButtonMouseClickHandler" onMouseEntered="#showPasswordButtonMouseEnterHandler" onMouseExited="#showPasswordButtonMouseExitHandler" onMousePressed="#showPasswordButtonMousePressHandler" onMouseReleased="#showPasswordButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../../resources/icons/show-password-icon.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
             <Pane fx:id="titlePane" layoutX="6.0" layoutY="29.0" prefHeight="79.0" prefWidth="338.0">
                <children>
                   <Rectangle fx:id="rectangle" arcHeight="20.0" arcWidth="20.0" height="68.0" layoutY="6.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="338.0" />

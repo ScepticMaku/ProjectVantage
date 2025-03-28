@@ -16,6 +16,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -51,8 +52,7 @@ public class TeamMemberMainPageController implements Initializable {
     
     private static TeamMemberMainPageController instance;
     
-    private double xOffset = 0;
-    private double yOffset = 0;
+    private static final double IMAGE_SIZE = 50;
     
     private String username;
 
@@ -106,13 +106,6 @@ public class TeamMemberMainPageController implements Initializable {
     private ImageView profileButton;
     @FXML
     private ImageView notificationButton;
-    private Label titlebarLabel;
-    @FXML
-    private AnchorPane rootPane1;
-    @FXML
-    private Group welcomeMessageLabel;
-    @FXML
-    private Label usernameLabel;
 
     /**
      * Initializes the controller class.
@@ -121,6 +114,12 @@ public class TeamMemberMainPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
+        
+        Platform.runLater(() -> {
+            elementConf.loadProfilePicture(username, profileButton, IMAGE_SIZE);
+            
+            loadDashboardPage();
+        });
     }
     
     public static TeamMemberMainPageController getInstance() {
@@ -135,6 +134,18 @@ public class TeamMemberMainPageController implements Initializable {
             rootPane.setCenter(root);
         } catch (Exception e) {
             alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
+        }
+    }
+    
+    public void loadDashboardPage() {
+        try{
+            FXMLLoader dashboardLoader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml"));
+            rootPane.setCenter(dashboardLoader.load());
+
+            TeamMemberDashboardPageController dashboardController = dashboardLoader.getController();
+            dashboardController.loadContent(username);
+        } catch(Exception e) {
+            e.printStackTrace();
         }
     }
     
@@ -154,8 +165,8 @@ public class TeamMemberMainPageController implements Initializable {
         return rootPane;
     }
     
-    public Label getTitlebarLabel() {
-        return titlebarLabel;
+    public ImageView getProfileButton() {
+        return profileButton;
     }
     
     private void hoverIcon(ImageView image) {
@@ -194,12 +205,9 @@ public class TeamMemberMainPageController implements Initializable {
     @FXML
     private void dashboardButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
-        String fxmlLocation = "/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml";
-        String user = getInstance().getUsername();
         
-        elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
-        pageConf.loadDashboardPage(currentStage, fxmlLocation, user, backgroundPane, rootPane);
-        titlebarLabel.setText("Dashboard");
+        loadDashboardPage();
+        currentStage.setTitle("Dashboard");
         
         elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
@@ -310,10 +318,11 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void profileButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage) rootPane.getScene().getWindow();
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
         String user = getInstance().getUsername();
         pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
-        titlebarLabel.setText("Profile");
+        currentStage.setTitle("Profile");
     }
 
     @FXML

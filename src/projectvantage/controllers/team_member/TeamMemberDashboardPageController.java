@@ -42,7 +42,7 @@ public class TeamMemberDashboardPageController implements Initializable {
         return instance;
     }
     
-    public void loadUsername(String user) {
+    public void loadContent(String user) {
         usernameLabel.setText(user);
     }
 }

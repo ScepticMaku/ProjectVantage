@@ -143,7 +143,8 @@ public class AuthenticationController implements Initializable {
 
     @FXML
     private void cancelButtonMouseClickHandler(MouseEvent event) throws Exception {
-        pageConf.switchScene(getClass(), event, "/projectvantage/fxml/authentication/Login.fxml");
+        Stage stage = (Stage)rootPane.getScene().getWindow();
+        stage.close();
     }
     
 }

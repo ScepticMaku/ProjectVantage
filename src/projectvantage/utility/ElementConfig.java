@@ -5,6 +5,7 @@
  */
 package projectvantage.utility;
 
+import java.io.File;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.scene.Node;
@@ -20,6 +21,31 @@ import javafx.util.Duration;
  * @author Mark Work Account
  */
 public class ElementConfig {
+    
+    public void loadProfilePicture(String user, ImageView image, double IMAGE_SIZE) {
+        DatabaseConfig dbConf = new DatabaseConfig();
+        
+        if(dbConf.getImagePath(user) != null) {
+            Image pfp = new Image(new File(dbConf.getImagePath(user)).toURI().toString());
+            
+            image.setImage(pfp);
+            image.setFitWidth(IMAGE_SIZE);
+            image.setFitHeight(IMAGE_SIZE);
+            image.setPreserveRatio(false);
+            image.setSmooth(true);
+            image.setCache(true);
+            
+            setToCircle(IMAGE_SIZE, image);
+        }
+    }
+    
+    public void setToCircle(double IMAGE_SIZE, ImageView image) {
+        Circle circle = new Circle(IMAGE_SIZE / 2);
+        circle.centerXProperty().bind(image.fitHeightProperty().divide(2));
+        circle.centerYProperty().bind(image.fitHeightProperty().divide(2));
+        image.setClip(circle);
+    }
+    
     public void fadeIn(Node node) {
         FadeTransition fadeTransition = new FadeTransition();
         fadeTransition.setDuration(Duration.millis(100));

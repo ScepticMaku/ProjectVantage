@@ -117,7 +117,7 @@ public class ChangePasswordPageController implements Initializable {
             case "admin":
                 AdminPageController adminController = loader.getController();
                 adminController.setUsername(username);
-               pageConf.loadProfilePage(fxmlLocation, username, adminController.getBackgroundPane(), adminController.getRootPane());
+                pageConf.loadProfilePage(fxmlLocation, username, adminController.getBackgroundPane(), adminController.getRootPane());
             break;
         }
         
@@ -125,17 +125,6 @@ public class ChangePasswordPageController implements Initializable {
         stage.setResizable(false);
         pageConf.setCenterAlignment(stage);
         stage.show();
-    }
-    
-    private void returnToPreviousPage(Event event) throws Exception {
-        switch(role) {
-            case "team member":
-                switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
-                break;
-            case "admin":
-                switchScene(getClass(),event, "/projectvantage/fxml/admin/AdminPage.fxml");
-                break;
-        }
     }
     
     private boolean checkFields(Stage currentStage, String currentField, String newField, String confirmField) {
@@ -182,7 +171,8 @@ public class ChangePasswordPageController implements Initializable {
 
     @FXML
     private void backButtonMouseClickHandler(MouseEvent event) throws Exception {
-        returnToPreviousPage(event);
+        Stage stage = (Stage)rootPane.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -204,7 +194,7 @@ public class ChangePasswordPageController implements Initializable {
             System.out.println("User updated successfully!");
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Change Password Successful", "Password Changed Succesfully!", currentStage);
             
-            returnToPreviousPage(event);
+            currentStage.close();
         }
     }
     

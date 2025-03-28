@@ -201,8 +201,7 @@ public class UserManagementPageController implements Initializable {
     @FXML
     private void addButtonMouseClickHandler(MouseEvent event) throws Exception {
         String FXML = "/projectvantage/fxml/admin/AddUserPage.fxml";
-        AdminPageController admin = AdminPageController.getInstance();
-        admin.loadPage(FXML, "Add User");
+        pageConf.loadWindow(FXML, "Add User", rootPane);
     }
 
     @FXML

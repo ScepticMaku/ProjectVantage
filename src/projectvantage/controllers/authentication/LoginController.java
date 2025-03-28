@@ -15,6 +15,7 @@ import projectvantage.utility.DatabaseConfig;
 import projectvantage.controllers.misc.AuthenticationController;
 import projectvantage.utility.AlertConfig;
 import projectvantage.models.User;
+import projectvantage.utility.LogConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -51,12 +52,11 @@ public class LoginController implements Initializable {
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
     AuthenticationConfig authConfig = new AuthenticationConfig();
-//    AdminPageController adminController = AdminPageController.getInstance();
+    LogConfig logConf = new LogConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
     dbConnect db = new dbConnect();
     AlertConfig alertConf = new AlertConfig();
     AuthenticationController authController = new AuthenticationController();
-    StringBuilder storedPassword = new StringBuilder();
     
     private static LoginController instance;
     
@@ -66,7 +66,6 @@ public class LoginController implements Initializable {
     private String salt;
     private String status;
     private String email;
-    
 
     @FXML
     private TextField usernameField;
@@ -90,6 +89,8 @@ public class LoginController implements Initializable {
     private ImageView hidePasswordButton;
     @FXML
     private ImageView showPasswordButton;
+    @FXML
+    private TextField revealedPasswordField;
 
     /**
      * Initializes the controller class.
@@ -128,15 +129,16 @@ public class LoginController implements Initializable {
         }
         
         role= user.getRole();
-//        password = user.getPassword();
+        password = user.getPassword();
         username = user.getUsername();
         salt = user.getSalt();
         status = user.getStatus();
         
-        boolean doesPasswordMatch = authConfig.verifyPassword(storedPassword.toString(), password, salt);
+        boolean doesPasswordMatch = authConfig.verifyPassword(passwordInput, password, salt);
         
         if(!doesPasswordMatch) {
             alertConf.showLoginErrorAlert(currentStage, "Password does not match.");
+            logConf.logLogin(false, user.getId(), "Password does not match.");
             return; 
         }
         
@@ -144,22 +146,24 @@ public class LoginController implements Initializable {
         
         if(!isStatusActive) {
             alertConf.showLoginErrorAlert(currentStage, "Account is not active yet.");
+            logConf.logLogin(false, user.getId(), "Account is not active yet.");
             return;
         }
         
-        alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Successfully logged in", currentStage);
-        
+        alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Successfully logged in.", currentStage);
                 
         switch(role) {
-            case "team member":
-                switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
-                break;
             case "admin":
                 switchScene(getClass(),event, "/projectvantage/fxml/admin/AdminPage.fxml");
                 break;
+            case "team member":
+                switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
+                break;
             default:
                 alertConf.showLoginErrorAlert(currentStage, "Role not found.");
+                logConf.logLogin(false, user.getId(), "Role not found.");
         }
+        logConf.logLogin(true, user.getId(), "Successfully logged in");
         alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Alert", "Welcome " + username + "!", currentStage);
     }
     
@@ -174,19 +178,14 @@ public class LoginController implements Initializable {
         
         String userRole = user.getRole();
         
-        String teamMemberPageFXML = "/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml";
-        String adminPageFXML = "/projectvantage/fxml/admin/AdminDashboardPage.fxml";
-        
         switch(userRole){
-            case "team member":
-                TeamMemberMainPageController teamMemberController = loader.getController();
-                teamMemberController.setUsername(userInput);
-                pageConf.loadDashboardPage(stage, teamMemberPageFXML, userInput, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane());
-            break;
             case "admin":
                 AdminPageController adminController = loader.getController();
                 adminController.setUsername(userInput);
-                pageConf.loadDashboardPage(stage, adminPageFXML, userInput, adminController.getBackgroundPane(), adminController.getRootPane());
+            break;
+            case "team member":
+                TeamMemberMainPageController teamMemberController = loader.getController();
+                teamMemberController.setUsername(userInput);
             break;
         }
         
@@ -202,19 +201,6 @@ public class LoginController implements Initializable {
     
     private boolean isTabPressed(KeyEvent event) throws Exception {
         return event.getCode() == KeyCode.TAB;
-    }
-    
-    private String maskText(int length) {
-        StringBuilder maskedText = new StringBuilder();
-        
-        for(int i = 0; i < length; i++) {
-            maskedText.append('\u2022');
-        }
-        return maskedText.toString();
-    }
-    
-    private void maskLastChar(TextField field) {
-        field.setText(maskText(passwordField.getText().length()));
     }
     
     @FXML
@@ -235,6 +221,7 @@ public class LoginController implements Initializable {
     private void usernameFieldOnKeyPressedHandler(KeyEvent event) throws Exception {
         if(isTabPressed(event)) {
             passwordField.setFocusTraversable(true);
+            passwordField.requestFocus();
         }
     }
 
@@ -242,6 +229,7 @@ public class LoginController implements Initializable {
     private void rootPaneKeyPressedHandler(KeyEvent event) throws Exception {
         if(isTabPressed(event)) {
             usernameField.setFocusTraversable(true);
+            usernameField.requestFocus();
         }
         
         if(isEnterPressed(event))
@@ -250,7 +238,7 @@ public class LoginController implements Initializable {
 
     @FXML
     private void passwordResetButtonMouseClickHandler(MouseEvent event) throws Exception {
-        pageConf.switchScene(getClass(), event, "/projectvantage/fxml/misc/ForgotPasswordPage.fxml");
+        pageConf.loadWindow("/projectvantage/fxml/misc/ForgotPasswordPage.fxml", "Password Reset",rootPane);
     }
 
     @FXML
@@ -258,8 +246,9 @@ public class LoginController implements Initializable {
         hidePasswordButton.setVisible(false);
         showPasswordButton.setVisible(true);
         
-        passwordField.setText(storedPassword.toString());
-        passwordField.positionCaret(passwordField.getText().length());
+        revealedPasswordField.setOpacity(1.0);
+        revealedPasswordField.toFront();
+        passwordField.setOpacity(0);
     }
 
     @FXML
@@ -267,8 +256,9 @@ public class LoginController implements Initializable {
         showPasswordButton.setVisible(false);
         hidePasswordButton.setVisible(true);
         
-        passwordField.setText(maskText(storedPassword.toString().length()));
-        passwordField.positionCaret(passwordField.getText().length());
+        passwordField.setOpacity(1.0);
+        passwordField.toFront();
+        revealedPasswordField.setOpacity(0);
     }
 
     @FXML
@@ -312,25 +302,14 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void passwordFieldKeyPressHandler(KeyEvent event) {
-        boolean isPasswordFieldEmpty = passwordField.getText().isEmpty();
+    private void passwordFieldKeyTypedHandler(KeyEvent event) {
+        String passField = passwordField.getText();
+        revealedPasswordField.textProperty().bindBidirectional(passwordField.textProperty());
         
-        if(!isPasswordFieldEmpty) {
+        hidePasswordButton.setVisible(false);
+        
+        if(!passField.isEmpty()) 
             hidePasswordButton.setVisible(true);
-            return;
-        }   
-        
-        if(isPasswordFieldEmpty) {
-            hidePasswordButton.setVisible(false);
-            storedPassword.delete(0, storedPassword.toString().length());
-        }
     }
 
-    @FXML
-    private void passwordFieldKeyTypedHandler(KeyEvent event) {
-        storedPassword.append(event.getCharacter());
-        
-        passwordField.setText(maskText(passwordField.getText().length()));
-        passwordField.positionCaret(passwordField.getText().length());
-    }
 }

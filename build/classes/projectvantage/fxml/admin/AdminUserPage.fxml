@@ -36,7 +36,7 @@
             </RadialGradient>
          </stroke>
       </Rectangle>
-      <ImageView fitHeight="168.0" fitWidth="204.0" layoutX="37.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="userPhoto" fitHeight="168.0" fitWidth="168.0" layoutX="37.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../resources/icons/user-profile-icon.png" />
          </image>

@@ -227,27 +227,7 @@
                <center>
                   <BorderPane fx:id="rootPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <center>
-                        <Pane prefHeight="488.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <AnchorPane id="AnchorPane" fx:id="rootPane1" prefHeight="570.0" prefWidth="600.0">
-                                 <children>
-                                    <Group fx:id="welcomeMessageLabel" layoutX="14.0" layoutY="14.0">
-                                       <children>
-                                          <Label layoutY="12.0" text="Hello," textFill="#192b4b">
-                                             <font>
-                                                <Font name="Segoe UI Bold" size="20.0" />
-                                             </font>
-                                          </Label>
-                                          <Label fx:id="usernameLabel" layoutX="62.0" layoutY="12.0" text="Username" textFill="#2f9efe">
-                                             <font>
-                                                <Font name="Segoe UI Bold" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </Group>
-                                 </children>
-                              </AnchorPane>
-                           </children></Pane>
+                        <Pane prefHeight="488.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
                      </center>
                      <right>
                         <Pane prefHeight="488.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -273,7 +253,7 @@
                                  </font>
                               </Label>
                               <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#2f9efe" height="62.0" layoutX="13.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="173.0" />
-                              <ImageView fx:id="profileButton" fitHeight="62.0" fitWidth="50.0" layoutX="109.0" layoutY="20.0" onMouseClicked="#profileButtonMouseClickHandler" onMouseEntered="#profileButtonMouseEnterHandler" onMouseExited="#profileButtonMouseExitHandler" onMousePressed="#profileButtonMousePressHandler" onMouseReleased="#profileButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="profileButton" fitHeight="50.0" fitWidth="50.0" layoutX="109.0" layoutY="20.0" onMouseClicked="#profileButtonMouseClickHandler" onMouseEntered="#profileButtonMouseEnterHandler" onMouseExited="#profileButtonMouseExitHandler" onMousePressed="#profileButtonMousePressHandler" onMouseReleased="#profileButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../resources/icons/user-profile-icon.png" />
                                  </image>

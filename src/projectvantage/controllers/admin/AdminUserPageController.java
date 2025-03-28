@@ -8,13 +8,16 @@ package projectvantage.controllers.admin;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.models.User;
+import projectvantage.utility.ElementConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -29,6 +32,9 @@ public class AdminUserPageController implements Initializable {
     
     PageConfig pageConf = new PageConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
+    ElementConfig elementConf = new ElementConfig();
+    
+    private static final double IMAGE_SIZE = 168;
     
     private String firstName;
     private String middleName;
@@ -61,6 +67,8 @@ public class AdminUserPageController implements Initializable {
     private Button editUserButton;
     @FXML
     private Button backButton;
+    @FXML
+    private ImageView userPhoto;
     
     /**
      * Initializes the controller class.
@@ -69,6 +77,10 @@ public class AdminUserPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
+        
+        Platform.runLater(() -> {
+            elementConf.loadProfilePicture(username, userPhoto, IMAGE_SIZE);
+        });
     }
     
     public static AdminUserPageController getInstance() {
@@ -106,9 +118,9 @@ public class AdminUserPageController implements Initializable {
 
     @FXML
     private void editUserButtonMouseClickHandler(MouseEvent event) throws Exception {
-        AdminPageController adminController = AdminPageController.getInstance();
         String FXML = "/projectvantage/fxml/admin/EditUserPage.fxml";
-        pageConf.loadEditUserPage(FXML, username, adminController.getBackgroundPane(), adminController.getRootPane());
+        pageConf.loadWindow(FXML, "Edit User", rootPane);
+        EditUserPageController.getInstance().loadUserContents(username);
     }
 
     @FXML

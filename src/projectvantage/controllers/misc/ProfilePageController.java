@@ -8,10 +8,11 @@ package projectvantage.controllers.misc;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.utility.Config;
-import projectvantage.models.User;
+import projectvantage.utility.ElementConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -38,8 +40,11 @@ public class ProfilePageController implements Initializable {
     PageConfig pageConf = new PageConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
     Config config = new Config();
+    ElementConfig elementConf = new ElementConfig();
             
     private static ProfilePageController instance;
+    
+    private static final double IMAGE_SIZE = 168;
     
     private String username;
     private String firstName;
@@ -58,10 +63,6 @@ public class ProfilePageController implements Initializable {
     @FXML
     private Label lastNamePlaceholder;
     @FXML
-    private Label emailAddressPlaceholder;
-    @FXML
-    private Label phoneNumberPlaceholder;
-    @FXML
     private Label rolePlaceholder;
     @FXML
     private AnchorPane rootPane;
@@ -69,6 +70,8 @@ public class ProfilePageController implements Initializable {
     private Button editProfileButton;
     @FXML
     private Button changePasswordButton;
+    @FXML
+    private ImageView profilePhoto;
 
     /**
      * Initializes the controller class.
@@ -80,10 +83,18 @@ public class ProfilePageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
+        
+        Platform.runLater(() -> {
+            elementConf.loadProfilePicture(username, profilePhoto, IMAGE_SIZE);
+        });
     }
     
     public static ProfilePageController getInstance() {
         return instance;
+    }
+    
+    public ImageView getProfilePhoto() {
+        return profilePhoto;
     }
     
     public void loadUser(String userInput) {
@@ -101,46 +112,22 @@ public class ProfilePageController implements Initializable {
         firstNamePlaceholder.setText(firstName);
         middleNamePlaceholder.setText(middleName);
         lastNamePlaceholder.setText(lastName);
-        emailAddressPlaceholder.setText(emailAddress);
-        phoneNumberPlaceholder.setText(phoneNumber);
         usernamePlaceholder.setText(username);
         rolePlaceholder.setText(role);
-    }
-    
-    public void loadChangePasswordPage(Class getClass, Event evt, String targetFXML) throws Exception {
-        Parent root = FXMLLoader.load(getClass.getResource(targetFXML));
-        Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        pageConf.setCenterAlignment(stage);
-        
-        ChangePasswordPageController.getInstance().setUsername(username);
-        
-        stage.show();
     }
 
     @FXML
     private void editProfileMouseClickHandler(MouseEvent event) throws Exception {
-        
-        TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
-        AdminPageController adminController = AdminPageController.getInstance();
-        
-        String FXML = "/projectvantage/fxml/misc/EditProfilePage.fxml";
-        
-        switch(role) {
-            case "team member":
-                pageConf.loadEditProfilePage(FXML, teamMemberController.getRootPane(), username);
-                break;
-            case "admin":
-                pageConf.loadEditProfilePage(FXML, adminController.getRootPane(), username);
-                break;
-        }
+        String FXML = "/projectvantage/fxml/misc/EditProfilePage.fxml";   
+        pageConf.loadWindow(FXML, "Edit Profile", rootPane);
+        EditProfilePageController.getInstance().loadUserContents(username);
     }
 
     @FXML
     private void changePasswordMouseClickHandler(MouseEvent event) throws Exception {
         String FXML = "/projectvantage/fxml/misc/ChangePasswordPage.fxml";
-        loadChangePasswordPage(getClass(),event, FXML);
+        pageConf.loadWindow(FXML, "Change Password", rootPane);
+        ChangePasswordPageController.getInstance().setUsername(username);
     }
 
 }
