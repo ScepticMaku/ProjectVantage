@@ -134,7 +134,7 @@ public class ResetPasswordPageController implements Initializable {
         if(verifyInput(currentStage , newPassword , confirmPassword))
             return;
         
-        if(db.updateData(sql, updatedPassword, username)) {
+        if(db.executeQuery(sql, updatedPassword, username)) {
             System.out.println("User updated successfully!");
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Change Password Successful", "Password Changed Succesfully!", currentStage);
             

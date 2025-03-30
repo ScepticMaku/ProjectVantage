@@ -76,8 +76,6 @@ public class EditProfilePageController implements Initializable {
     @FXML
     private Label usernamePlaceholder;
     @FXML
-    private Button backButton;
-    @FXML
     private TextField firstNameField;
     @FXML
     private TextField middleNameField;
@@ -160,24 +158,16 @@ public class EditProfilePageController implements Initializable {
         String sql;
         String imagePath = targetFile.getPath();
         
-        System.out.println(imagePath);
-        
         if(dbConf.getImagePath(username) == null) {
             sql = "INSERT INTO user_image (user_id, image_path) VALUES (?, ?)";
-            db.insertData(sql, userId, imagePath);
+            db.executeQuery(sql, userId, imagePath);
             System.out.println("User Image updated successfully!");
             return;
         }
         
         sql = "UPDATE user_image SET image_path = ? WHERE user_id = ?";
-        db.updateData(sql, imagePath, userId);
+        db.executeQuery(sql, imagePath, userId);
         System.out.println("User Image updated successfully!");
-    }
-        
-    @FXML
-    private void backButtonMouseClickHandler(MouseEvent event) throws Exception {
-        Stage stage = (Stage)rootPane.getScene().getWindow();
-        stage.close();
     }
 
     @FXML
@@ -193,7 +183,7 @@ public class EditProfilePageController implements Initializable {
         if(verifyInput(currentStage, fName, lName)) 
             return;
         
-        if(db.updateData(sql, fName, mName, lName, username)) {
+        if(db.executeQuery(sql, fName, mName, lName, username)) {
                 System.out.println("User updated successfully!");
                 alertConf.showAlert(Alert.AlertType.INFORMATION, "User Update Successful", "User Updated Succesfully!", currentStage);
                 

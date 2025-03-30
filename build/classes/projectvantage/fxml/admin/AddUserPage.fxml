@@ -3,19 +3,14 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" stylesheets="@../../css/authentication-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.AddUserPageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="387.0" prefWidth="551.0" stylesheets="@../../css/authentication-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.AddUserPageController">
    <children>
-      <Button fx:id="backButton" layoutX="504.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#backButtonMouseClickHandler" prefHeight="27.0" prefWidth="82.0" text="Back">
-         <font>
-            <Font name="Segoe UI" size="12.0" />
-         </font>
-      </Button>
       <Label layoutX="14.0" layoutY="14.0" text="Add User" textFill="#192b4b">
          <font>
             <Font name="Segoe UI Bold" size="20.0" />
@@ -40,38 +35,22 @@
       <Label layoutX="212.0" layoutY="218.0" text="Username:" textFill="#575757" />
       <Label layoutX="18.0" layoutY="279.0" text="Password" textFill="#575757" />
       <Label layoutX="212.0" layoutY="279.0" text="Confirm password:" textFill="#575757" />
-      <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#2f9efe" height="242.0" layoutX="395.0" layoutY="97.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="184.0" />
-      <RadioButton fx:id="teamMemberRadioButton" layoutX="419.0" layoutY="145.0" mnemonicParsing="false" onMouseClicked="#teamMemberButtonMouseClickHandler" text="Team member" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </RadioButton>
-      <RadioButton fx:id="teamLeaderRadioButton" layoutX="419.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#teamLeaderButtonMouseClickHandler" text="Team Leader" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </RadioButton>
-      <RadioButton fx:id="teamManagerRadioButton" layoutX="420.0" layoutY="231.0" mnemonicParsing="false" onMouseClicked="#teamManagerMouseClickHandler" text="Team Manager" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </RadioButton>
-      <RadioButton fx:id="projectManagerRadioButton" layoutX="420.0" layoutY="272.0" mnemonicParsing="false" onMouseClicked="#projectManagerMouseClickHandler" text="Project Manager" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </RadioButton>
       <Label layoutX="395.0" layoutY="62.0" text="User type" textFill="#2f9efe">
          <font>
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
       </Label>
-      <Button fx:id="addUserButton" layoutX="511.0" layoutY="351.0" mnemonicParsing="false" onMouseClicked="#addUserButtonMouseClickHandler" prefHeight="30.0" prefWidth="69.0" text="Register">
+      <Button fx:id="addUserButton" layoutX="444.0" layoutY="344.0" mnemonicParsing="false" onMouseClicked="#addUserButtonMouseClickHandler" prefHeight="30.0" prefWidth="69.0" text="Register">
          <font>
             <Font name="Segoe UI Bold" size="14.0" />
          </font>
       </Button>
       <PasswordField fx:id="passwordField" layoutX="18.0" layoutY="300.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" />
       <PasswordField fx:id="confirmPasswordField" layoutX="212.0" layoutY="300.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" />
+      <TableView fx:id="roleTable" fixedCellSize="0.0" layoutX="395.0" layoutY="94.0" prefHeight="237.0" prefWidth="146.0" stylesheets="@../../css/user-table.css">
+        <columns>
+          <TableColumn fx:id="roleColumn" prefWidth="145.0" resizable="false" text="Role" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

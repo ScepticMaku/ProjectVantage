@@ -33,13 +33,14 @@
                         <TableColumn fx:id="userFirstName" editable="false" prefWidth="135.0" sortable="false" text="First Name" />
                         <TableColumn fx:id="userLastName" editable="false" prefWidth="150.0" sortable="false" text="Last Name" />
                         <TableColumn fx:id="userRole" editable="false" prefWidth="120.0" sortable="false" text="Role" />
-                        <TableColumn fx:id="userStatus" editable="false" prefWidth="143.0" sortable="false" text="Status" />
+                        <TableColumn fx:id="userStatus" editable="false" prefWidth="112.0" sortable="false" text="Status" />
+                        <TableColumn fx:id="userAction" prefWidth="73.0" text="Action" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <cursor>
-                        <Cursor fx:constant="HAND" />
+                        <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </TableView>
                   <Label layoutX="14.0" layoutY="12.0" text="Users" textFill="#192b4b">

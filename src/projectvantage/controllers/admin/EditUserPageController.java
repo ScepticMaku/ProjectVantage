@@ -5,27 +5,40 @@
  */
 package projectvantage.controllers.admin;
 
+import java.io.File;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.Config;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.models.User;
+import projectvantage.models.Role;
+import projectvantage.utility.ElementConfig;
 
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -42,20 +55,27 @@ public class EditUserPageController implements Initializable {
     PageConfig pageConf = new PageConfig();
     Config config = new Config();
     DatabaseConfig dbConf = new DatabaseConfig();
+    ElementConfig elementConf = new ElementConfig();
     
+    ObservableList<Role> roleList = FXCollections.observableArrayList();
+    
+    private static final String TARGET_DIRECTORY = "pfp/";
+    private static final double IMAGE_SIZE = 168;
+    
+    private File selectedFile;
+    
+    private int userId;
     private String firstName;
     private String middleName;
     private String lastName;
     private String emailAddress;
     private String phoneNumber;
-    private String status;
     private String role;
+    private String status;
     private String username;
 
     @FXML
     private AnchorPane rootPane;
-    @FXML
-    private Button backButton;
     @FXML
     private TextField firstNameField;
     @FXML
@@ -69,17 +89,6 @@ public class EditUserPageController implements Initializable {
     @FXML
     private TextField usernameField;
     @FXML
-    private RadioButton teamMemberRadioButton;
-    @FXML
-    private RadioButton teamLeaderRadioButton;
-    @FXML
-    private RadioButton teamManagerRadioButton;
-    @FXML
-    private RadioButton projectManagerRadioButton;
-    @FXML
-    private RadioButton adminRadioButton;
-    private PasswordField passwordField;
-    @FXML
     private Button deactivateButton;
     @FXML
     private Button activateButton;
@@ -87,6 +96,12 @@ public class EditUserPageController implements Initializable {
     private Label usernameLabel;
     @FXML
     private Button submitUserButton;
+    @FXML
+    private TableView<Role> roleTable;
+    @FXML
+    private TableColumn<Role, String> roleColumn;
+    @FXML
+    private Button fileChooseButton;
 
     /**
      * Initializes the controller class.
@@ -95,6 +110,13 @@ public class EditUserPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
+        
+        roleColumn.setSortable(false);
+        roleColumn.setResizable(false);
+        
+        roleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        
+        loadColumnData();
     }
     
     public static EditUserPageController getInstance() {
@@ -105,6 +127,7 @@ public class EditUserPageController implements Initializable {
         
         User user = dbConf.getUserByUsername(userInput);
         
+        userId = user.getId();
         firstName = user.getFirstName();
         middleName = user.getMiddleName();
         lastName = user.getLastName();
@@ -122,14 +145,7 @@ public class EditUserPageController implements Initializable {
         usernameLabel.setText(username);
         usernameField.setText(username);
         
-        switch(role) {
-            case "team member":
-                teamMemberRadioButton.setSelected(true);
-                break;
-            case "admin":
-                adminRadioButton.setSelected(true);
-                break;
-        }
+        
         
         boolean isActive = status.equals("active");
         
@@ -139,6 +155,54 @@ public class EditUserPageController implements Initializable {
         
         if(!isActive) {
             deactivateButton.setVisible(false);
+        }
+    }
+    
+    private String getFileExtension(File file) {
+        String fileName = file.getName();
+        return fileName.substring(fileName.lastIndexOf("."));
+    }
+    
+    private void moveAndSaveImageToDatabase() throws Exception {
+        File targetDir = new File(TARGET_DIRECTORY);
+        
+        if(selectedFile == null) {
+            return;
+        }
+        
+        String newFileName = "user_" + username + getFileExtension(selectedFile);
+        File targetFile = new File(targetDir, newFileName);
+        
+        Files.copy(selectedFile.toPath().toAbsolutePath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        
+        String sql;
+        String imagePath = targetFile.getPath();
+        
+        if(dbConf.getImagePath(username) == null) {
+            sql = "INSERT INTO user_image (user_id, image_path) VALUES (?, ?)";
+            db.executeQuery(sql, userId, imagePath);
+            System.out.println("User Image updated successfully!");
+            return;
+        }
+        
+        sql = "UPDATE user_image SET image_path = ? WHERE user_id = ?";
+        db.executeQuery(sql, imagePath, userId);
+        System.out.println("User Image updated successfully!");
+    }
+    
+    private void loadColumnData() {
+            String sql = "SELECT id, name FROM role WHERE id NOT IN (1)";
+        
+        try(ResultSet result = db.getData(sql)) {
+            while(result.next()) {
+                roleList.add(new Role(
+                        result.getInt("id"),
+                        result.getString("name")
+                ));
+            }
+            roleTable.setItems(roleList);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     
@@ -218,7 +282,7 @@ public class EditUserPageController implements Initializable {
     }
     
     private boolean updateUserStatus(String query) {
-        if(db.updateData(query)) {
+        if(db.executeQuery(query)) {
             System.out.println("User status updated!");
             return true;
         }
@@ -226,36 +290,14 @@ public class EditUserPageController implements Initializable {
     }
     
     private void refreshPage() throws Exception {
-        String FXML = "/projectvantage/fxml/admin/EditUserPage.fxml";
-        pageConf.loadWindow(FXML, "Edit user", rootPane);
         EditUserPageController.getInstance().loadUserContents(username);
     }
             
-    @FXML
     private void backButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
     }
 
-    @FXML
-    private void teamMemberButtonMouseClickHandler(MouseEvent event) {
-    }
-
-    @FXML
-    private void teamLeaderButtonMouseClickHandler(MouseEvent event) {
-    }
-
-    @FXML
-    private void teamManagerMouseClickHandler(MouseEvent event) {
-    }
-
-    @FXML
-    private void projectManagerMouseClickHandler(MouseEvent event) {
-    }
-
-    @FXML
-    private void adminButtonMouseClickHandler(MouseEvent event) {
-    }
 
 
     @FXML
@@ -290,6 +332,10 @@ public class EditUserPageController implements Initializable {
     private void submitUserButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) rootPane.getScene().getWindow();
         
+        AdminUserPageController adminUserController = AdminUserPageController.getInstance();
+        
+        int id;
+        
         String fName = firstNameField.getText();
         String mName = middleNameField.getText();
         String lName = lastNameField.getText();
@@ -297,31 +343,43 @@ public class EditUserPageController implements Initializable {
         String eAddress = emailAddressField.getText();
         String uName = usernameField.getText();
         
-        String userRole;
-        
-        if(teamMemberRadioButton.isSelected()) {
-            userRole = "team member";
-        } else if(teamLeaderRadioButton.isSelected()) {
-            userRole = "team leader";
-        } else if(teamManagerRadioButton.isSelected()) {
-            userRole = "team manager";
-        } else if(projectManagerRadioButton.isSelected()) {
-            userRole = "project manager";
-        } else if(adminRadioButton.isSelected()) {
-            userRole = "admin";
-        } else {
-            alertConf.showEditEUserErrorAlert(currentStage, "You must select a type of user.");
-            return;
-        }
-        
-        String sql = "UPDATE user SET first_name = ?, middle_name = ?, last_name = ?, phone_number = ?, email = ?, username = ? WHERE username = ?";
+        String sql = "UPDATE user SET first_name = ?, middle_name = ?, last_name = ?, phone_number = ?, email = ?, username = ?, role_id = ? WHERE username = ?";
         
         if(!verifyInput(currentStage, fName, lName, pNumber, eAddress, uName)) {
-            if(db.updateData(sql, fName, mName, lName, pNumber, eAddress, uName, username)) {
+            Role selectedRole = roleTable.getSelectionModel().getSelectedItem();
+            
+            id = dbConf.getUserRoleIdByUsername(username);
+            
+            if(selectedRole != null) {
+               id = selectedRole.getId();
+            }
+            
+            if(db.executeQuery(sql, fName, mName, lName, pNumber, eAddress, uName, id, username)) {
                 System.out.println("User updated successfully!");
                 alertConf.showAlert(Alert.AlertType.INFORMATION, "User Update Successful", "User Updated Succesfully!", currentStage);
+                moveAndSaveImageToDatabase();
+                elementConf.loadProfilePicture(username, adminUserController.getUserPhoto(), IMAGE_SIZE);
+                adminUserController.loadUser(username);
                 currentStage.close();
             }
+        }
+    }
+
+    @FXML
+    private void fileChooseButtonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Profile Photo");
+        
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+        
+        selectedFile = fileChooser.showOpenDialog(currentStage);
+        
+        if(selectedFile == null) {
+            alertConf.showAlert(Alert.AlertType.ERROR, "File Selection Failed", "File selection cancelled.", currentStage);
         }
     }
 }

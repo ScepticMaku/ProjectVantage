@@ -56,10 +56,6 @@ public class AdminUserPageController implements Initializable {
     @FXML
     private Label lastNamePlaceholder;
     @FXML
-    private Label emailAddressPlaceholder;
-    @FXML
-    private Label phoneNumberPlaceholder;
-    @FXML
     private Label rolePlaceholder;
     @FXML
     private Label statusPlaceholder;
@@ -87,6 +83,10 @@ public class AdminUserPageController implements Initializable {
         return instance;
     }
     
+    public ImageView getUserPhoto() {
+        return userPhoto;
+    }
+    
     public void loadUser(String userInput) {
         
         User user = dbConf.getUserByUsername(userInput);
@@ -109,8 +109,6 @@ public class AdminUserPageController implements Initializable {
         firstNamePlaceholder.setText(firstName);
         middleNamePlaceholder.setText(middleName);
         lastNamePlaceholder.setText(lastName);
-        emailAddressPlaceholder.setText(email);
-        phoneNumberPlaceholder.setText(phoneNumber);
         usernamePlaceholder.setText(username);
         rolePlaceholder.setText(role);
         statusPlaceholder.setText(status);

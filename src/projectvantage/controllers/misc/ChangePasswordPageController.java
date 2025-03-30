@@ -60,8 +60,6 @@ public class ChangePasswordPageController implements Initializable {
     private String role;
 
     @FXML
-    private Button backButton;
-    @FXML
     private TextField currentPasswordField;
     @FXML
     private TextField newPasswordField;
@@ -170,12 +168,6 @@ public class ChangePasswordPageController implements Initializable {
     }
 
     @FXML
-    private void backButtonMouseClickHandler(MouseEvent event) throws Exception {
-        Stage stage = (Stage)rootPane.getScene().getWindow();
-        stage.close();
-    }
-
-    @FXML
     private void submitButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         
@@ -190,7 +182,7 @@ public class ChangePasswordPageController implements Initializable {
         if(checkFields(currentStage, currentF , newF , confirmF))
             return;
         
-        if(db.updateData(sql, newPass, username)) {
+        if(db.executeQuery(sql, newPass, username)) {
             System.out.println("User updated successfully!");
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Change Password Successful", "Password Changed Succesfully!", currentStage);
             

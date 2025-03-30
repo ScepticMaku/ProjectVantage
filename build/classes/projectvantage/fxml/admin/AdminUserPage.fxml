@@ -76,43 +76,23 @@
             <Font name="Segoe UI" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="399.0" layoutY="103.0" text="Email address:" textFill="#2f9efe">
+      <Label layoutX="394.0" layoutY="102.0" text="Role:" textFill="#2f9efe">
          <font>
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
       </Label>
-      <Label fx:id="emailAddressPlaceholder" layoutX="399.0" layoutY="122.0" text="Placeholder" textFill="#575757">
-         <font>
-            <Font name="Segoe UI" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="399.0" layoutY="148.0" text="Phone number:" textFill="#2f9efe">
-         <font>
-            <Font name="Segoe UI Bold" size="16.0" />
-         </font>
-      </Label>
-      <Label fx:id="phoneNumberPlaceholder" layoutX="399.0" layoutY="167.0" text="Placeholder" textFill="#575757">
-         <font>
-            <Font name="Segoe UI" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="398.0" layoutY="194.0" text="Role:" textFill="#2f9efe">
-         <font>
-            <Font name="Segoe UI Bold" size="16.0" />
-         </font>
-      </Label>
-      <Label fx:id="rolePlaceholder" layoutX="398.0" layoutY="213.0" text="Placeholder" textFill="#575757">
+      <Label fx:id="rolePlaceholder" layoutX="394.0" layoutY="121.0" text="Placeholder" textFill="#575757">
          <font>
             <Font name="Segoe UI" size="14.0" />
          </font>
       </Label>
       <Button fx:id="editUserButton" layoutX="409.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#editUserButtonMouseClickHandler" prefHeight="27.0" prefWidth="83.0" text="Edit User" />
-      <Label layoutX="398.0" layoutY="240.0" text="Status:" textFill="#2f9efe">
+      <Label layoutX="394.0" layoutY="148.0" text="Status:" textFill="#2f9efe">
          <font>
             <Font name="Segoe UI Bold" size="16.0" />
          </font>
       </Label>
-      <Label fx:id="statusPlaceholder" layoutX="399.0" layoutY="259.0" text="Placeholder" textFill="#575757">
+      <Label fx:id="statusPlaceholder" layoutX="395.0" layoutY="167.0" text="Placeholder" textFill="#575757">
          <font>
             <Font name="Segoe UI" size="14.0" />
          </font>

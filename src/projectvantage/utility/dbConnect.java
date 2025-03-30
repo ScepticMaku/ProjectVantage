@@ -30,28 +30,15 @@ public class dbConnect {
     }
     
      
-    public boolean insertData(String query, Object... values) {
+    public boolean executeQuery(String query, Object... values) {
         try (PreparedStatement pstmt = connect.prepareStatement(query)) {
             for (int i = 0; i < values.length; i++) {
                 pstmt.setObject(i + 1, values[i]); // Set values dynamically
             }
             int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0; // Returns true if the insertion was successful
+            return rowsAffected > 0; // Returns true if the execution was successful
         } catch (SQLException e) {
-            System.out.println("Insert failed: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public boolean updateData(String query, Object... values) {
-        try (PreparedStatement pstmt = connect.prepareStatement(query)) {
-            for (int i = 0; i < values.length; i++) {
-                pstmt.setObject(i + 1, values[i]); // Set values dynamically
-            }
-            return pstmt.executeUpdate() > 0; // Returns true if the update was successful
-        } catch (SQLException e) {
-            System.out.println("Update failed: " + e.getMessage());
+            System.out.println("Execution failed: " + e.getMessage());
             e.printStackTrace();
             return false;
         }

@@ -6,11 +6,12 @@
 package projectvantage.controllers.admin;
 
 import projectvantage.models.User;
-
+import projectvantage.utility.DatabaseConfig;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.Config;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.ElementConfig;
+import projectvantage.utility.dbConnect;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -22,6 +23,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
@@ -37,10 +39,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import projectvantage.utility.dbConnect;
 
 /**
  * FXML Controller class
@@ -49,13 +51,19 @@ import projectvantage.utility.dbConnect;
  */
 public class UserManagementPageController implements Initializable {
     
+    private static UserManagementPageController instance;
+    
     private static final int ROWS_PER_PAGE = 10;
+    private static final double DELETE_IMAGE_HEIGHT = 25;
+    private static final double DELETE_IMAGE_WIDTH = 25;
     
     ObservableList<User> userList = FXCollections.observableArrayList();
     AlertConfig alertConf = new AlertConfig();
     Config config = new Config();
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
+    DatabaseConfig dbConf = new DatabaseConfig();
+    dbConnect db = new dbConnect();
 
     @FXML
     private AnchorPane rootPane;
@@ -81,6 +89,8 @@ public class UserManagementPageController implements Initializable {
     private Button addButton;
     @FXML
     private Button viewButton;
+    @FXML
+    private TableColumn<User, String> userAction;
 
     /**
      * Initializes the controller class.
@@ -88,20 +98,16 @@ public class UserManagementPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
-        userId.setResizable(false);
-        userFirstName.setResizable(false);
-        userLastName.setResizable(false);
-        userRole.setResizable(false);
-        userStatus.setResizable(false);
+        instance = this;
+        
+        userTable.setEditable(false);
         
         userId.setSortable(false);
         userFirstName.setSortable(false);
         userLastName.setSortable(false);
         userRole.setSortable(false);
         userStatus.setSortable(false);
-        
-        
+        userAction.setSortable(false);
         
         userId.setCellValueFactory(new PropertyValueFactory<>("id"));
         userFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -109,8 +115,71 @@ public class UserManagementPageController implements Initializable {
         userRole.setCellValueFactory(new PropertyValueFactory<>("role"));
         userStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         
+        Callback<TableColumn<User, String>, TableCell<User, String>> cellFactory = (TableColumn<User, String> param) -> {
+            final TableCell<User, String> cell = new TableCell<User, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    
+                    if(empty) {
+                        setGraphic(null);
+                        setText(null);
+                        return;
+                    }
+                    
+                    ImageView deleteButton = new ImageView("/projectvantage/resources/icons/delete-icon.png");
+                    
+                    deleteButton.setFitHeight(DELETE_IMAGE_HEIGHT);
+                    deleteButton.setFitWidth(DELETE_IMAGE_WIDTH);
+                    deleteButton.setCursor(Cursor.HAND);
+                    
+                    deleteButton.setOnMouseEntered(event -> {
+                        hoverIcon(deleteButton);
+                    });
+                    
+                    deleteButton.setOnMouseExited(event -> {
+                        unhoverIcon(deleteButton);
+                    });
+                    
+                    deleteButton.setOnMouseClicked(event -> {
+                        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+                        User selectedRow = userTable.getSelectionModel().getSelectedItem();
+                        int id = selectedRow.getId();
+                        String role = selectedRow.getRole();
+                        
+                        String sql = "DELETE FROM user WHERE id = ?";
+                        
+                        switch(role) {
+                            case "admin":
+                                alertConf.showAlert(Alert.AlertType.INFORMATION, "User deletion alert", "You can't delete an admin.", currentStage);
+                                break;
+                            default:
+                                alertConf.showDeleteConfirmationAlert(currentStage, sql, id);
+                                refreshTable();
+                        }
+                        
+                    });
+                    
+                    HBox actionButtons = new HBox(deleteButton);
+                    setGraphic(actionButtons);
+                    setText(null);
+                }
+            };
+            return cell;
+        };
+        userAction.setCellFactory(cellFactory);
+        
         loadTableData();
-    }    
+    }
+    
+    public static UserManagementPageController getInstance() {
+        return instance;
+    }
+    
+    public void refreshTable() {
+        userList.clear();
+        loadTableData();
+    }
 
     private Node createPage(int pageIndex) {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
@@ -120,7 +189,6 @@ public class UserManagementPageController implements Initializable {
     }
     
     private void loadTableData() {
-        dbConnect db = new dbConnect();
         String sql = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, role.name AS role, user_status.name AS status "
                 + "FROM user INNER JOIN role ON user.role_id = role.id INNER JOIN user_status ON user.status_id = user_status.id ORDER BY user.id ASC";
         

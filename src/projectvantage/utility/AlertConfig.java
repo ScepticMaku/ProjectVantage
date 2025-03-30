@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -72,6 +72,25 @@ public class AlertConfig {
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK) {
             stage.close();
+        }
+    }
+    
+    public void showDeleteConfirmationAlert(Stage stage, String query, int id) {
+        dbConnect db = new dbConnect();
+        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Delete Confirmation");
+        alert.setContentText("Are you sure you want to delete user?");
+        alert.initOwner(stage);
+        
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource(ALERT_STYLE_CSS).toExternalForm());
+        dialogPane.getStyleClass().add("alert");
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK && db.executeQuery(query, id)) {
+            System.out.println("User deleted successfully!");
+            showAlert(Alert.AlertType.INFORMATION, "User successfully deleted!", "Deletion Successful", stage);
         }
     }
     

@@ -5,10 +5,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="projectvantage.controllers.team_member.TeamMemberDashboardPageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.team_member.TeamMemberDashboardPageController">
    <children>
-      <Group fx:id="welcomeMessageLabel" layoutX="24.0" layoutY="24.0">
+      <Group layoutX="14.0" layoutY="14.0">
          <children>
             <Label text="Hello," textFill="#192b4b">
                <font>

@@ -14,13 +14,14 @@
         <group>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/authentication/RegisterController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/utility/dbConnect.java</file>
-            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/authentication/LoginController.java</file>
-            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/AddUserPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/SettingsPageController.java</file>
+            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/AddUserPageController.java</file>
+            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/authentication/LoginController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/fxml/misc/SettingsPage.fxml</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/EditUserPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/team_member/TeamMemberMainPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/AuthenticationController.java</file>
+            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/project_manager/ProjectPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/EventLogPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/utility/Config.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/EditProfilePageController.java</file>
@@ -28,14 +29,18 @@
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/utility/AuthenticationConfig.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/utility/PageConfig.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/AdminUserPageController.java</file>
+            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/UserManagementPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/authentication/GoogleAuthenticationController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/fxml/misc/ProfilePage.fxml</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/utility/DatabaseConfig.java</file>
+            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/models/Role.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/ForgotPasswordPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/main/ProjectVantage.java</file>
+            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/models/User.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/ProfilePageController.java</file>
-            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/ResetPasswordPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/utility/GoogleAuthenticationConfig.java</file>
+            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/ResetPasswordPageController.java</file>
+            <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/fxml/project_manager/ProjectPage.fxml</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/misc/ChangePasswordPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/AdminDashboardPageController.java</file>
             <file>file:/C:/Users/Mark%20Work%20Account/Documents/GitHub/ProjectVantage/src/projectvantage/controllers/admin/AdminPageController.java</file>

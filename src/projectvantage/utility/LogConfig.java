@@ -19,7 +19,7 @@ public class LogConfig {
     private void insertLog(int userId, String act, String desc) {
         String sql = "INSERT INTO system_log (user_id, action, description) VALUES (?, ?, ?)";
         
-        db.insertData(sql, userId, act, desc);
+        db.executeQuery(sql, userId, act, desc);
     }
     
     public void logLogin(boolean isUserLoggedIn, int userId, String desc) {

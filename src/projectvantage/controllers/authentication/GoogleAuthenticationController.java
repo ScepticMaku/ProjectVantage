@@ -115,7 +115,7 @@ public class GoogleAuthenticationController implements Initializable {
         
         alertConf.showAlert(Alert.AlertType.INFORMATION, "Authentication Successful", "Account successfully verified!", currentStage);
         
-        if(connect.insertData(query, firstName, middleName, lastName, email, phoneNumber, username, salt, hashedPassword, secretKey)) {
+        if(connect.executeQuery(query, firstName, middleName, lastName, email, phoneNumber, username, salt, hashedPassword, secretKey)) {
              System.out.println("User added to database!");
              alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
          }

@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.admin;
 
+import projectvantage.models.Role;
 import projectvantage.controllers.authentication.RegisterController;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.Config;
@@ -12,13 +13,20 @@ import projectvantage.utility.AlertConfig;
 import projectvantage.utility.AuthenticationConfig;
 
 import java.net.URL;
+import java.sql.ResultSet;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -31,15 +39,15 @@ import javafx.stage.Stage;
 public class AddUserPageController implements Initializable {
     
     RegisterController registerController = new RegisterController();
-    dbConnect connect = new dbConnect();
+    dbConnect db = new dbConnect();
     Config config = new Config();
     AuthenticationConfig authConf = new AuthenticationConfig();
     AlertConfig alertConf = new AlertConfig();
+    
+    ObservableList<Role> roleList = FXCollections.observableArrayList();
 
     @FXML
     private AnchorPane rootPane;
-    @FXML
-    private Button backButton;
     @FXML
     private TextField firstNameField;
     @FXML
@@ -57,15 +65,11 @@ public class AddUserPageController implements Initializable {
     @FXML
     private TextField confirmPasswordField;
     @FXML
-    private RadioButton teamMemberRadioButton;
-    @FXML
-    private RadioButton teamLeaderRadioButton;
-    @FXML
-    private RadioButton teamManagerRadioButton;
-    @FXML
-    private RadioButton projectManagerRadioButton;
-    @FXML
     private Button addUserButton;
+    @FXML
+    private TableColumn<Role, String> roleColumn;
+    @FXML
+    private TableView<Role> roleTable;
 
     /**
      * Initializes the controller class.
@@ -73,24 +77,45 @@ public class AddUserPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        roleColumn.setSortable(false);
+        roleColumn.setResizable(false);
+        
+        roleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        
+        loadColumnData();
     }
     
-    private void insertUser(Stage currentStage, String query, String firstName, String middleName, String lastName, String emailAddress, String phoneNumber, String username, String salt, String password, String role) {
-        if(connect.insertData(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, password, role)) {
+    private void insertUser(Stage currentStage, String query, String firstName, String middleName, String lastName, String emailAddress, String phoneNumber, String username, String salt, String password, int id) {
+        if(db.executeQuery(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, password, id)) {
             System.out.println("User added to database!");
             alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Successful", currentStage);
         }
     }
+    
+    private void loadColumnData() {
+            String sql = "SELECT id, name FROM role WHERE id NOT IN (1)";
+        
+        try(ResultSet result = db.getData(sql)) {
+            while(result.next()) {
+                roleList.add(new Role(
+                        result.getInt("id"),
+                        result.getString("name")
+                ));
+            }
+            roleTable.setItems(roleList);
+            
 
-    @FXML
-    private void backButtonMouseClickHandler(MouseEvent event) {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        stage.close();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void addUserButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) rootPane.getScene().getWindow();
+        
+        UserManagementPageController userController = UserManagementPageController.getInstance();
         
         String firstName = firstNameField.getText();
         String middleName = middleNameField.getText();
@@ -101,60 +126,26 @@ public class AddUserPageController implements Initializable {
         String password = passwordField.getText();
         String passwordConfirm = confirmPasswordField.getText();
         
-        String role;
-        
-        if(teamMemberRadioButton.isSelected()) {
-            role = "team member";
-        } else if(teamLeaderRadioButton.isSelected()) {
-            role = "team leader";
-        } else if(teamManagerRadioButton.isSelected()) {
-            role = "team manager";
-        } else if(projectManagerRadioButton.isSelected()) {
-            role = "project manager";
-        } else {
-            alertConf.showRegisterErrorAlert(currentStage, "You must select a type of user.");
-            return;
-        }
-        
-        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, role) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, role_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, '', ?)";
         
         if(registerController.verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
             return;
         
+        Role selectedRole = roleTable.getSelectionModel().getSelectedItem();
+        
+        if(selectedRole == null) {
+            alertConf.showAlert(Alert.AlertType.ERROR, "Failed to Add User", "You must select a row.", currentStage);
+            return;
+        }
+        
+        int id = selectedRole.getId();
+        
         String salt = authConf.generateSalt();
         String hashedPassword = authConf.hashPassword(password, salt);
 
-        insertUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword, role);
+        insertUser(currentStage, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword, id);
         currentStage.close();
-    }
-
-    @FXML
-    private void teamMemberButtonMouseClickHandler(MouseEvent event) {
-            teamLeaderRadioButton.setSelected(false);
-            teamManagerRadioButton.setSelected(false);
-            projectManagerRadioButton.setSelected(false);
-    }
-
-    @FXML
-    private void teamLeaderButtonMouseClickHandler(MouseEvent event) {
-            teamMemberRadioButton.setSelected(false);
-            teamManagerRadioButton.setSelected(false);
-            projectManagerRadioButton.setSelected(false);
-    }
-
-    @FXML
-    private void teamManagerMouseClickHandler(MouseEvent event) {
-            teamLeaderRadioButton.setSelected(false);
-            teamMemberRadioButton.setSelected(false);
-            projectManagerRadioButton.setSelected(false);
-        
-    }
-
-    @FXML
-    private void projectManagerMouseClickHandler(MouseEvent event) {
-            teamLeaderRadioButton.setSelected(false);
-            teamManagerRadioButton.setSelected(false);
-            teamMemberRadioButton.setSelected(false);
+        userController.refreshTable();
     }
 }
