@@ -5,7 +5,7 @@
  */
 package projectvantage.models;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 /**
  *
@@ -15,12 +15,12 @@ public class Project {
     private int id;
     private String name;
     private String description;
-    private LocalDate creation_date;
-    private LocalDate due_date;
+    private String creation_date;
+    private String due_date;
     private String creatorName;
     private String status;
     
-    public Project(int id, String name, String description, LocalDate creation_date, LocalDate due_date, String creatorName, String status){
+    public Project(int id, String name, String description, String creation_date, String due_date, String creatorName, String status){
         this.id = id;
         this.name = name;
         this.description = description;
@@ -42,11 +42,11 @@ public class Project {
         return description;
     }
     
-    public LocalDate getCreationDate() {
+    public String getCreationDate() {
         return creation_date;
     }
     
-    public LocalDate getDueDate() {
+    public String getDueDate() {
         return due_date;
     }
     

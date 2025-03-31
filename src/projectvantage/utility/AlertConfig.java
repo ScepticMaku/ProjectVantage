@@ -80,7 +80,7 @@ public class AlertConfig {
         
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Delete Confirmation");
-        alert.setContentText("Are you sure you want to delete user?");
+        alert.setContentText("Are you sure you want to delete?");
         alert.initOwner(stage);
         
         DialogPane dialogPane = alert.getDialogPane();
@@ -89,9 +89,13 @@ public class AlertConfig {
         
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK && db.executeQuery(query, id)) {
-            System.out.println("User deleted successfully!");
-            showAlert(Alert.AlertType.INFORMATION, "User successfully deleted!", "Deletion Successful", stage);
+            System.out.println("Deleted successfully!");
+            showAlert(Alert.AlertType.INFORMATION, "Successfully deleted!", "Deletion Successful", stage);
         }
+    }
+    
+    public void showWindowLoadErrorAlert(Stage stage, String errorMessage) {
+        showAlert(Alert.AlertType.ERROR, "Window Load Error", errorMessage, stage);
     }
     
     public void showLoginErrorAlert(Stage stage, String errorMessage) {
@@ -124,5 +128,9 @@ public class AlertConfig {
     
     public void showResetPasswordErrorAlert(Stage stage, String errorMessage) {
         showAlert(Alert.AlertType.ERROR, "Reset Password Error", errorMessage, stage);
+    }
+    
+    public void showEditProjectErrorAlert(Stage stage, String errorMessage) {
+        showAlert(Alert.AlertType.ERROR, "Edit Project Error", errorMessage, stage);
     }
 }

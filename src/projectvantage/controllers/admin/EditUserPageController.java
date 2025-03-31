@@ -202,6 +202,7 @@ public class EditUserPageController implements Initializable {
             }
             roleTable.setItems(roleList);
         } catch (Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

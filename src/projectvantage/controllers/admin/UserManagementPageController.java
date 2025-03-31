@@ -53,9 +53,9 @@ public class UserManagementPageController implements Initializable {
     
     private static UserManagementPageController instance;
     
-    private static final int ROWS_PER_PAGE = 10;
-    private static final double DELETE_IMAGE_HEIGHT = 25;
-    private static final double DELETE_IMAGE_WIDTH = 25;
+    private static final int ROWS_PER_PAGE = 9;
+    private static final double DELETE_IMAGE_HEIGHT = 26;
+    private static final double DELETE_IMAGE_WIDTH = 26;
     
     ObservableList<User> userList = FXCollections.observableArrayList();
     AlertConfig alertConf = new AlertConfig();
@@ -100,8 +100,6 @@ public class UserManagementPageController implements Initializable {
         // TODO
         instance = this;
         
-        userTable.setEditable(false);
-        
         userId.setSortable(false);
         userFirstName.setSortable(false);
         userLastName.setSortable(false);
@@ -134,11 +132,11 @@ public class UserManagementPageController implements Initializable {
                     deleteButton.setCursor(Cursor.HAND);
                     
                     deleteButton.setOnMouseEntered(event -> {
-                        hoverIcon(deleteButton);
+                        elementConf.hoverIcon(deleteButton);
                     });
                     
                     deleteButton.setOnMouseExited(event -> {
-                        unhoverIcon(deleteButton);
+                        elementConf.unhoverIcon(deleteButton);
                     });
                     
                     deleteButton.setOnMouseClicked(event -> {
@@ -216,31 +214,14 @@ public class UserManagementPageController implements Initializable {
             
         } catch (SQLException e) {
             System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     
-    private void changeIcon(String location, ImageView icon) {
-        Image image = new Image(location);
-        icon.setImage(image);
-    }
-    
-    public void hoverIcon(ImageView image) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
-        scaleTransition.setFromX(1.0);
-        scaleTransition.setFromY(1.0);
-        scaleTransition.setToX(1.1);
-        scaleTransition.setToY(1.1);
-        scaleTransition.play();
-    }
-    
-    public void unhoverIcon(ImageView image) {
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), image);
-        scaleTransition.setFromX(1.1);
-        scaleTransition.setFromY(1.1);
-        scaleTransition.setToX(1.0);
-        scaleTransition.setToY(1.0);
-        scaleTransition.play();
-    }
+//    private void changeIcon(String location, ImageView icon) {
+//        Image image = new Image(location);
+//        icon.setImage(image);
+//    }
 
     @FXML
     private void tablePageOnMouseClickHandler(MouseEvent event) {

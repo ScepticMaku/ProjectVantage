@@ -181,7 +181,8 @@ public class AdminPageController implements Initializable {
             rootPane.setCenter(root);
             currentStage.setTitle(title);
         } catch (Exception e) {
-            alertConf.showDatabaseErrorAlert(currentStage, e.getMessage());
+            e.printStackTrace();
+            alertConf.showDatabaseErrorAlert(currentStage, "Failed to load page: " + e.getMessage());
         }
     }
     

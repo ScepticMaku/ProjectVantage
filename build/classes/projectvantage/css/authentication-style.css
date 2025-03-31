@@ -1,8 +1,15 @@
 .textfield {
 	-fx-prompt-text-fill: #8a8a8a;
-	-fx-background-color: transparent;
+	-fx-border-radius: 5px;
+	-fx-background-radius: 5px;
 	-fx-border-width: 2 2 2	2;
 	-fx-border-color: #9F9F9F;
+}
+
+.text-field:focused {
+	-fx-border-color: #2F9EFE;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
 }
 
 .button {
@@ -46,4 +53,8 @@
 
 .forgot-password-button:pressed {
 	-fx-text-fill: #323232;
+}
+
+.combo-box {
+	-fx-background-color: #E4E4E4;
 }

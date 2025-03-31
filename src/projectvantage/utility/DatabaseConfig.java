@@ -5,10 +5,13 @@
  */
 package projectvantage.utility;
 
+import projectvantage.models.Project;
+import projectvantage.models.User;
+
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import projectvantage.models.Role;
-import projectvantage.models.User;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -99,6 +102,47 @@ public class DatabaseConfig {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    private String formatDate(Date date) {
+        return date.toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+    }
+    
+    public Project getProjectById(int id) {
+        String sql = "SELECT project.id, project.name, description, creation_date, due_date, user.last_name AS creator_name, project_status.name AS status "
+                + "FROM project INNER JOIN project_status ON project.status_id = project_status.id INNER JOIN user ON project.user_id = user.id WHERE project.id = " + id;
+        
+        try(ResultSet result = db.getData(sql)) {
+            if(result.next()) {
+                return new Project(
+                        result.getInt("id"),
+                        result.getString("name"),
+                        result.getString("description"),
+                        formatDate(result.getDate("creation_date")),
+                        formatDate(result.getDate("due_date")),
+                        result.getString("creator_name"),
+                        result.getString("status")
+               ); 
+            } 
+        } catch (Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public int getStatusIdById(int id) {
+        String sql = "SELECT status_id FROM project WHERE id = " + id;
+        
+        try(ResultSet result = db.getData(sql)) {
+            if(result.next()) {
+                return result.getInt("status_id");
+            }
+        } catch (Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
 
