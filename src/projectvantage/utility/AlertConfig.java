@@ -133,4 +133,8 @@ public class AlertConfig {
     public void showEditProjectErrorAlert(Stage stage, String errorMessage) {
         showAlert(Alert.AlertType.ERROR, "Edit Project Error", errorMessage, stage);
     }
+    
+    public void showAddProjectErrorAlert(Stage stage, String errorMessage) {
+        showAlert(Alert.AlertType.ERROR, "Add Project Error", errorMessage, stage);
+    }
 }

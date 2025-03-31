@@ -25,6 +25,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -56,6 +57,8 @@ public class ProjectPageController implements Initializable {
     private static final int ROWS_PER_PAGE = 9;
     private static final double ICON_HEIGHT = 26;
     private static final double ICON_WIDTH = 26;
+    
+    private String username;
 
     @FXML
     private Pagination pagination;
@@ -73,6 +76,8 @@ public class ProjectPageController implements Initializable {
     private TableColumn<Project, String> actionColumn;
     @FXML
     private AnchorPane rootPane;
+    @FXML
+    private Button addProjectButton;
 
     /**
      * Initializes the controller class.
@@ -179,6 +184,14 @@ public class ProjectPageController implements Initializable {
         return instance;
     }
     
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+    
     public void refreshTable() {
         projectList.clear();
         loadTableData();
@@ -224,5 +237,12 @@ public class ProjectPageController implements Initializable {
     
     @FXML
     private void userTableMouseClickHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void addProjectButtonMouseClickHandler(MouseEvent event) throws Exception {
+        String AddProjectFXML = "/projectvantage/fxml/project_manager/AddProjectPage.fxml";
+        pageConf.loadWindow(AddProjectFXML, "Add Project", rootPane);
+        
     }
 }

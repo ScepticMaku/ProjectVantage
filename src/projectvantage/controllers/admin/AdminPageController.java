@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.admin;
 
+import projectvantage.controllers.project_manager.ProjectPageController;
 import projectvantage.controllers.misc.ProfilePageController;
 import projectvantage.utility.Config;
 import projectvantage.utility.ElementConfig;
@@ -249,6 +250,7 @@ public class AdminPageController implements Initializable {
     private void projectButtonMouseClickHandler(MouseEvent event) {
         String projectFXML = "/projectvantage/fxml/project_manager/ProjectPage.fxml";
         loadPage(projectFXML, "Projects");
+        ProjectPageController.getInstance().setUsername(username);
         elementConf.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         
         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);

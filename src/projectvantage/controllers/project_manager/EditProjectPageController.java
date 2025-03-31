@@ -34,6 +34,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -94,6 +95,30 @@ public class EditProjectPageController implements Initializable {
             
             loadStatusData();
         });
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        
+        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                if(date != null) {
+                        return formatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+            
+            @Override
+            public LocalDate fromString(String string) {
+                if(string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, formatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+        
+        datePicker.setConverter(converter);
         
         datePicker.getEditor().textProperty().bindBidirectional(dueDateField.textProperty());
     }
@@ -159,12 +184,8 @@ public class EditProjectPageController implements Initializable {
     }
     
     private Date formatDate(String date) {
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        String formattedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        
-        localDate = LocalDate.parse(formattedDate, DateTimeFormatter.ISO_LOCAL_DATE);
-        Date outputDate = Date.valueOf(localDate);
-        return outputDate;
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        return Date.valueOf(localDate);
     }
 
     @FXML
