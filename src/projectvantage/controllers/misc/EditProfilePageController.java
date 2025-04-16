@@ -59,7 +59,7 @@ public class EditProfilePageController implements Initializable {
     
     private static final double PROFILE_FIT_WIDTH = 204;
     private static final double PROFILE_FIT_HEIGHT = 168;
-    private static final double IMAGE_SIZE = 168;
+    private static final double IMAGE_SIZE = 100;
     private static final String TARGET_DIRECTORY = "pfp/";
     
     private File selectedFile;

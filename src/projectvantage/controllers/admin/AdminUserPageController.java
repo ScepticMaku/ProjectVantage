@@ -34,7 +34,7 @@ public class AdminUserPageController implements Initializable {
     DatabaseConfig dbConf = new DatabaseConfig();
     ElementConfig elementConf = new ElementConfig();
     
-    private static final double IMAGE_SIZE = 168;
+    private static final double IMAGE_SIZE = 100;
     
     private String firstName;
     private String middleName;

@@ -44,7 +44,7 @@ public class ProfilePageController implements Initializable {
             
     private static ProfilePageController instance;
     
-    private static final double IMAGE_SIZE = 168;
+    private static final double IMAGE_SIZE = 100;
     
     private String username;
     private String firstName;

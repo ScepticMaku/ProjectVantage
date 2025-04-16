@@ -60,7 +60,7 @@ public class EditUserPageController implements Initializable {
     ObservableList<Role> roleList = FXCollections.observableArrayList();
     
     private static final String TARGET_DIRECTORY = "pfp/";
-    private static final double IMAGE_SIZE = 168;
+    private static final double IMAGE_SIZE = 100;
     
     private File selectedFile;
     

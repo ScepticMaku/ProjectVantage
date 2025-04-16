@@ -8,45 +8,25 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="343.0" prefWidth="555.0" stylesheets="@../../css/authentication-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.EditUserPageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="343.0" prefWidth="555.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.EditUserPageController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Edit User" textFill="#192b4b">
-         <font>
-            <Font name="Segoe UI Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="16.0" layoutY="62.0" text="Info of" textFill="#192b4b">
-         <font>
-            <Font name="Segoe UI Bold" size="16.0" />
-         </font>
-      </Label>
+      <Label layoutX="14.0" layoutY="14.0" text="Edit User" />
+      <Label layoutX="16.0" layoutY="62.0" text="Info of" />
       <TextField fx:id="firstNameField" layoutX="17.0" layoutY="117.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" />
-      <Label layoutX="17.0" layoutY="93.0" text="First name:" textFill="#575757" />
+      <Label layoutX="17.0" layoutY="93.0" text="First name:" />
       <TextField fx:id="middleNameField" layoutX="212.0" layoutY="117.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" />
-      <Label layoutX="212.0" layoutY="94.0" text="Middle name (optional):" textFill="#575757" />
+      <Label layoutX="212.0" layoutY="94.0" text="Middle name (optional):" />
       <TextField fx:id="lastNameField" layoutX="17.0" layoutY="181.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" />
-      <Label layoutX="17.0" layoutY="157.0" text="Last name:" textFill="#575757" />
+      <Label layoutX="17.0" layoutY="157.0" text="Last name:" />
       <TextField fx:id="emailAddressField" layoutX="18.0" layoutY="242.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" />
-      <Label layoutX="18.0" layoutY="218.0" text="Email address:" textFill="#575757" />
+      <Label layoutX="18.0" layoutY="218.0" text="Email address:" />
       <TextField fx:id="phoneNumberField" layoutX="212.0" layoutY="181.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" />
-      <Label layoutX="212.0" layoutY="157.0" text="Phone number:" textFill="#575757" />
+      <Label layoutX="212.0" layoutY="157.0" text="Phone number:" />
       <TextField fx:id="usernameField" layoutX="212.0" layoutY="242.0" prefHeight="30.0" prefWidth="167.0" styleClass="textfield" />
-      <Label layoutX="212.0" layoutY="218.0" text="Username:" textFill="#575757" />
-      <Label layoutX="395.0" layoutY="62.0" text="User type" textFill="#2f9efe">
-         <font>
-            <Font name="Segoe UI Bold" size="16.0" />
-         </font>
-      </Label>
-      <Button fx:id="submitUserButton" layoutX="18.0" layoutY="295.0" mnemonicParsing="false" onMouseClicked="#submitUserButtonMouseClickHandler" prefHeight="30.0" prefWidth="69.0" text="Submit">
-         <font>
-            <Font name="Segoe UI Bold" size="14.0" />
-         </font>
-      </Button>
-      <Label fx:id="usernameLabel" layoutX="73.0" layoutY="62.0" text="User" textFill="#2f9efe">
-         <font>
-            <Font name="Segoe UI Bold" size="16.0" />
-         </font>
-      </Label>
+      <Label layoutX="212.0" layoutY="218.0" text="Username:" />
+      <Label layoutX="395.0" layoutY="62.0" text="User type" />
+      <Button fx:id="submitUserButton" layoutX="18.0" layoutY="295.0" mnemonicParsing="false" onMouseClicked="#submitUserButtonMouseClickHandler" prefHeight="30.0" prefWidth="69.0" text="Submit" />
+      <Label fx:id="usernameLabel" layoutX="62.0" layoutY="62.0" text="User" />
       <Button fx:id="deactivateButton" layoutX="265.0" layoutY="297.0" mnemonicParsing="false" onMouseClicked="#deactivateButtonMouseClickHandler" prefHeight="27.0" prefWidth="110.0" text="Deactivate User">
          <font>
             <Font name="Segoe UI" size="12.0" />
@@ -57,7 +37,7 @@
             <Font name="Segoe UI" size="12.0" />
          </font>
       </Button>
-      <TableView fx:id="roleTable" fixedCellSize="0.0" layoutX="394.0" layoutY="93.0" prefHeight="237.0" prefWidth="146.0" stylesheets="@../../css/user-table.css">
+      <TableView fx:id="roleTable" fixedCellSize="0.0" layoutX="394.0" layoutY="93.0" prefHeight="237.0" prefWidth="146.0">
          <columns>
             <TableColumn fx:id="roleColumn" prefWidth="145.0" resizable="false" text="Role" />
          </columns>

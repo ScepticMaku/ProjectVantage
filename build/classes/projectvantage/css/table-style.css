@@ -73,3 +73,25 @@
 .table-view .table-row-cell:selected {
 	-fx-background-color: transparent;
 }
+
+.pagitation .number-button {
+	-fx-background-color: transparent;
+	-fx-text-fill: #192b4b;
+}
+
+.pagitation .left-arrow-button {
+	-fx-background-color: transparent;
+}
+
+.pagitation .right-arrow-button {
+	-fx-background-color: transparent;
+}
+
+.pagitation .number-button:hover {
+	-fx-background-color: #ecf0f1;
+}
+
+.pagitation .number-button:selected {
+	-fx-background-color: #2f9efe;
+	-fx-text-fill: white;
+}

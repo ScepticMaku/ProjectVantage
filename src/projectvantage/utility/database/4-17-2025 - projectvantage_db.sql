@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 31, 2025 at 07:47 AM
+-- Generation Time: Apr 17, 2025 at 01:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `project` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL,
+  `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `creation_date` date NOT NULL,
   `due_date` date NOT NULL,
@@ -42,7 +42,8 @@ CREATE TABLE `project` (
 --
 
 INSERT INTO `project` (`id`, `name`, `description`, `creation_date`, `due_date`, `user_id`, `status_id`) VALUES
-(1, 'Test Project', 'This is a test project', '2025-03-29', '2025-03-31', 44, 1);
+(1, 'Test Project', 'This is a test project', '2025-03-29', '2025-03-31', 44, 2),
+(3, 'Pangilatan Peak', 'Manaka Pangilatang', '2025-04-16', '2025-04-25', 44, 1);
 
 -- --------------------------------------------------------
 
@@ -52,7 +53,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `creation_date`, `due_date`,
 
 CREATE TABLE `project_status` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL
+  `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -71,7 +72,7 @@ INSERT INTO `project_status` (`id`, `name`) VALUES
 
 CREATE TABLE `role` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL
+  `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -80,10 +81,10 @@ CREATE TABLE `role` (
 
 INSERT INTO `role` (`id`, `name`) VALUES
 (1, 'admin'),
-(2, 'team member'),
+(5, 'project manager'),
 (3, 'team leader'),
 (4, 'team manager'),
-(5, 'project manager');
+(2, 'team member');
 
 -- --------------------------------------------------------
 
@@ -94,7 +95,7 @@ INSERT INTO `role` (`id`, `name`) VALUES
 CREATE TABLE `system_log` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `action` text NOT NULL,
+  `action` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -469,7 +470,33 @@ INSERT INTO `system_log` (`id`, `user_id`, `action`, `description`, `timestamp`)
 (365, 44, 'Login Success', 'Successfully logged in', '2025-03-31 05:32:45'),
 (366, 44, 'Login Success', 'Successfully logged in', '2025-03-31 05:33:21'),
 (367, 44, 'Login Success', 'Successfully logged in', '2025-03-31 05:42:34'),
-(368, 44, 'Login Success', 'Successfully logged in', '2025-03-31 05:46:10');
+(368, 44, 'Login Success', 'Successfully logged in', '2025-03-31 05:46:10'),
+(369, 44, 'Login Success', 'Successfully logged in', '2025-03-31 07:24:35'),
+(370, 44, 'Login Success', 'Successfully logged in', '2025-03-31 07:25:17'),
+(371, 44, 'Login Failed', 'Password does not match.', '2025-03-31 07:26:06'),
+(372, 44, 'Login Success', 'Successfully logged in', '2025-03-31 07:26:09'),
+(373, 44, 'Login Success', 'Successfully logged in', '2025-03-31 07:26:56'),
+(374, 44, 'Login Failed', 'Password does not match.', '2025-03-31 10:32:16'),
+(375, 44, 'Login Failed', 'Password does not match.', '2025-03-31 10:32:17'),
+(376, 44, 'Login Success', 'Successfully logged in', '2025-03-31 10:32:18'),
+(377, 44, 'Login Success', 'Successfully logged in', '2025-03-31 10:35:36'),
+(378, 44, 'Login Success', 'Successfully logged in', '2025-03-31 10:52:45'),
+(379, 44, 'Login Success', 'Successfully logged in', '2025-04-03 00:43:38'),
+(380, 44, 'Login Success', 'Successfully logged in', '2025-04-03 00:46:27'),
+(381, 44, 'Login Success', 'Successfully logged in', '2025-04-03 00:46:50'),
+(382, 44, 'Login Success', 'Successfully logged in', '2025-04-03 03:56:04'),
+(383, 44, 'Login Success', 'Successfully logged in', '2025-04-03 03:57:21'),
+(384, 44, 'Login Success', 'Successfully logged in', '2025-04-03 03:58:05'),
+(385, 44, 'Login Success', 'Successfully logged in', '2025-04-03 14:35:48'),
+(386, 44, 'Login Success', 'Successfully logged in', '2025-04-03 15:02:42'),
+(387, 52, 'Login Failed', 'Account is not active yet.', '2025-04-03 15:03:38'),
+(388, 52, 'Login Failed', 'Account is not active yet.', '2025-04-03 15:03:45'),
+(389, 44, 'Login Success', 'Successfully logged in', '2025-04-03 15:03:47'),
+(390, 52, 'Login Success', 'Successfully logged in', '2025-04-03 15:04:04'),
+(391, 44, 'Login Success', 'Successfully logged in', '2025-04-03 15:14:33'),
+(392, 44, 'Login Success', 'Successfully logged in', '2025-04-14 13:09:57'),
+(393, 44, 'Login Success', 'Successfully logged in', '2025-04-16 06:32:37'),
+(394, 44, 'Login Success', 'Successfully logged in', '2025-04-16 06:36:49');
 
 -- --------------------------------------------------------
 
@@ -479,7 +506,7 @@ INSERT INTO `system_log` (`id`, `user_id`, `action`, `description`, `timestamp`)
 
 CREATE TABLE `task` (
   `id` int(11) NOT NULL,
-  `task_name` text NOT NULL,
+  `task_name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `date_created` date NOT NULL,
   `due_date` date NOT NULL,
@@ -497,7 +524,7 @@ CREATE TABLE `task` (
 
 CREATE TABLE `task_status` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL
+  `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -517,7 +544,7 @@ INSERT INTO `task_status` (`id`, `name`) VALUES
 
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
-  `team_name` text NOT NULL,
+  `team_name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `project_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -544,7 +571,7 @@ CREATE TABLE `team_member` (
 
 CREATE TABLE `team_member_status` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL
+  `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -563,15 +590,15 @@ INSERT INTO `team_member_status` (`id`, `name`) VALUES
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
-  `first_name` text NOT NULL,
-  `middle_name` text DEFAULT NULL,
-  `last_name` text NOT NULL,
-  `email` text NOT NULL,
-  `phone_number` text NOT NULL,
-  `username` text NOT NULL,
-  `salt` text NOT NULL,
-  `password` text NOT NULL,
-  `secret_key` text NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `middle_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone_number` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `salt` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `secret_key` varchar(255) NOT NULL,
   `role_id` int(11) DEFAULT 2,
   `status_id` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -586,7 +613,9 @@ INSERT INTO `user` (`id`, `first_name`, `middle_name`, `last_name`, `email`, `ph
 (46, 'Aljon', '', 'Paragoso', 'aljon.paragoso@gmail.com', '09452213265', 'aljon', 'NOV6cAYQD/BQyaIMVIBywg==', '490fd32237ea889e802f623209642711118d3bf04b3da6dc5910d5a92469e1e2', '', 3, 2),
 (47, 'Jan Klyde', '', 'Bulagao', 'jan.bulagao@gmail.com', '09543321652', 'janklyde', 'BzQhRU6gcLUMGKjbuBTUYg==', 'ac7eac4f902ed6ed50f45995fb0ee421b06544e1ddc5bc69dd009fcf812f0c71', '', 4, 2),
 (48, 'Rasheed', '', 'Tapales', 'rasheed@gmail.com', '09512236526', 'rasheed', '8yPOxTTWI6SyCgF0f5xWAQ==', '20d2acaff05185c6b0e81175bb7da32e1ce86eac78cb68c4b202af0723638963', '', 5, 2),
-(49, 'Axcee', '', 'Cabusas', 'axcee@gmail.com', '09366695326', 'axcee', 'b90hNfAiNghPHtgVubut2Q==', '09d159469ef04cbdc89f1c4bf8f15d3ca02434278fcdcfe6731caa9630ee1108', '', 2, 2);
+(49, 'Axcee', '', 'Cabusas', 'axcee@gmail.com', '09366695326', 'axcee', 'b90hNfAiNghPHtgVubut2Q==', '09d159469ef04cbdc89f1c4bf8f15d3ca02434278fcdcfe6731caa9630ee1108', '', 2, 2),
+(52, 'Jerame', '', 'Abing', 'abing@gmail.com', '09995869948', 'abing', '47Kqnf10dZChUb61Du0ZRg==', 'd3509ea4d31128813966c6a6f0b0a121ede09a2a092916a72d446073ba930fbb', '', 2, 2),
+(53, 'test', 'test', 'test', 'test1@gmail.com', '09698857989', 'test1', 'zWMlAaUjrAlKcjL/6rJQqw==', '4c800443320616c3cc2c4efb55cf952deb3e0b81e014c2c7e89346ed3ddf4413', 'MS3MX2DDJYWTW3F2', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -597,7 +626,7 @@ INSERT INTO `user` (`id`, `first_name`, `middle_name`, `last_name`, `email`, `ph
 CREATE TABLE `user_image` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `image_path` text NOT NULL
+  `image_path` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -620,7 +649,7 @@ INSERT INTO `user_image` (`id`, `user_id`, `image_path`) VALUES
 
 CREATE TABLE `user_status` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL
+  `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -628,8 +657,8 @@ CREATE TABLE `user_status` (
 --
 
 INSERT INTO `user_status` (`id`, `name`) VALUES
-(1, 'inactive'),
-(2, 'active');
+(2, 'active'),
+(1, 'inactive');
 
 --
 -- Indexes for dumped tables
@@ -654,7 +683,7 @@ ALTER TABLE `project_status`
 --
 ALTER TABLE `role`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `role` (`name`) USING HASH;
+  ADD UNIQUE KEY `role` (`name`);
 
 --
 -- Indexes for table `system_log`
@@ -722,7 +751,7 @@ ALTER TABLE `user_image`
 --
 ALTER TABLE `user_status`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `status` (`name`) USING HASH;
+  ADD UNIQUE KEY `status` (`name`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -732,7 +761,7 @@ ALTER TABLE `user_status`
 -- AUTO_INCREMENT for table `project`
 --
 ALTER TABLE `project`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `project_status`
@@ -750,7 +779,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `system_log`
 --
 ALTER TABLE `system_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=369;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=395;
 
 --
 -- AUTO_INCREMENT for table `task`
@@ -780,7 +809,7 @@ ALTER TABLE `team_member`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `user_image`

@@ -188,7 +188,7 @@
                                     <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#2f9efe" height="62.0" layoutX="13.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="173.0" />
                                     <ImageView fx:id="profileButton" fitHeight="62.0" fitWidth="50.0" layoutX="109.0" layoutY="20.0" onMouseClicked="#profileButtonMouseClickHandler" onMouseEntered="#profileButtonMouseEnterHandler" onMouseExited="#profileButtonMouseExitHandler" onMousePressed="#profileButtonMousePressHandler" onMouseReleased="#profileButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../resources/icons/user-profile-icon.png" />
+                                          <Image url="@../../resources/icons/user-profile-picture-icon.png" />
                                        </image>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />

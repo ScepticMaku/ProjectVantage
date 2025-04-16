@@ -7,33 +7,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.RadialGradient?>
-<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="324.0" prefWidth="527.0" stylesheets="@../../css/authentication-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.EditProfilePageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="324.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.EditProfilePageController">
    <children>
-      <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#2f9efe" height="218.0" layoutX="14.0" layoutY="58.0" strokeType="INSIDE" strokeWidth="0.0" width="214.0">
-         <stroke>
-            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
-            </RadialGradient>
-         </stroke>
-      </Rectangle>
-      <ImageView fx:id="profilePhoto" fitHeight="168.0" fitWidth="204.0" layoutX="37.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="profilePhoto" fitHeight="100.0" fitWidth="100.0" layoutX="71.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../resources/icons/user-profile-icon.png" />
          </image>
@@ -41,40 +20,16 @@
             <Rectangle2D />
          </viewport>
       </ImageView>
-      <Label fx:id="usernamePlaceholder" alignment="CENTER" layoutX="15.0" layoutY="240.0" prefHeight="18.0" prefWidth="214.0" text="Username" textFill="WHITE">
-         <font>
-            <Font name="Segoe UI Bold" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="239.0" layoutY="93.0" text="First name:" textFill="#2f9efe">
-         <font>
-            <Font name="Segoe UI Bold" size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="239.0" layoutY="148.0" text="Middle name:" textFill="#2f9efe">
-         <font>
-            <Font name="Segoe UI Bold" size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="239.0" layoutY="200.0" text="Last Name:" textFill="#2f9efe">
-         <font>
-            <Font name="Segoe UI Bold" size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="429.0" layoutY="92.0" text="Role:" textFill="#2f9efe">
-         <font>
-            <Font name="Segoe UI Bold" size="16.0" />
-         </font>
-      </Label>
+      <Label fx:id="usernamePlaceholder" alignment="CENTER" layoutX="14.0" layoutY="191.0" prefHeight="18.0" prefWidth="214.0" text="Username" />
+      <Label layoutX="239.0" layoutY="93.0" text="First name:" />
+      <Label layoutX="239.0" layoutY="148.0" text="Middle name:" />
+      <Label layoutX="239.0" layoutY="200.0" text="Last Name:" />
+      <Label layoutX="429.0" layoutY="92.0" text="Role:" />
       <TextField fx:id="firstNameField" layoutX="239.0" layoutY="112.0" styleClass="textfield" />
       <TextField fx:id="middleNameField" layoutX="239.0" layoutY="167.0" styleClass="textfield" />
       <TextField fx:id="lastNameField" layoutX="239.0" layoutY="219.0" styleClass="textfield" />
       <Button fx:id="submitButton" layoutX="426.0" layoutY="285.0" mnemonicParsing="false" onMouseClicked="#submitButtonMouseClickHandler" prefHeight="27.0" prefWidth="83.0" text="Submit" />
-      <Label fx:id="rolePlaceholder" layoutX="430.0" layoutY="117.0" text="Placeholder" textFill="#575757">
-         <font>
-            <Font name="Segoe UI" size="14.0" />
-         </font>
-      </Label>
+      <Label fx:id="rolePlaceholder" layoutX="430.0" layoutY="117.0" text="Placeholder" />
       <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#2f9efe" height="44.0" layoutX="15.0" layoutY="6.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="214.0" />
       <ImageView fitHeight="150.0" fitWidth="30.0" layoutX="56.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
          <image>

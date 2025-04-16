@@ -11,17 +11,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="235.0" prefWidth="431.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.project_manager.EditProjectPageController">
    <children>
       <Pane prefHeight="243.0" prefWidth="431.0">
          <children>
-            <Label layoutX="16.0" layoutY="14.0" text="Edit Project" textFill="#192b4b">
-               <font>
-                  <Font name="Segoe UI Bold" size="20.0" />
-               </font>
-            </Label>
+            <Label layoutX="16.0" layoutY="14.0" text="Edit Project" />
             <Label layoutX="16.0" layoutY="62.0" text="Name:" />
             <TextField fx:id="projectNameField" layoutX="15.0" layoutY="82.0" prefHeight="25.0" prefWidth="200.0" styleClass="textfield" />
             <Label layoutX="16.0" layoutY="113.0" text="Description:" />

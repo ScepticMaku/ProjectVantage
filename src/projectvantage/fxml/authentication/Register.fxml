@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" stylesheets="@../../css/authentication-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.authentication.RegisterController">
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.authentication.RegisterController">
    <children>
       <Pane fx:id="registerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="562.0" prefWidth="416.0">
          <children>
@@ -28,17 +28,13 @@
             </ImageView>
             <Rectangle fill="WHITE" height="406.0" layoutY="156.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="416.0" />
             <Button fx:id="registerButton" layoutX="163.0" layoutY="514.0" mnemonicParsing="false" onMouseClicked="#registerButtonMouseClickHandler" prefHeight="27.0" prefWidth="87.0" styleClass="modern-button" text="Register" />
-            <Label layoutX="118.0" layoutY="487.0" text="Already have an account?" textFill="#575757" />
-            <Label fx:id="loginButton" layoutX="258.0" layoutY="487.0" onMouseClicked="#loginButtonMouseClickHandler" onMouseEntered="#loginButtonMouseEnterHandler" onMouseExited="#loginButtonMouseExitHandler" onMousePressed="#loginButtonMousePressHandler" styleClass="text-button" text="Login." textFill="#0593ff">
+            <Label layoutX="118.0" layoutY="487.0" text="Already have an account?" />
+            <Label fx:id="loginButton" layoutX="258.0" layoutY="487.0" onMouseClicked="#loginButtonMouseClickHandler" onMouseEntered="#loginButtonMouseEnterHandler" onMouseExited="#loginButtonMouseExitHandler" onMousePressed="#loginButtonMousePressHandler" text="Login.">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Label>
-            <Label layoutX="179.0" layoutY="186.0" text="Register" textFill="#474747">
-               <font>
-                  <Font name="Leelawadee UI Bold" size="18.0" />
-               </font>
-            </Label>
+            <Label layoutX="179.0" layoutY="186.0" text="Register" />
             <TextField fx:id="middleNameField" layoutX="55.0" layoutY="284.0" prefHeight="30.0" prefWidth="150.0" promptText="Ex. Samayo" styleClass="textfield" />
             <TextField fx:id="lastNameField" layoutX="212.0" layoutY="284.0" prefHeight="30.0" prefWidth="150.0" promptText="Ex. Sison" styleClass="textfield" />
             <TextField fx:id="emailAddressField" layoutX="54.0" layoutY="333.0" prefHeight="30.0" prefWidth="150.0" promptText="Ex. user@email.com" styleClass="textfield" />
@@ -46,47 +42,15 @@
             <TextField fx:id="usernameField" layoutX="54.0" layoutY="388.0" prefHeight="30.0" prefWidth="307.0" styleClass="textfield" />
             <PasswordField fx:id="passwordField" layoutX="55.0" layoutY="443.0" prefHeight="30.0" prefWidth="150.0" styleClass="textfield" />
             <PasswordField fx:id="passwordConfirmField" layoutX="210.0" layoutY="443.0" prefHeight="30.0" prefWidth="150.0" styleClass="textfield" />
-            <Label layoutX="55.0" layoutY="267.0" text="Middle name (optional):" textFill="#575757">
-               <font>
-                  <Font name="Leelawadee UI" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="214.0" layoutY="267.0" text="Last name:" textFill="#575757">
-               <font>
-                  <Font name="Leelawadee UI" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="54.0" layoutY="316.0" text="Email address:" textFill="#575757">
-               <font>
-                  <Font name="Leelawadee UI" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="210.0" layoutY="316.0" text="Phone number:" textFill="#575757">
-               <font>
-                  <Font name="Leelawadee UI" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="54.0" layoutY="373.0" text="Username:" textFill="#575757">
-               <font>
-                  <Font name="Leelawadee UI" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="55.0" layoutY="426.0" text="Password:" textFill="#575757">
-               <font>
-                  <Font name="Leelawadee UI" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="212.0" layoutY="426.0" text="Confirm password:" textFill="#575757">
-               <font>
-                  <Font name="Leelawadee UI" size="12.0" />
-               </font>
-            </Label>
+            <Label layoutX="55.0" layoutY="267.0" text="Middle name (optional):" />
+            <Label layoutX="214.0" layoutY="267.0" text="Last name:" />
+            <Label layoutX="54.0" layoutY="316.0" text="Email address:" />
+            <Label layoutX="210.0" layoutY="316.0" text="Phone number:" />
+            <Label layoutX="54.0" layoutY="373.0" text="Username:" />
+            <Label layoutX="55.0" layoutY="426.0" text="Password:" />
+            <Label layoutX="212.0" layoutY="426.0" text="Confirm password:" />
             <TextField fx:id="firstNameField" layoutX="54.0" layoutY="236.0" prefHeight="30.0" prefWidth="307.0" promptText="Ex. Arl" styleClass="textfield" />
-            <Label layoutX="56.0" layoutY="213.0" text="First name:" textFill="#575757">
-               <font>
-                  <Font name="Leelawadee UI" size="12.0" />
-               </font>
-            </Label>
+            <Label layoutX="56.0" layoutY="213.0" text="First name:" />
             <Pane fx:id="titlePane" layoutX="45.0" layoutY="39.0" prefHeight="79.0" prefWidth="338.0">
                <children>
                   <Rectangle fx:id="rectangle" arcHeight="20.0" arcWidth="20.0" height="68.0" layoutY="6.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="338.0" />
