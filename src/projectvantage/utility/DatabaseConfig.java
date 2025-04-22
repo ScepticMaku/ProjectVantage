@@ -7,6 +7,8 @@ package projectvantage.utility;
 
 import projectvantage.models.Project;
 import projectvantage.models.User;
+import projectvantage.models.Team;
+import projectvantage.models.TeamMember;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -21,8 +23,8 @@ public class DatabaseConfig {
     dbConnect db = new dbConnect();
     
     public User getUserByUsername(String username) {
-        String query = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, role.name AS role, user_status.name AS status "
-                + "FROM user INNER JOIN role ON user.role_id = role.id INNER JOIN user_status ON user.status_id = user_status.id WHERE username = '" + username + "'";
+        String query = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, user_role.name AS role, user_status.name AS status "
+                + "FROM user INNER JOIN user_role ON user.role_id = user_role.id INNER JOIN user_status ON user.status_id = user_status.id WHERE username = '" + username + "'";
         
         try(ResultSet result = db.getData(query)) {
             if(result.next()) {
@@ -49,8 +51,36 @@ public class DatabaseConfig {
     }
     
     public User getUserByEmail(String email) {
-        String query = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, role.name AS role, user_status.name AS status "
-                + "FROM user INNER JOIN role ON user.role_id = role.id INNER JOIN user_status ON user.status_id = user_status.id WHERE email = '" + email + "'";
+        String query = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, user_role.name AS role, user_status.name AS status "
+                + "FROM user INNER JOIN user_role ON user.role_id = user_role.id INNER JOIN user_status ON user.status_id = user_status.id WHERE email = '" + email + "'";
+        
+        try(ResultSet result = db.getData(query)) {
+            if(result.next()) {
+                return new User(
+                        result.getInt("user.id"),
+                        result.getString("first_name"),
+                        result.getString("middle_name"),
+                        result.getString("last_name"),
+                        result.getString("email"),
+                        result.getString("phone_number"),
+                        result.getString("username"),
+                        result.getString("salt"),
+                        result.getString("password"),
+                        result.getString("secret_key"),
+                        result.getString("role"),
+                        result.getString("status")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public User getUserById(int id) {
+        String query = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, user_role.name AS role, user_status.name AS status "
+                + "FROM user INNER JOIN user_role ON user.role_id = user_role.id INNER JOIN user_status ON user.status_id = user_status.id WHERE user.id = " + id;
         
         try(ResultSet result = db.getData(query)) {
             if(result.next()) {
@@ -143,6 +173,99 @@ public class DatabaseConfig {
             e.printStackTrace();
         }
         return 0;
+    }
+    
+    public Team getTeamById(int id) {
+        
+        String sql = "SELECT id, name, project_id FROM team WHERE id = " + id;
+        
+        try(ResultSet result = db.getData(sql)) {
+            if(result.next()) {
+                return new Team(
+                        result.getInt("id"),
+                        result.getString("name"),
+                        result.getInt("project_id")
+                );
+            }
+        } catch (Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public TeamMember getTeamMemberById(int id) {
+        String sql = "SELECT team_member.id AS id, team_id, user.last_name AS last_name, user.username AS username, team_member_role.name AS role, team_member_status.name AS status "
+                + "FROM team_member INNER JOIN user ON user_id = user.id INNER JOIN team_member_role ON team_member.role_id = team_member_role.id "
+                + "INNER JOIN team_member_status ON team_member.status_id = team_member_status.id WHERE team_member.user_id = " + id;
+        
+        try (ResultSet result = db.getData(sql)){
+            if(result.next()) {
+                return new TeamMember(
+                        result.getInt("id"),
+                        result.getInt("team_id"),
+                        result.getString("last_name"),
+                        result.getString("username"),
+                        result.getString("role"),
+                        result.getString("status")
+                );
+            }
+        } catch(Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public TeamMember getTeamMembersByTeamId(int id) {
+        String sql = "SELECT team_member.id AS id, team_id, user.last_name AS last_name, user.username AS username, team_member_role.name AS role, team_member_status.name AS status "
+                + "FROM team_member INNER JOIN user ON user_id = user.id INNER JOIN team_member_role ON team_member.role_id = team_member_role.id "
+                + "INNER JOIN team_member_status ON team_member.status_id = team_member_status.id WHERE team_id = " + id;
+        
+        try (ResultSet result = db.getData(sql)){
+            return new TeamMember(
+                    result.getInt("id"),
+                    result.getInt("team_id"),
+                    result.getString("last_name"),
+                    result.getString("username"),
+                    result.getString("role"),
+                    result.getString("status")
+            );
+        } catch(Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public int getUserIdById(int id) {
+        String sql = "SELECT user_id FROM team_member WHERE id = " + id;
+        
+        try(ResultSet result = db.getData(sql)) {
+            if(result.next()) {
+                return result.getInt("user_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Database Error: " + e.getMessage());
+        }
+        
+        return -1;
+    }
+    
+    public String getTeamLeaderByTeamId(int id) {
+        String sql = "SELECT team_member.id, team_id, user.username AS username FROM team_member INNER JOIN user ON user_id = user.id WHERE team_id = " + id + " AND team_member.role_id = 2";
+        
+        try (ResultSet result = db.getData(sql)){
+            if(result.next()) {
+                return result.getString("username");
+            }
+        } catch (Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

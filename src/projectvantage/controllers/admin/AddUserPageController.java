@@ -22,6 +22,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -67,21 +69,14 @@ public class AddUserPageController implements Initializable {
     @FXML
     private Button addUserButton;
     @FXML
-    private TableColumn<Role, String> roleColumn;
-    @FXML
-    private TableView<Role> roleTable;
+    private ComboBox<Role> roleComboBox;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        roleColumn.setSortable(false);
-        roleColumn.setResizable(false);
-        
-        roleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        
+        // TODO        
         loadColumnData();
     }
     
@@ -93,7 +88,7 @@ public class AddUserPageController implements Initializable {
     }
     
     private void loadColumnData() {
-            String sql = "SELECT id, name FROM role WHERE id NOT IN (1)";
+            String sql = "SELECT id, name FROM user_role WHERE id NOT IN (1)";
         
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {
@@ -101,14 +96,39 @@ public class AddUserPageController implements Initializable {
                         result.getInt("id"),
                         result.getString("name")
                 ));
+                displayRoles(roleComboBox, roleList);
             }
-            roleTable.setItems(roleList);
-            
-
-            
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    private void displayRoles(ComboBox<Role> comboBox, ObservableList<Role> list) {
+        comboBox.setItems(list);
+
+        comboBox.setCellFactory(lv -> new ListCell<Role>(){
+                @Override
+                protected void updateItem(Role item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if(empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.getName());
+                    }
+                }
+            });
+
+        comboBox.setButtonCell(new ListCell<Role>() {
+            @Override
+            protected void updateItem(Role item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
     }
 
     @FXML
@@ -132,7 +152,7 @@ public class AddUserPageController implements Initializable {
         if(registerController.verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
             return;
         
-        Role selectedRole = roleTable.getSelectionModel().getSelectedItem();
+        Role selectedRole = roleComboBox.getSelectionModel().getSelectedItem();
         
         if(selectedRole == null) {
             alertConf.showAlert(Alert.AlertType.ERROR, "Failed to Add User", "You must select a row.", currentStage);

@@ -187,8 +187,8 @@ public class UserManagementPageController implements Initializable {
     }
     
     private void loadTableData() {
-        String sql = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, role.name AS role, user_status.name AS status "
-                + "FROM user INNER JOIN role ON user.role_id = role.id INNER JOIN user_status ON user.status_id = user_status.id ORDER BY user.id ASC";
+        String sql = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, user_role.name AS role, user_status.name AS status "
+                + "FROM user INNER JOIN user_role ON user.role_id = user_role.id INNER JOIN user_status ON user.status_id = user_status.id ORDER BY user.id ASC";
         
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {

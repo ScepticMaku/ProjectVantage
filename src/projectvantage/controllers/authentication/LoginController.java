@@ -9,6 +9,7 @@ import projectvantage.utility.Config;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
+import projectvantage.controllers.project_manager.ProjectManagerPageController;
 import projectvantage.controllers.admin.AdminPageController;
 import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.DatabaseConfig;
@@ -40,6 +41,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import projectvantage.controllers.team_manager.TeamManagerPageController;
 
 /**
  * FXML Controller class
@@ -105,10 +107,8 @@ public class LoginController implements Initializable {
         return instance;
     }
     
-    private void loginUser(Event event) throws Exception {
-        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+    public void loginUser(Stage currentStage, String userInput) throws Exception {
         
-        String userInput = usernameField.getText();
         String passwordInput = passwordField.getText();
         
         if(userInput.isEmpty()) {
@@ -151,28 +151,33 @@ public class LoginController implements Initializable {
         }
         
         alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Successfully logged in.", currentStage);
-                
+        
         switch(role) {
             case "admin":
-                switchScene(getClass(),event, "/projectvantage/fxml/admin/AdminPage.fxml");
+                switchScene(userInput, getClass(), "/projectvantage/fxml/admin/AdminPage.fxml");
                 break;
-            case "team member":
-                switchScene(getClass(), event, "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
+            case "standard":
+                switchScene(userInput, getClass(), "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
+                break;
+            case "project manager":
+                switchScene(userInput, getClass(), "/projectvantage/fxml/project_manager/ProjectManagerPage.fxml");
+                break;
+            case "team manager":
+                switchScene(userInput, getClass(), "/projectvantage/fxml/team_manager/TeamManagerPage.fxml");
                 break;
             default:
                 alertConf.showLoginErrorAlert(currentStage, "Role not found.");
                 logConf.logLogin(false, user.getId(), "Role not found.");
         }
+        
         logConf.logLogin(true, user.getId(), "Successfully logged in");
         alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Alert", "Welcome " + username + "!", currentStage);
     }
     
-    public void switchScene(Class getClass, Event evt, String targetFXML) throws Exception {
-        Stage stage = (Stage)((Node)evt.getSource()).getScene().getWindow();
+    public void switchScene(String userInput, Class getClass, String targetFXML) throws Exception {
+        Stage stage = (Stage)rootPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
         Parent root = loader.load();
-        
-        String userInput = usernameField.getText();
         
         User user = dbConf.getUserByUsername(userInput);
         
@@ -183,11 +188,21 @@ public class LoginController implements Initializable {
                 AdminPageController adminController = loader.getController();
                 adminController.setUsername(userInput);
             break;
-            case "team member":
+            case "standard":
                 TeamMemberMainPageController teamMemberController = loader.getController();
                 teamMemberController.setUsername(userInput);
             break;
+            case "project manager":
+                ProjectManagerPageController projectManagerController = loader.getController();
+                projectManagerController.setUsername(userInput);
+            break;
+            case "team manager":
+                TeamManagerPageController teamManagerController = loader.getController();
+                teamManagerController.setUsername(userInput);
+                break;
         }
+        
+        authConfig.rememberUser(userInput);
         
         stage.setScene(new Scene(root));
         stage.setResizable(false);
@@ -214,8 +229,10 @@ public class LoginController implements Initializable {
 
     @FXML
     private void loginButtonMouseClickHandler(MouseEvent event) throws Exception {
-        loginUser(event);
+        Stage stage = (Stage)rootPane.getScene().getWindow();
+        loginUser(stage, usernameField.getText());
     }
+    
 
     @FXML
     private void usernameFieldOnKeyPressedHandler(KeyEvent event) throws Exception {
@@ -227,13 +244,15 @@ public class LoginController implements Initializable {
 
     @FXML
     private void rootPaneKeyPressedHandler(KeyEvent event) throws Exception {
+        Stage stage = (Stage)rootPane.getScene().getWindow();
+        
         if(isTabPressed(event)) {
             usernameField.setFocusTraversable(true);
             usernameField.requestFocus();
         }
         
         if(isEnterPressed(event))
-            loginUser(event);
+            loginUser(stage, usernameField.getText());
     }
 
     @FXML

@@ -5,9 +5,13 @@
  */
 package projectvantage.main;
 
+import projectvantage.models.User;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.AlertConfig;
+import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.DatabaseConfig;
+import projectvantage.utility.LogConfig;
+import projectvantage.controllers.authentication.LoginController;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +19,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import projectvantage.controllers.admin.AdminPageController;
+import projectvantage.controllers.project_manager.ProjectManagerPageController;
+import projectvantage.controllers.team_manager.TeamManagerPageController;
+import projectvantage.controllers.team_member.TeamMemberMainPageController;
+import projectvantage.models.User;
 
 /**
  *
@@ -25,10 +34,15 @@ public class ProjectVantage extends Application {
     DatabaseConfig dbConf = new DatabaseConfig();
     PageConfig pageConf = new PageConfig();
     AlertConfig alertConf = new AlertConfig();
-    
+    LoginController loginControl = new LoginController();
+    AuthenticationConfig authConf = new AuthenticationConfig();
+    LogConfig logConf = new LogConfig();
     
     private static ProjectVantage instance;
     private static Stage primaryStage;
+    
+    private String role;
+    private int id;
     
     String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
     
@@ -40,24 +54,94 @@ public class ProjectVantage extends Application {
         return primaryStage;
     }
     
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(loginFXML));
+    private void checkRole(Stage stage, String userInput, String role, int userId) throws Exception {
+        switch(role) {
+            case "admin":
+                switchScene(stage, userInput, getClass(), "/projectvantage/fxml/admin/AdminPage.fxml");
+                break;
+            case "standard":
+                switchScene(stage, userInput, getClass(), "/projectvantage/fxml/team_member/TeamMemberMainPage.fxml");
+                break;
+            case "project manager":
+                switchScene(stage, userInput, getClass(), "/projectvantage/fxml/project_manager/ProjectManagerPage.fxml");
+                break;
+            case "team manager":
+                switchScene(stage, userInput, getClass(), "/projectvantage/fxml/team_manager/TeamManagerPage.fxml");
+                break;
+            default:
+                alertConf.showLoginErrorAlert(stage, "Role not found.");
+                logConf.logLogin(false, userId, "Role not found.");
+        }
+    }
+    
+    private void switchScene(Stage stage, String userInput, Class getClass, String targetFXML) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
         Parent root = loader.load();
         
+        User user = dbConf.getUserByUsername(userInput);
+        
+        String userRole = user.getRole();
+        
+        switch(userRole){
+            case "admin":
+                AdminPageController adminController = loader.getController();
+                adminController.setUsername(userInput);
+            break;
+            case "standard":
+                TeamMemberMainPageController teamMemberController = loader.getController();
+                teamMemberController.setUsername(userInput);
+            break;
+            case "project manager":
+                ProjectManagerPageController projectManagerController = loader.getController();
+                projectManagerController.setUsername(userInput);
+            break;
+            case "team manager":
+                TeamManagerPageController teamManagerController = loader.getController();
+                teamManagerController.setUsername(userInput);
+                break;
+        }
+        
+        authConf.rememberUser(userInput);
+        
+        stage.getIcons().add(new Image("/projectvantage/resources/img/ProjectLogo.png"));
+        stage.setTitle("Dashboard");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.show();
+        pageConf.setCenterAlignment(stage);
+    }
+    
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        
+        String rememberedUser = authConf.getRememberedUser();
+        
+        if(rememberedUser != null) {
+            User user = dbConf.getUserByUsername(rememberedUser);
+            
+            this.role = user.getRole();
+            this.id = user.getId();
+            
+            checkRole(primaryStage, rememberedUser, role, id);
+            return;
+        }
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(loginFXML));
+        Parent root = loader.load();
+
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Login");
         primaryStage.setResizable(false);
         primaryStage.sizeToScene();
         primaryStage.getIcons().add(new Image("/projectvantage/resources/img/ProjectLogo.png"));
-        
+
         primaryStage.setOnCloseRequest(event -> {
             event.consume();
             alertConf.showExitConfirmationAlert(primaryStage);
         });
-        
+
         primaryStage.show();
-        pageConf.setCenterAlignment(primaryStage);  
+        pageConf.setCenterAlignment(primaryStage); 
     }
     /**
      * @param args the command line arguments

@@ -25,8 +25,6 @@ public class TeamMemberDashboardPageController implements Initializable {
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private Group welcomeMessageLabel;
-    @FXML
     private Label usernameLabel;
 
     /**

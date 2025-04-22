@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.team_manager.ViewTeamPageController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Team" />
+      <Label layoutX="17.0" layoutY="43.0" text="Team Name:" />
+      <Label fx:id="teamNameLabel" layoutX="98.0" layoutY="43.0" text="Name" />
+      <Label layoutX="17.0" layoutY="67.0" text="Team Leader:" />
+      <Label fx:id="teamLeaderLabel" layoutX="98.0" layoutY="67.0" text="None" />
+      <Button fx:id="addLeaderButton" layoutX="359.0" layoutY="422.0" mnemonicParsing="false" onMouseClicked="#addLeaderButtonMouseClickHandler" prefHeight="25.0" prefWidth="111.0" text="Make Leader" />
+      <Label layoutX="14.0" layoutY="128.0" text="Members:" />
+      <Label layoutX="17.0" layoutY="90.0" text="Assigned Project:" />
+      <Label fx:id="projectLabel" layoutX="118.0" layoutY="90.0" text="None" />
+      <Button fx:id="viewMemberButton" layoutX="98.0" layoutY="422.0" mnemonicParsing="false" onMouseClicked="#viewMemberButtonMouseClickHandler" prefHeight="25.0" prefWidth="71.0" text="View" />
+      <Button fx:id="removeLeaderButton" layoutX="479.0" layoutY="422.0" mnemonicParsing="false" onMouseClicked="#removeLeaderMouseClickHandler" prefHeight="25.0" prefWidth="99.0" text="Remove Leader" />
+      <TableView fx:id="memberTable" layoutX="14.0" layoutY="145.0" prefHeight="269.0" prefWidth="565.0">
+        <columns>
+          <TableColumn fx:id="idColumn" prefWidth="58.66668891906738" text="ID" />
+            <TableColumn fx:id="lastNameColumn" prefWidth="126.00003051757812" text="Last Name" />
+          <TableColumn fx:id="usernameColumn" prefWidth="125.33331298828125" text="Username" />
+            <TableColumn fx:id="roleColumn" prefWidth="123.3333740234375" text="Role" />
+            <TableColumn fx:id="statusColumn" prefWidth="132.66659545898438" text="Status" />
+        </columns>
+      </TableView>
+      <Button fx:id="addMemberButton" layoutX="17.0" layoutY="422.0" mnemonicParsing="false" onMouseClicked="#addMemberButtonMouseClickHandler" prefHeight="25.0" prefWidth="71.0" text="Add" />
+      <Button fx:id="removeMemberButton" layoutX="180.0" layoutY="422.0" mnemonicParsing="false" onMouseClicked="#removeMemberButtonMouseClickHandler" prefHeight="25.0" prefWidth="71.0" text="Remove" />
+      <ListView fx:id="activityListView" layoutX="17.0" layoutY="472.0" prefHeight="114.0" prefWidth="565.0" />
+      <Label layoutX="17.0" layoutY="455.0" text="Recent activities:" />
+      <Button fx:id="deleteTeamButton" layoutX="499.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#deleteTeamButtonMouseClickHandler" text="Delete Team" />
+   </children>
+</AnchorPane>

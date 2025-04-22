@@ -36,6 +36,7 @@ public class AlertConfig {
     
     public void showLogoutConfirmationAlert(Node node, Event event) {
         PageConfig pageConf = new PageConfig();
+        AuthenticationConfig authConf = new AuthenticationConfig();
         
         Stage currentStage = (Stage) node.getScene().getWindow();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -52,6 +53,7 @@ public class AlertConfig {
         alert.showAndWait().ifPresent(response -> {
             if(response == ButtonType.OK)
                 try {
+                    authConf.logout();
                     pageConf.switchScene(getClass(), event, loginFXML);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -136,5 +138,17 @@ public class AlertConfig {
     
     public void showAddProjectErrorAlert(Stage stage, String errorMessage) {
         showAlert(Alert.AlertType.ERROR, "Add Project Error", errorMessage, stage);
+    }
+    
+    public void showAddTeamErrorAlert(Stage stage, String errorMessage) {
+        showAlert(Alert.AlertType.ERROR, "Add Team Error", errorMessage, stage);
+    }
+    
+    public void showEditTeamErrorAlert(Stage stage, String errorMessage) {
+        showAlert(Alert.AlertType.ERROR, "Edit Team Error", errorMessage, stage);
+    }
+    
+    public void showAddTeamMemberErrorAlert(Stage stage, String errorMessage) {
+        showAlert(Alert.AlertType.ERROR, "Add Team Member Error", errorMessage, stage);
     }
 }

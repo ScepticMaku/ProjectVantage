@@ -5,8 +5,10 @@
  */
 package projectvantage.controllers.admin;
 
+import projectvantage.controllers.misc.SettingsPageController;
 import projectvantage.controllers.project_manager.ProjectPageController;
 import projectvantage.controllers.misc.ProfilePageController;
+import projectvantage.controllers.team_manager.TeamPageController;
 import projectvantage.utility.Config;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
@@ -131,6 +133,16 @@ public class AdminPageController implements Initializable {
     private ImageView profileButton;
     @FXML
     private ImageView notificationButton;
+    @FXML
+    private Group teamMemberButton;
+    @FXML
+    private Rectangle teamMemberButtonBG;
+    @FXML
+    private ImageView teamMemberButtonIcon;
+    @FXML
+    private Label teamMemberButtonLabel;
+    @FXML
+    private Circle teamMemberButtonIndicator;
     
      /**
      * Initializes the controller class.
@@ -187,7 +199,7 @@ public class AdminPageController implements Initializable {
         }
     }
     
-    public void loadDashboardPage() {
+    private void loadDashboardPage() {
         try{
             FXMLLoader dashboardLoader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/admin/AdminDashboardPage.fxml"));
             rootPane.setCenter(dashboardLoader.load());
@@ -219,6 +231,7 @@ public class AdminPageController implements Initializable {
         loadDashboardPage();
         elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
         
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
@@ -228,7 +241,7 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void dashboardMousePressHandler(MouseEvent event) {
-        taskButtonBG.setFill(Color.web("#eeeeee"));
+        dashboardButtonBG.setFill(Color.web("#eeeeee"));
     }
 
     @FXML
@@ -253,6 +266,7 @@ public class AdminPageController implements Initializable {
         ProjectPageController.getInstance().setUsername(username);
         elementConf.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
@@ -309,8 +323,13 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void teamButtonMouseClickHandler(MouseEvent event) {
+        String teamFXML = "/projectvantage/fxml/team_manager/TeamPage.fxml";
+        
         elementConf.setSelected("/projectvantage/resources/icons/team-icon-selected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        loadPage(teamFXML, "Teams");
+        TeamPageController.getInstance().setUsername(username);
       
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
@@ -340,8 +359,12 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void taskButtonMouseClickHandler(MouseEvent event) {
+        String taskFXML = "/projectvantage/fxml/task_manager/TaskPage.fxml";
+        loadPage(taskFXML, "Tasks");
+        
         elementConf.setSelected("/projectvantage/resources/icons/task-icon-selected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
         
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
@@ -376,6 +399,7 @@ public class AdminPageController implements Initializable {
         elementConf.setSelected("projectvantage/resources/icons/user-icon-selected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
         loadPage(userManagementPageFXML, "Users");
         
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
@@ -407,8 +431,10 @@ public class AdminPageController implements Initializable {
     private void settingsButtonMouseClickHandler(MouseEvent event) throws Exception {
         String settingsPageFXML = "/projectvantage/fxml/misc/SettingsPage.fxml";
         loadPage(settingsPageFXML, "Settings");
+        SettingsPageController.getInstance().setUsername(username);
         elementConf.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
         
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
@@ -442,6 +468,7 @@ public class AdminPageController implements Initializable {
         String user = getInstance().username;
         pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
         
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
@@ -478,7 +505,40 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void notificationButtonMousePressHandler(MouseEvent event) {
-        notificationButton.setScaleX(0.9);
-        notificationButton.setScaleY(0.9);
+         elementConf.pressIcon(notificationButton);
+    }
+
+    @FXML
+    private void teamMemberButtonMouseClickHandler(MouseEvent event) {
+        String teamMemberPageFXML = "/projectvantage/fxml/team_member/TeamMemberPage.fxml";
+        loadPage(teamMemberPageFXML, "Team Members");
+        elementConf.setSelected("/projectvantage/resources/icons/team-icon-selected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
+        
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/task-icon-unselected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        elementConf.setUnselected("projectvantage/resources/icons/user-icon-unselected.png", userButtonLabel, userButtonIndicator, userButtonIcon);
+    }
+
+    @FXML
+    private void teamMemberButtonMouseReleaseHandler(MouseEvent event) {
+        teamMemberButtonBG.setFill(Color.web("#f5f5f5"));
+    }
+
+    @FXML
+    private void teamMemberButtonMouseExitHandler(MouseEvent event) {
+        elementConf.fadeOut(teamMemberButtonBG);
+    }
+
+    @FXML
+    private void teamMemberButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.fadeIn(teamMemberButtonBG);
+    }
+
+    @FXML
+    private void teamMemberButtonMousePressHandler(MouseEvent event) {
+        teamMemberButtonBG.setFill(Color.web("#eeeeee")); 
     }
 }

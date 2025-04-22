@@ -5,6 +5,10 @@
  */
 package projectvantage.utility;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -40,5 +44,34 @@ public class AuthenticationConfig {
     public boolean verifyPassword(String enteredPassword, String storedHash, String storedSalt) {
         String newHash = hashPassword(enteredPassword, storedSalt);
         return newHash.equals(storedHash);
+    }
+    
+    public void rememberUser(String username) {
+        try (FileWriter writer = new FileWriter("rememberMe.txt")) {
+            writer.write(username);
+        } catch (Exception e) {
+            System.out.println("There was a problem creating the text file: " + e.getMessage());
+        }
+    }
+    
+    public String getRememberedUser() {
+        File file = new File("rememberMe.txt");
+        
+        if(file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                return reader.readLine();
+            } catch (Exception e) {
+                System.out.println("There was a problem with the text file: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    
+    public void logout() {
+        File file = new File("rememberMe.txt");
+        if(file.exists()) {
+            file.delete();
+        }
     }
 }

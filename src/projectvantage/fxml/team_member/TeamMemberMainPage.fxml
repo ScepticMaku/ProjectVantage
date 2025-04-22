@@ -15,11 +15,11 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.team_member.TeamMemberMainPageController">
    <children>
-      <AnchorPane fx:id="backgroundPane" layoutX="2.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #ffffff;">
+      <AnchorPane fx:id="backgroundPane" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #ffffff;">
          <children>
-            <VBox prefHeight="570.0" prefWidth="1000.0">
+            <VBox layoutY="-1.0" prefHeight="601.0" prefWidth="1000.0">
                <children>
-                  <BorderPane prefHeight="571.0" prefWidth="1000.0">
+                  <BorderPane prefHeight="600.0" prefWidth="1000.0">
                      <left>
                         <Pane prefHeight="558.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <children>
@@ -43,7 +43,7 @@
                                     </ImageView>
                                  </children>
                               </Group>
-                              <VBox prefHeight="570.0" prefWidth="205.0">
+                              <VBox layoutX="-1.0" prefHeight="570.0" prefWidth="205.0">
                                  <children>
                                     <Pane prefHeight="82.0" prefWidth="202.0" />
                                     <Pane prefHeight="55.0" prefWidth="202.0">
@@ -80,7 +80,7 @@
                                     </Pane>
                                     <Pane prefHeight="55.0" prefWidth="202.0">
                                        <children>
-                                          <Group fx:id="taskButton" layoutX="8.0" layoutY="3.0" onMouseClicked="#taskButtonMouseClickHandler" onMouseEntered="#taskButtonMouseEnterHandler" onMouseExited="#taskButtonMouseExitHandler" onMousePressed="#taskButtonMousePressHandler" onMouseReleased="#taskButtonMouseReleaseHandler">
+                                          <Group fx:id="taskButton" layoutX="10.0" layoutY="3.0" onMouseClicked="#taskButtonMouseClickHandler" onMouseEntered="#taskButtonMouseEnterHandler" onMouseExited="#taskButtonMouseExitHandler" onMousePressed="#taskButtonMousePressHandler" onMouseReleased="#taskButtonMouseReleaseHandler">
                                              <children>
                                                 <Rectangle fx:id="taskButtonBG" arcHeight="20.0" arcWidth="20.0" fill="WHITESMOKE" height="50.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="186.0" />
                                                 <ImageView fx:id="taskButtoIcon" fitHeight="150.0" fitWidth="30.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
@@ -187,12 +187,12 @@
                                     </Label>
                                     <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#2f9efe" height="62.0" layoutX="13.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="173.0" />
                                     <ImageView fx:id="profileButton" fitHeight="62.0" fitWidth="50.0" layoutX="109.0" layoutY="20.0" onMouseClicked="#profileButtonMouseClickHandler" onMouseEntered="#profileButtonMouseEnterHandler" onMouseExited="#profileButtonMouseExitHandler" onMousePressed="#profileButtonMousePressHandler" onMouseReleased="#profileButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../resources/icons/user-profile-picture-icon.png" />
-                                       </image>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
+                                       <image>
+                                          <Image url="@../../resources/icons/user-profile-icon-1.png" />
+                                       </image>
                                     </ImageView>
                                     <ImageView fx:id="notificationButton" fitHeight="30.0" fitWidth="20.0" layoutX="72.0" layoutY="35.0" onMouseClicked="#notificationButtonMouseClickHandler" onMouseEntered="#notificationButtonMouseEnterHandler" onMouseExited="#notificationButtonMouseExitHandler" onMousePressed="#notificationButtonMousePressHandler" onMouseReleased="#notificationButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true">
                                        <image>

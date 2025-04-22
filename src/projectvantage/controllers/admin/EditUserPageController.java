@@ -21,6 +21,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,7 +29,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -40,6 +44,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import projectvantage.models.ProjectStatus;
 
 /**
  * FXML Controller class
@@ -97,11 +102,9 @@ public class EditUserPageController implements Initializable {
     @FXML
     private Button submitUserButton;
     @FXML
-    private TableView<Role> roleTable;
-    @FXML
-    private TableColumn<Role, String> roleColumn;
-    @FXML
     private Button fileChooseButton;
+    @FXML
+    private ComboBox<Role> roleComboBox;
 
     /**
      * Initializes the controller class.
@@ -111,10 +114,9 @@ public class EditUserPageController implements Initializable {
         // TODO
         instance = this;
         
-        roleColumn.setSortable(false);
-        roleColumn.setResizable(false);
-        
-        roleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        Platform.runLater(() -> {
+            roleComboBox.setPromptText(role);
+        });
         
         loadColumnData();
     }
@@ -191,7 +193,7 @@ public class EditUserPageController implements Initializable {
     }
     
     private void loadColumnData() {
-            String sql = "SELECT id, name FROM role WHERE id NOT IN (1)";
+            String sql = "SELECT id, name FROM user_role WHERE id NOT IN (1)";
         
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {
@@ -200,7 +202,7 @@ public class EditUserPageController implements Initializable {
                         result.getString("name")
                 ));
             }
-            roleTable.setItems(roleList);
+            displayRoles(roleComboBox, roleList);
         } catch (Exception e) {
             System.out.println("Database Error: " + e.getMessage());
             e.printStackTrace();
@@ -328,6 +330,34 @@ public class EditUserPageController implements Initializable {
         alertConf.showAlert(Alert.AlertType.INFORMATION, "User Activation", "User successfully activated!", currentStage);
         refreshPage();
     }
+    
+    private void displayRoles(ComboBox<Role> comboBox, ObservableList<Role> list) {
+        comboBox.setItems(list);
+
+        comboBox.setCellFactory(lv -> new ListCell<Role>(){
+                @Override
+                protected void updateItem(Role item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if(empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.getName());
+                    }
+                }
+            });
+
+        comboBox.setButtonCell(new ListCell<Role>() {
+            @Override
+            protected void updateItem(Role item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+    }
 
     @FXML
     private void submitUserButtonMouseClickHandler(MouseEvent event) throws Exception {
@@ -347,7 +377,7 @@ public class EditUserPageController implements Initializable {
         String sql = "UPDATE user SET first_name = ?, middle_name = ?, last_name = ?, phone_number = ?, email = ?, username = ?, role_id = ? WHERE username = ?";
         
         if(!verifyInput(currentStage, fName, lName, pNumber, eAddress, uName)) {
-            Role selectedRole = roleTable.getSelectionModel().getSelectedItem();
+            Role selectedRole = roleComboBox.getSelectionModel().getSelectedItem();
             
             id = dbConf.getUserRoleIdByUsername(username);
             

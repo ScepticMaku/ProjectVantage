@@ -116,6 +116,8 @@ public class AddProjectPageController implements Initializable {
         
         User user = dbConf.getUserByUsername(username);
         Date formattedDueDate = formatDate(dueDate);
+        LocalDate selectedDate = datePicker.getValue();
+        LocalDate today = LocalDate.now();
         
         if(name.isEmpty()) {
             alertConf.showAddProjectErrorAlert(currentStage, "You must enter a project name.");
@@ -129,6 +131,11 @@ public class AddProjectPageController implements Initializable {
         
         if(dueDate.isEmpty()) {
             alertConf.showAddProjectErrorAlert(currentStage, "You must set a due date.");
+            return;
+        }
+        
+        if(selectedDate.isBefore(today)) {
+            alertConf.showAddProjectErrorAlert(currentStage, "Due Date must not be before the current date.");
             return;
         }
         

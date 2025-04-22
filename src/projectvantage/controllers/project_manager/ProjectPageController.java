@@ -5,17 +5,21 @@
  */
 package projectvantage.controllers.project_manager;
 
-import projectvantage.utility.PageConfig;
 import projectvantage.models.Project;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.AlertConfig;
+import projectvantage.utility.PageConfig;
+import projectvantage.utility.DatabaseConfig;
+import projectvantage.models.User;
+import projectvantage.controllers.admin.AdminPageController;
 
 import java.net.URL;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -37,6 +41,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import projectvantage.controllers.team_manager.TeamManagerPageController;
 
 /**
  * FXML Controller class
@@ -51,6 +56,7 @@ public class ProjectPageController implements Initializable {
     ElementConfig elementConf = new ElementConfig();
     AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
+    DatabaseConfig databaseConf = new DatabaseConfig();
     
     ObservableList<Project> projectList = FXCollections.observableArrayList();
     
@@ -59,6 +65,8 @@ public class ProjectPageController implements Initializable {
     private static final double ICON_WIDTH = 26;
     
     private String username;
+    private String role;
+    private int userId;
 
     @FXML
     private Pagination pagination;
@@ -78,6 +86,8 @@ public class ProjectPageController implements Initializable {
     private AnchorPane rootPane;
     @FXML
     private Button addProjectButton;
+    @FXML
+    private Button viewProjectButton;
 
     /**
      * Initializes the controller class.
@@ -177,7 +187,9 @@ public class ProjectPageController implements Initializable {
         };
         actionColumn.setCellFactory(cellFactory);
         
-        loadTableData();
+        Platform.runLater(() -> {
+            loadTableData();
+        });
     }
     
     public static ProjectPageController getInstance() {
@@ -186,6 +198,11 @@ public class ProjectPageController implements Initializable {
     
     public void setUsername(String username) {
         this.username = username;
+        
+        User user = databaseConf.getUserByUsername(username);
+        
+        this.role = user.getRole();
+        this.userId = user.getId();
     }
     
     public String getUsername() {
@@ -209,8 +226,14 @@ public class ProjectPageController implements Initializable {
     }
     
     private void loadTableData() {
+        
         String sql = "SELECT project.id, project.name, description, creation_date, due_date, user.last_name AS creator_name, project_status.name AS status "
-                + "FROM project INNER JOIN project_status ON project.status_id = project_status.id INNER JOIN user ON project.user_id = user.id ORDER BY project.id ASC";
+                + "FROM project INNER JOIN project_status ON project.status_id = project_status.id INNER JOIN user ON project.user_id = user.id WHERE user_id = " + userId + " ORDER BY project.id DESC";
+        
+        if(role.equals("admin")) {
+            sql = "SELECT project.id, project.name, description, creation_date, due_date, user.last_name AS creator_name, project_status.name AS status "
+                + "FROM project INNER JOIN project_status ON project.status_id = project_status.id INNER JOIN user ON project.user_id = user.id ORDER BY project.id DESC";
+        }
         
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {
@@ -243,6 +266,31 @@ public class ProjectPageController implements Initializable {
     private void addProjectButtonMouseClickHandler(MouseEvent event) throws Exception {
         String AddProjectFXML = "/projectvantage/fxml/project_manager/AddProjectPage.fxml";
         pageConf.loadWindow(AddProjectFXML, "Add Project", rootPane);
+        
+    }
+
+    @FXML
+    private void viewProjectButtonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        AdminPageController adminController = AdminPageController.getInstance();
+        ProjectManagerPageController projectManagerController = ProjectManagerPageController.getInstance();
+        
+        Project selectedProject = projectTable.getSelectionModel().getSelectedItem();
+        String viewProjectFXML = "/projectvantage/fxml/project_manager/ViewProjectPage.fxml";
+        
+        try {
+            if(role.equals("admin")) {
+                adminController.loadPage(viewProjectFXML, selectedProject.getName());
+                ViewProjectPageController.getInstance().loadContent(selectedProject.getId(), username);
+                return;
+            }
+            
+            projectManagerController.loadPage(viewProjectFXML, selectedProject.getName());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Project", "You must select a project", currentStage);
+        }
         
     }
 }

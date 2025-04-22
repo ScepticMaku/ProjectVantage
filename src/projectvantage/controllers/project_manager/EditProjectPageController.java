@@ -232,10 +232,10 @@ public class EditProjectPageController implements Initializable {
        String sql = "UPDATE project SET name = ?, description = ?, due_date = ?, status_id = ? WHERE id = ?";
        
        if(db.executeQuery(sql, nameF, descF, formattedDueDateF, pStatus, id)) {
-           System.out.println("Project updated successfully!");
+            System.out.println("Project updated successfully!");
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Project Update Successful", "Project Updated Succesfully!", currentStage);
-           ProjectPageController.getInstance().refreshTable();
-           currentStage.close();
+            ProjectPageController.getInstance().refreshTable();
+            currentStage.close();
        }
        
     }

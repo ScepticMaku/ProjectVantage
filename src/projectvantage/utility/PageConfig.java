@@ -5,7 +5,6 @@
  */
 package projectvantage.utility;
 
-import java.io.IOException;
 import projectvantage.controllers.misc.ProfilePageController;
 import projectvantage.controllers.admin.AdminDashboardPageController;
 import projectvantage.controllers.team_member.TeamMemberDashboardPageController;
