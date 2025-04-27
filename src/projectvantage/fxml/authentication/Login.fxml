@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" focusTraversable="true" onKeyPressed="#rootPaneKeyPressedHandler" prefHeight="436.0" prefWidth="341.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.authentication.LoginController">
+<AnchorPane fx:id="rootPane" focusTraversable="true" onKeyPressed="#rootPaneKeyPressedHandler" prefHeight="436.0" prefWidth="341.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.authentication.LoginController">
    <children>
       <ImageView fitHeight="241.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
          <image>

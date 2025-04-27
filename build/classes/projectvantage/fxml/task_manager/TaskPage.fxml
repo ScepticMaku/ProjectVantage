@@ -10,20 +10,18 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.task_manager.TaskPageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.task_manager.TaskPageController">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Tasks" />
       <TextField layoutX="14.0" layoutY="40.0" />
       <Button layoutX="173.0" layoutY="40.0" mnemonicParsing="false" text="Search" />
-      <Button layoutX="521.0" layoutY="40.0" mnemonicParsing="false" text="Add Task" />
-      <Button layoutX="442.0" layoutY="40.0" mnemonicParsing="false" text="View Task" />
+      <Button fx:id="viewTaskButton" layoutX="517.0" layoutY="40.0" mnemonicParsing="false" onMouseClicked="#viewTaskButtonMouseClickHandler" text="View Task" />
       <Pagination fx:id="pagination" layoutX="10.0" layoutY="79.0" pageCount="50" prefHeight="497.0" prefWidth="600.0" />
-      <TableView fx:id="projectTable" layoutX="14.0" layoutY="75.0" onMouseClicked="#userTableMouseClickHandler" prefHeight="449.0" prefWidth="572.0">
+      <TableView fx:id="taskTable" layoutX="14.0" layoutY="75.0" onMouseClicked="#taskTableMouseClickHandler" prefHeight="449.0" prefWidth="572.0">
          <columns>
-            <TableColumn fx:id="idColumn" editable="false" prefWidth="50.0" sortable="false" text="ID" />
-            <TableColumn fx:id="nameColumn" editable="false" prefWidth="218.00003814697266" sortable="false" text="Name" />
-            <TableColumn fx:id="nameColumn1" editable="false" prefWidth="174.6666259765625" sortable="false" text="Status" />
-            <TableColumn fx:id="actionColumn" prefWidth="110.66665649414062" text="Action" />
+            <TableColumn fx:id="idColumn" editable="false" prefWidth="96.66662883758545" sortable="false" text="ID" />
+            <TableColumn fx:id="nameColumn" editable="false" prefWidth="248.00006866455078" sortable="false" text="Name" />
+            <TableColumn fx:id="statusColumn" editable="false" prefWidth="174.6666259765625" sortable="false" text="Status" />
          </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

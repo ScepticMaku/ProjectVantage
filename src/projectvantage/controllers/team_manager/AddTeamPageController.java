@@ -54,14 +54,6 @@ public class AddTeamPageController implements Initializable {
     public static AddTeamPageController getInstance() {
         return instance;
     }
-    
-    public void loadSql(String sql) {
-        this.sql = sql;
-    }
-    
-    public void setProjectId(int id) {
-        this.id = id;
-    }
 
     @FXML
     private void addButtonMouseClickHandler(MouseEvent event) {
@@ -85,6 +77,8 @@ public class AddTeamPageController implements Initializable {
             }
             return;
         }
+        
+        this.sql = "INSERT INTO team (name) VALUES (?)";
         
         if(db.executeQuery(sql, name)) {
             System.out.println("Team added to database!");

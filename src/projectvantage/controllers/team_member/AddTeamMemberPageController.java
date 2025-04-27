@@ -49,9 +49,6 @@ public class AddTeamMemberPageController implements Initializable {
     AlertConfig alertConf = new AlertConfig();
     dbConnect db = new dbConnect();
     
-    private static final int CARD_SPACING = 5;
-    private static final int INSET_VALUE = 10;
-    
     ObservableList<User> userList = FXCollections.observableArrayList();
     
     private int teamId;

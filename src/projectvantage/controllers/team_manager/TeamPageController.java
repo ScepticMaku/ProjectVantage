@@ -231,7 +231,6 @@ public class TeamPageController implements Initializable {
     @FXML
     private void addTeamButtonMouseClickHandler(MouseEvent event) throws Exception {
         pageConf.loadWindow("/projectvantage/fxml/team_manager/AddTeamPage.fxml", "Add Team", rootPane);
-        AddTeamPageController.getInstance().loadSql("INSERT INTO team (name) VALUES (?)");
     }
 
     @FXML

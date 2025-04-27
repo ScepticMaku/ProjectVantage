@@ -151,4 +151,8 @@ public class AlertConfig {
     public void showAddTeamMemberErrorAlert(Stage stage, String errorMessage) {
         showAlert(Alert.AlertType.ERROR, "Add Team Member Error", errorMessage, stage);
     }
+    
+    public void showAddTaskErrorAlert(Stage stage, String errorMessage) {
+        showAlert(Alert.AlertType.ERROR, "Add Task Error", errorMessage, stage);
+    }
 }

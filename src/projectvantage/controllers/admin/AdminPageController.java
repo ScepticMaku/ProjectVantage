@@ -8,6 +8,7 @@ package projectvantage.controllers.admin;
 import projectvantage.controllers.misc.SettingsPageController;
 import projectvantage.controllers.project_manager.ProjectPageController;
 import projectvantage.controllers.misc.ProfilePageController;
+import projectvantage.controllers.task_manager.TaskPageController;
 import projectvantage.controllers.team_manager.TeamPageController;
 import projectvantage.utility.Config;
 import projectvantage.utility.ElementConfig;
@@ -361,6 +362,7 @@ public class AdminPageController implements Initializable {
     private void taskButtonMouseClickHandler(MouseEvent event) {
         String taskFXML = "/projectvantage/fxml/task_manager/TaskPage.fxml";
         loadPage(taskFXML, "Tasks");
+        TaskPageController.getInstance().setUsername(username);
         
         elementConf.setSelected("/projectvantage/resources/icons/task-icon-selected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
         

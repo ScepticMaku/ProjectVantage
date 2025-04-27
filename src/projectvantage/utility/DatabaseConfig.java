@@ -9,6 +9,7 @@ import projectvantage.models.Project;
 import projectvantage.models.User;
 import projectvantage.models.Team;
 import projectvantage.models.TeamMember;
+import projectvantage.models.Task;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -195,10 +196,33 @@ public class DatabaseConfig {
         return null;
     }
     
-    public TeamMember getTeamMemberById(int id) {
+    public TeamMember getTeamMemberByUserId(int id) {
         String sql = "SELECT team_member.id AS id, team_id, user.last_name AS last_name, user.username AS username, team_member_role.name AS role, team_member_status.name AS status "
                 + "FROM team_member INNER JOIN user ON user_id = user.id INNER JOIN team_member_role ON team_member.role_id = team_member_role.id "
                 + "INNER JOIN team_member_status ON team_member.status_id = team_member_status.id WHERE team_member.user_id = " + id;
+        
+        try (ResultSet result = db.getData(sql)){
+            if(result.next()) {
+                return new TeamMember(
+                        result.getInt("id"),
+                        result.getInt("team_id"),
+                        result.getString("last_name"),
+                        result.getString("username"),
+                        result.getString("role"),
+                        result.getString("status")
+                );
+            }
+        } catch(Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public TeamMember getTeamMemberById(int id) {
+        String sql = "SELECT team_member.id AS id, team_id, user.last_name AS last_name, user.username AS username, team_member_role.name AS role, team_member_status.name AS status "
+                + "FROM team_member INNER JOIN user ON user_id = user.id INNER JOIN team_member_role ON team_member.role_id = team_member_role.id "
+                + "INNER JOIN team_member_status ON team_member.status_id = team_member_status.id WHERE team_member.id = " + id;
         
         try (ResultSet result = db.getData(sql)){
             if(result.next()) {
@@ -265,6 +289,32 @@ public class DatabaseConfig {
             System.out.println("Database Error: " + e.getMessage());
             e.printStackTrace();
         }
+        return null;
+    }
+    
+    public Task getTaskById(int id) {
+        String sql = "SELECT task.id, task.name, task.description, date_created, due_date, user.last_name, team_member_id, project_id, task_status.name AS status "
+                + "FROM task INNER JOIN user ON user_id = user.id INNER JOIN task_status ON task.status_id = task_status.id WHERE task.id = " + id;
+        
+        try(ResultSet result = db.getData(sql)) {
+            if(result.next()) {
+                return new Task(
+                    result.getInt("id"),
+                    result.getString("name"),
+                    result.getString("description"),
+                    result.getString("date_created"),
+                    result.getString("due_date"),
+                    result.getString("last_name"),
+                    result.getInt("team_member_id"),
+                    result.getInt("project_id"),
+                    result.getString("status")
+                );
+            }
+        } catch (Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
         return null;
     }
 }

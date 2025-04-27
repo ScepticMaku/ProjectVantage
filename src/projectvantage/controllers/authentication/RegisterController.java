@@ -155,7 +155,7 @@ public class RegisterController implements Initializable {
         }
         
         if(config.isDuplicated("email", emailAddress)) {
-            alertConf.showRegisterErrorAlert(currentStage, "Password already exists.");
+            alertConf.showRegisterErrorAlert(currentStage, "Email already exists.");
             return true;
         }
         return false;

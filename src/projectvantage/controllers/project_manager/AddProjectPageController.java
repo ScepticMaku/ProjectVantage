@@ -135,7 +135,7 @@ public class AddProjectPageController implements Initializable {
         }
         
         if(selectedDate.isBefore(today)) {
-            alertConf.showAddProjectErrorAlert(currentStage, "Due Date must not be before the current date.");
+            alertConf.showAddProjectErrorAlert(currentStage, "Due date must not be before the current date.");
             return;
         }
         
