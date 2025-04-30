@@ -79,6 +79,8 @@ public class TeamPageController implements Initializable {
     private Button addTeamButton;
     @FXML
     private Button viewTeamButton;
+    @FXML
+    private ImageView searchButton;
 
     /**
      * Initializes the controller class.
@@ -262,6 +264,18 @@ public class TeamPageController implements Initializable {
             e.printStackTrace();
             alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Team", "You must select a team", currentStage);
         }
+    }
+
+    @FXML
+    private void searchButtonMouseReleaseHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void searchButtonMouseClickHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void searchButtonMousePressHandler(MouseEvent event) {
     }
     
 }

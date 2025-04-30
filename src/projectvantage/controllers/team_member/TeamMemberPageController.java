@@ -76,6 +76,8 @@ public class TeamMemberPageController implements Initializable {
     private Button viewTeamMemberButton;
     @FXML
     private TableColumn<TeamMember, Integer> teamIdColumn;
+    @FXML
+    private ImageView searchButton;
 
     /**
      * Initializes the controller class.
@@ -196,6 +198,18 @@ public class TeamMemberPageController implements Initializable {
         
         pageConf.loadWindow(viewTeamMemberFXML, "Team Member", rootPane);
         ViewTeamMemberPageController.getInstance().loadContent(userId);
+    }
+
+    @FXML
+    private void searchButtonMouseReleaseHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void searchButtonMouseClickHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void searchButtonMousePressHandler(MouseEvent event) {
     }
     
 }

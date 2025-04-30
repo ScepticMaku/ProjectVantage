@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.authentication.GoogleAuthenticationController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="600.0" prefWidth="400.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.authentication.GoogleAuthenticationController">
    <children>
       <Pane prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: white;">
          <children>
@@ -27,10 +27,10 @@
                   <Image url="@../../resources/icons/lock-icon.png" />
                </image>
             </ImageView>
-            <Label layoutX="107.0" layoutY="449.0" text="Enter verification code to continue." />
+            <Label layoutX="107.0" layoutY="440.0" text="Enter verification code to continue." />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#192b4b" height="1.0" layoutX="50.0" layoutY="404.0" opacity="0.24" stroke="#192b4b" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
-            <TextField fx:id="otpField" alignment="CENTER" layoutX="73.0" layoutY="466.0" onKeyPressed="#otpFieldKeyPressedHandler" prefHeight="39.0" prefWidth="253.0" promptText="Verification Code" />
-            <Button fx:id="submitButton" layoutX="139.0" layoutY="505.0" mnemonicParsing="false" onMouseClicked="#submitButtonMouseClickHandler" prefHeight="27.0" prefWidth="123.0" text="Submit" />
+            <TextField fx:id="otpField" alignment="CENTER" layoutX="73.0" layoutY="466.0" onKeyPressed="#otpFieldKeyPressedHandler" prefHeight="39.0" prefWidth="253.0" promptText="Verification Code" styleClass="textfield" />
+            <Button fx:id="submitButton" layoutX="138.0" layoutY="515.0" mnemonicParsing="false" onMouseClicked="#submitButtonMouseClickHandler" prefHeight="27.0" prefWidth="123.0" text="Submit" />
          </children>
       </Pane>
    </children>

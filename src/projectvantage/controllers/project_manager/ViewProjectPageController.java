@@ -111,7 +111,7 @@ public class ViewProjectPageController implements Initializable {
     @FXML
     private ProgressBar taskProgressBar;
     @FXML
-    private TableColumn<?, ?> statusColumn;
+    private TableColumn<Task, String> statusColumn;
     @FXML
     private Button printReportButton;
 
@@ -137,9 +137,13 @@ public class ViewProjectPageController implements Initializable {
         teamIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         teamNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         
+        load();
+    }
+    
+    public void load() {
         Platform.runLater(() -> {
-            loadTeamTable();
-            loadTaskTable();
+            refreshTeamTable();
+            refreshTaskTable();
             
 //            updateTaskProgress(getCompletedTasks());
 
@@ -201,7 +205,7 @@ public class ViewProjectPageController implements Initializable {
     }
     
     public int getCompletedTasks() {
-        String sql = "SELECT COUNT(*) AS total FROM task WHERE status_id = 3";
+        String sql = "SELECT COUNT(*) AS total FROM task WHERE status_id = 2 AND project_id = " + projectId;
         
         try (ResultSet result = db.getData(sql)) {
             if(result.next()) {
@@ -215,7 +219,7 @@ public class ViewProjectPageController implements Initializable {
     }
     
     public int getTotalTasks() {
-        String sql = "SELECT COUNT(*) AS total FROM task";
+        String sql = "SELECT COUNT(*) AS total FROM task WHERE project_id = " + projectId;
         
         try(ResultSet result = db.getData(sql)) {
             if(result.next()) {

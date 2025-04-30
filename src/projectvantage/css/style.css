@@ -27,7 +27,7 @@
 }
 
 .button:pressed {
-    -fx-background-color: #02559E;
+    -fx-background-color: #01528d;
     -fx-effect: none;
 }
 
@@ -57,4 +57,10 @@
 
 .combo-box {
 	-fx-background-color: #E4E4E4;
+}
+
+.pagination .control-box .number-button {
+	-fx-background-color: #2f9efe;
+	-fx-text-fill: white;
+	-fx-background-radius: 5px;
 }

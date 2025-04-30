@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" focusTraversable="true" onKeyPressed="#rootPaneKeyPressedHandler" prefHeight="436.0" prefWidth="341.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.authentication.LoginController">
+<AnchorPane fx:id="rootPane" focusTraversable="true" onKeyPressed="#rootPaneKeyPressedHandler" prefHeight="436.0" prefWidth="341.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.authentication.LoginController">
    <children>
       <ImageView fitHeight="241.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -30,13 +30,13 @@
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="260.0" layoutY="-36.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="350.0" />
                   <Label layoutX="87.0" layoutY="156.0" text="Don't have an account?" />
-                  <Label fx:id="registerButton" layoutX="217.0" layoutY="156.0" onMouseClicked="#registerButtonMouseClickHandler" text="Register.">
+                  <Label fx:id="registerButton" layoutX="217.0" layoutY="156.0" onMouseClicked="#registerButtonMouseClickHandler" stylesheets="@../../css/text-button-style.css" text="Register.">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Label>
                   <Button fx:id="loginButton" layoutX="133.0" layoutY="183.0" mnemonicParsing="false" onMouseClicked="#loginButtonMouseClickHandler" prefHeight="27.0" prefWidth="85.0" text="Login" textFill="WHITE" />
-                  <Label layoutX="160.0" layoutY="5.0" text="Login" />
+                  <Label layoutX="154.0" layoutY="-4.0" stylesheets="@../../css/title-label-style.css" text="Login" />
                   <Label layoutX="162.0" layoutY="31.0" />
                   <TextField fx:id="usernameField" alignment="CENTER" focusTraversable="false" layoutX="45.0" layoutY="30.0" onKeyPressed="#usernameFieldOnKeyPressedHandler" prefHeight="40.0" prefWidth="261.0" promptText="Username" styleClass="textfield">
                      <font>

@@ -24,6 +24,7 @@ import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -52,17 +53,15 @@ public class TaskPageController implements Initializable {
     @FXML
     private TableColumn<Task, String> nameColumn;
     @FXML
-    private TableColumn<Task, String> actionColumn;
-    @FXML
     private TableColumn<Task, String> statusColumn;
     @FXML
     private Button viewTaskButton;
     @FXML
-    private Button addTaskButton;
-    @FXML
     private TableView<Task> taskTable;
     @FXML
     private AnchorPane rootPane;
+    @FXML
+    private ImageView searchButton;
 
     /**
      * Initializes the controller class.
@@ -92,6 +91,11 @@ public class TaskPageController implements Initializable {
     
     public void setUsername(String username) {
         this.username = username;
+    }
+    
+    public void refreshTaskTable() {
+        taskList.clear();
+        loadTaskTable();
     }
     
     public void loadTaskTable() {
@@ -138,7 +142,6 @@ public class TaskPageController implements Initializable {
         ViewTaskPageController.getInstance().loadContent(taskId);
     }
 
-    @FXML
     private void addTaskButtonMouseClickHandler(MouseEvent event) throws Exception {
         pageConf.loadWindow("/projectvantage/fxml/task_manager/AddTaskPage.fxml", "Add Task", rootPane);
         
@@ -146,6 +149,18 @@ public class TaskPageController implements Initializable {
 
     @FXML
     private void taskTableMouseClickHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void searchButtonMouseReleaseHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void searchButtonMouseClickHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void searchButtonMousePressHandler(MouseEvent event) {
     }
     
 }

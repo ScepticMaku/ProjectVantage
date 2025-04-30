@@ -22,9 +22,8 @@ public class ReportPrinter implements Printable {
             return NO_SUCH_PAGE;
         }
         
-        Image image = Toolkit.getDefaultToolkit().getImage("/src/projectvantage/resources/img/ProjectLogo.png");
-        g.drawImage(image, 50, 50, null);
-        
+        Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/projectvantage/resources/img/ProjectLogo.png"));
+        g.drawImage(image, 20, 20, 30, 30, null);
         g.drawString("Test", 100, 100);
         
         return PAGE_EXISTS;

@@ -88,6 +88,8 @@ public class ProjectPageController implements Initializable {
     private Button addProjectButton;
     @FXML
     private Button viewProjectButton;
+    @FXML
+    private ImageView searchButton;
 
     /**
      * Initializes the controller class.
@@ -292,5 +294,17 @@ public class ProjectPageController implements Initializable {
             alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Project", "You must select a project", currentStage);
         }
         
+    }
+
+    @FXML
+    private void searchButtonMouseReleaseHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void searchButtonMouseClickHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void searchButtonMousePressHandler(MouseEvent event) {
     }
 }

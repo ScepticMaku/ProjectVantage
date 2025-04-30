@@ -1,0 +1,11 @@
+.label {
+    -fx-text-fill: #2F9EFE;
+}
+
+.label:hover {
+    -fx-text-fill: #0177DD;
+}
+
+.label:pressed {
+    -fx-text-fill: #01528d;
+}

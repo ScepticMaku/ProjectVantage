@@ -12,7 +12,7 @@ import projectvantage.models.Task;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.utility.AlertConfig;
-import projectvantage.controllers.task_manager.AssignTaskPageController;
+import projectvantage.utility.dbConnect;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,6 +29,7 @@ import projectvantage.controllers.admin.AdminPageController;
 import projectvantage.controllers.project_manager.ProjectManagerPageController;
 import projectvantage.controllers.project_manager.ViewProjectPageController;
 import projectvantage.controllers.team_member.ViewTeamMemberPageController;
+import projectvantage.controllers.task_manager.TaskPageController;
 
 /**
  * FXML Controller class
@@ -42,6 +43,7 @@ public class ViewTaskPageController implements Initializable {
     AlertConfig alertConf = new AlertConfig();
     DatabaseConfig databaseConf = new DatabaseConfig();
     PageConfig pageConf = new PageConfig();
+    dbConnect db = new dbConnect();
     
     private int taskId;
     private int userId;
@@ -97,6 +99,10 @@ public class ViewTaskPageController implements Initializable {
         // TODO
         instance = this;
         
+        load();
+    }
+    
+    private void load() {
         Platform.runLater(() -> {
            taskNameLabel.setText(taskName);
            descriptionLabel.setText(description);
@@ -114,6 +120,23 @@ public class ViewTaskPageController implements Initializable {
                uncompleteTaskButton.setVisible(false);
                completeTaskButton.setVisible(true);
            }
+           
+           Stage currentStage = (Stage)rootPane.getScene().getWindow();
+           
+           currentStage.setOnCloseRequest(event -> {
+               ViewProjectPageController projectController = ViewProjectPageController.getInstance();
+               TaskPageController taskController = TaskPageController.getInstance();
+               
+               if(projectController != null) {
+                    projectController.load();
+                    projectController.loadContent(projectId, username);
+                    return;
+               }
+               
+               if(taskController != null) {
+                   taskController.refreshTaskTable();
+               }
+           });
            
         });
     }
@@ -209,10 +232,28 @@ public class ViewTaskPageController implements Initializable {
 
     @FXML
     private void completeTaskButtonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        
+        String sql = "UPDATE task SET status_id = 2 WHERE id = " + taskId;
+        
+        if(db.executeQuery(sql)) {
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "Task Completion Successful!", "Task completed!", currentStage);
+            loadContent(taskId);
+            load();
+        }
     }
 
     @FXML
     private void uncompleteTaskButtonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        
+        String sql = "UPDATE task SET status_id = 1 WHERE id = " + taskId;
+        
+        if(db.executeQuery(sql)) {
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "Task Uncompletion Successful!", "Task completion revoked!", currentStage);
+            loadContent(taskId);
+            load();
+        }
     }
 
     @FXML

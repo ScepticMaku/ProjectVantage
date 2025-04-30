@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -8,16 +9,17 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.task_manager.TaskPageController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Tasks" />
-      <TextField layoutX="14.0" layoutY="40.0" />
-      <Button layoutX="173.0" layoutY="40.0" mnemonicParsing="false" text="Search" />
-      <Button fx:id="viewTaskButton" layoutX="517.0" layoutY="40.0" mnemonicParsing="false" onMouseClicked="#viewTaskButtonMouseClickHandler" text="View Task" />
-      <Pagination fx:id="pagination" layoutX="10.0" layoutY="79.0" pageCount="50" prefHeight="497.0" prefWidth="600.0" />
-      <TableView fx:id="taskTable" layoutX="14.0" layoutY="75.0" onMouseClicked="#taskTableMouseClickHandler" prefHeight="449.0" prefWidth="572.0">
+      <Label layoutX="14.0" layoutY="12.0" stylesheets="@../../css/title-label-style.css" text="Tasks" />
+      <TextField layoutX="144.0" layoutY="41.0" styleClass="textfield" />
+      <Button fx:id="viewTaskButton" layoutX="505.0" layoutY="40.0" mnemonicParsing="false" onMouseClicked="#viewTaskButtonMouseClickHandler" prefWidth="82.0" text="View Task" />
+      <Pagination fx:id="pagination" layoutY="95.0" pageCount="50" prefHeight="475.0" prefWidth="600.0" />
+      <TableView fx:id="taskTable" layoutX="14.0" layoutY="96.0" onMouseClicked="#taskTableMouseClickHandler" prefHeight="429.0" prefWidth="572.0">
          <columns>
             <TableColumn fx:id="idColumn" editable="false" prefWidth="96.66662883758545" sortable="false" text="ID" />
             <TableColumn fx:id="nameColumn" editable="false" prefWidth="248.00006866455078" sortable="false" text="Name" />
@@ -30,6 +32,18 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </TableView>
-      <ComboBox layoutX="234.0" layoutY="40.0" prefHeight="25.0" prefWidth="120.0" promptText="Filter by" />
+      <ComboBox layoutX="14.0" layoutY="41.0" prefHeight="25.0" prefWidth="120.0" promptText="Filter by" />
+      <ImageView fx:id="searchButton" fitHeight="150.0" fitWidth="35.0" layoutX="298.0" layoutY="37.0" onMouseClicked="#searchButtonMouseClickHandler" onMousePressed="#searchButtonMousePressHandler" onMouseReleased="#searchButtonMouseReleaseHandler" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../resources/icons/search-icon.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
    </children>
+   <stylesheets>
+      <URL value="@../../css/table-style.css" />
+      <URL value="@../../css/style.css" />
+   </stylesheets>
 </AnchorPane>
