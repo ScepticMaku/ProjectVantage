@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="842.0" prefWidth="595.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.ProjectReportPDFController">
+   <children>
+      <Pane prefHeight="842.0" prefWidth="595.0">
+         <children>
+            <Group layoutX="14.0" layoutY="14.0">
+               <children>
+                  <Rectangle fx:id="rectangle" arcHeight="20.0" arcWidth="20.0" height="46.0" layoutY="5.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="181.0" />
+                  <Label layoutX="42.0" prefHeight="56.0" prefWidth="80.0" text="Project" textFill="WHITE">
+                     <font>
+                        <Font name="Leelawadee UI Bold" size="17.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="100.0" layoutY="11.0" prefHeight="35.0" prefWidth="74.0" text="Vantage" textFill="#0593ff">
+                     <font>
+                        <Font name="System Bold Italic" size="17.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="12.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../resources/img/ProjectLogo.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+            <Rectangle fill="#a5b4d9" height="1.0" layoutX="8.0" layoutY="79.0" opacity="0.2" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="580.0" />
+            <Label layoutX="26.0" layoutY="96.0" text="Project Name:" textFill="#545454" />
+            <Label fx:id="projectNameLabel" layoutX="111.0" layoutY="96.0" text="Name" textFill="#545454" />
+            <Label layoutX="26.0" layoutY="119.0" text="Description:" textFill="#545454" />
+            <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="112.0" layoutY="119.0" prefHeight="92.0" prefWidth="200.0" text="Description" textFill="#545454" />
+            <Label fx:id="dateCreatedLabel" layoutX="492.0" layoutY="96.0" text="Date created" textFill="#545454" />
+            <Label layoutX="394.0" layoutY="96.0" text="Date created:" textFill="#545454" />
+            <Label fx:id="dueDateLabel" layoutX="493.0" layoutY="119.0" text="Due Date" textFill="#545454" />
+            <Label layoutX="26.0" layoutY="224.0" text="Progress:" textFill="#545454" />
+            <Label fx:id="statusLabel" layoutX="494.0" layoutY="45.0" text="Status" textFill="#545454" />
+            <Label layoutX="394.0" layoutY="46.0" text="Status:" textFill="#545454" />
+            <Label fx:id="projectManagerLabel" layoutX="494.0" layoutY="22.0" text="Name" textFill="#545454" />
+            <Label layoutX="394.0" layoutY="22.0" text="Project Manager:" textFill="#545454" />
+            <ProgressBar fx:id="taskProgressBar" layoutX="26.0" layoutY="247.0" prefHeight="18.0" prefWidth="538.0" progress="0.0" />
+            <Rectangle fill="#a5b4d9" height="1.0" layoutX="5.0" layoutY="285.0" opacity="0.2" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="580.0" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

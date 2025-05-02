@@ -88,7 +88,7 @@
                         <Font name="System Bold Italic" size="24.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="83.0" fitWidth="58.0" layoutX="53.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="56.0" fitWidth="46.0" layoutX="65.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../resources/img/ProjectLogo.png" />
                      </image>

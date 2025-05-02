@@ -12,16 +12,16 @@
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Project" />
       <Label layoutX="19.0" layoutY="40.0" text="Project Name:" />
-      <Label layoutX="19.0" layoutY="57.0" text="Description:" />
+      <Label layoutX="20.0" layoutY="64.0" text="Description:" />
       <Label fx:id="projectNameLabel" layoutX="100.0" layoutY="40.0" text="Name" />
-      <Label fx:id="descriptionText" layoutX="19.0" layoutY="74.0" text="Text" />
+      <Label fx:id="descriptionText" layoutX="102.0" layoutY="64.0" text="Text" />
       <Label layoutX="418.0" layoutY="62.0" text="Creation date:" />
-      <Label fx:id="creationDateLabel" layoutX="525.0" layoutY="66.0" text="Date" />
+      <Label fx:id="creationDateLabel" layoutX="518.0" layoutY="66.0" text="Date" />
       <Label layoutX="418.0" layoutY="85.0" text="Due date:" />
-      <Label fx:id="dueDateLabel" layoutX="525.0" layoutY="85.0" text="Date" />
+      <Label fx:id="dueDateLabel" layoutX="518.0" layoutY="85.0" text="Date" />
       <Label layoutX="18.0" layoutY="220.0" text="Tasks:" />
       <Label layoutX="418.0" layoutY="109.0" text="Status:" />
-      <Label fx:id="statusLabel" layoutX="522.0" layoutY="109.0" text="Status" />
+      <Label fx:id="statusLabel" layoutX="515.0" layoutY="109.0" text="Status" />
       <Label layoutX="312.0" layoutY="220.0" text="Teams:" />
       <Label layoutX="22.0" layoutY="153.0" text="Progress:" />
       <ProgressBar fx:id="taskProgressBar" layoutX="17.0" layoutY="178.0" prefHeight="18.0" prefWidth="565.0" progress="0.0" />
@@ -48,8 +48,10 @@
       <Label fx:id="creatorNameLabel" layoutX="518.0" layoutY="39.0" text="Creator" />
       <Button fx:id="deleteTeamButton" layoutX="522.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#removeTeamButtonMouseClickHandler" text="Remove" />
       <Button fx:id="deleteTaskButton" layoutX="235.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#deleteTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="Delete" />
-      <Button fx:id="printReportButton" layoutX="490.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#printReportButtonMouseClickHandler" prefHeight="25.0" prefWidth="88.0" text="Print Report" />
+      <Button fx:id="viewReportButton" layoutX="324.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#viewReportButtonMouseClickHandler" prefHeight="25.0" prefWidth="147.0" text="View Printable Report" />
       <Button fx:id="seeTaskButton" layoutX="173.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#seeTaskButtonMouseClickHandler" text="See Assigned Task" visible="false" />
       <Button fx:id="seeTeamButton" layoutX="463.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#seeTeamButtonMouseClickHandler" text="See Assigned Team" visible="false" />
+      <Button fx:id="generateReportButton" layoutX="214.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#generateReportButtonMouseClickHandler" prefHeight="25.0" prefWidth="100.0" text="Generate PDF" />
+      <Button fx:id="printReportButton" layoutX="481.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#printReportButtonMouseClickHandler" prefHeight="25.0" prefWidth="100.0" text="Print Report" />
    </children>
 </AnchorPane>

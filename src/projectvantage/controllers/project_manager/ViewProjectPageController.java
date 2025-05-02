@@ -5,8 +5,9 @@
  */
 package projectvantage.controllers.project_manager;
 
-import projectvantage.utility.ReportPrinter;
-import java.awt.print.PrinterJob;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import projectvantage.controllers.misc.ProjectReportPDFController;
 import projectvantage.models.TeamMember;
 import projectvantage.models.Task;
 import projectvantage.models.Project;
@@ -21,15 +22,21 @@ import projectvantage.controllers.task_manager.AddTaskPageController;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.models.User;
 import projectvantage.utility.PageConfig;
-
+import javafx.stage.FileChooser;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -38,9 +45,17 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import projectvantage.controllers.task_manager.ViewTaskPageController;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
 /**
@@ -122,6 +137,10 @@ public class ViewProjectPageController implements Initializable {
     private Button seeTeamButton;
     @FXML
     private ListView<?> recentActivityListView;
+    @FXML
+    private Button viewReportButton;
+    @FXML
+    private Button generateReportButton;
 
     /**
      * Initializes the controller class.
@@ -210,6 +229,7 @@ public class ViewProjectPageController implements Initializable {
             this.creationDate = project.getCreationDate();
             this.dueDate = project.getDueDate();
             this.status = project.getStatus();
+            this.creatorName = project.getCreatorName();
         }
         
         if(user != null) {
@@ -217,11 +237,11 @@ public class ViewProjectPageController implements Initializable {
             this.role = user.getRole();
         }
         
-        User creator = databaseConf.getUserById(userId);
+//        User creator = databaseConf.getUserById(userId);
         
-        if(creator != null) {
-            this.creatorName = creator.getLastName();
-        }
+//        if(creator != null) {
+//            this.creatorName = creator.getLastName();
+//        }
     }
     
     public int getCompletedTasks() {
@@ -341,23 +361,6 @@ public class ViewProjectPageController implements Initializable {
         }
     }
 
-//    private void addTeamButtonMouseClickHandler(MouseEvent event) throws Exception {
-//        pageConf.loadWindow("/projectvantage/fxml/team_manager/AddTeamPage.fxml", "Add Team", rootPane);
-//        AddTeamPageController addTeamController = AddTeamPageController.getInstance();
-//    }
-//
-//    private void deleteTeamButtonMouseClickHandler(MouseEvent event) {
-//        Stage currentStage = (Stage)rootPane.getScene().getWindow();
-//        
-//        Team selectedRow = teamTable.getSelectionModel().getSelectedItem();
-//        int id = selectedRow.getId();
-//
-//        String sql = "DELETE FROM team WHERE id = ?";
-//
-//        alertConf.showDeleteConfirmationAlert(currentStage, sql, id);
-//        refreshTeamTable();
-//    }
-
     @FXML
     private void viewTaskButtonMouseClickHandler(MouseEvent event) throws Exception  {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
@@ -418,17 +421,7 @@ public class ViewProjectPageController implements Initializable {
     }
 
     @FXML
-    private void printReportButtonMouseClickHandler(MouseEvent event) {
-        PrinterJob printerJob = PrinterJob.getPrinterJob();
-        printerJob.setPrintable(new ReportPrinter());
-        
-        if(printerJob.printDialog()) {
-             try {
-                 printerJob.print();
-             } catch (Exception e) {
-                 e.printStackTrace();
-             }
-        }
+    private void printReportButtonMouseClickHandler(MouseEvent event) throws Exception {
     }
 
     @FXML
@@ -465,5 +458,58 @@ public class ViewProjectPageController implements Initializable {
         
         TeamMemberMainPageController.getInstance().loadPage(viewTeamFXML, "Team");
         ViewTeamPageController.getInstance().loadContent(teamId, username);
+    }
+
+    @FXML
+    private void viewReportButtonMouseClickHandler(MouseEvent event) throws Exception {
+        String reportFXML = "/projectvantage/fxml/misc/ProjectReportPDF.fxml";
+        pageConf.loadWindow(reportFXML, "Project Report", rootPane);
+        ProjectReportPDFController.getInstance().loadContent(projectId, username);
+    }
+
+    @FXML
+    private void generateReportButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/misc/ProjectReportPDF.fxml"));
+        Parent root = loader.load();
+        
+        Stage dummyStage = new Stage();
+        Scene scene = new Scene(root);
+        dummyStage.setScene(scene);
+        dummyStage.show();
+        
+        ProjectReportPDFController controller = loader.getController();
+        controller.loadContent(projectId, username);
+        controller.load();
+        
+        root.applyCss();
+        root.layout();
+        
+        WritableImage fxImage = root.snapshot(new SnapshotParameters(), null);
+        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
+        
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+        document.addPage(page);
+        
+        PDImageXObject pdfImage = LosslessFactory.createFromImage(document, bufferedImage);
+        
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.drawImage(pdfImage, 0, 0, PDRectangle.A4.getWidth(), PDRectangle.A4.getHeight());
+        contentStream.close();
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Report As");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        fileChooser.setInitialFileName("ProjectReport.pdf");
+        
+        Window window = ((Node) event.getSource()).getScene().getWindow();
+        File file = fileChooser.showSaveDialog(window);
+
+        if (file != null) {
+            document.save(file);
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "Generate PDF Successful", "PDF Successfully Generated!", currentStage);
+        }
+        document.close();
     }
 }

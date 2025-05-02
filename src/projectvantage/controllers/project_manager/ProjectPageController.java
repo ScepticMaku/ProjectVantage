@@ -280,6 +280,11 @@ public class ProjectPageController implements Initializable {
         Project selectedProject = projectTable.getSelectionModel().getSelectedItem();
         String viewProjectFXML = "/projectvantage/fxml/project_manager/ViewProjectPage.fxml";
         
+        if(selectedProject == null) {
+            alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Project", "You must select a project", currentStage);
+            return;
+        }
+        
         try {
             if(role.equals("admin")) {
                 adminController.loadPage(viewProjectFXML, selectedProject.getName());
@@ -291,7 +296,6 @@ public class ProjectPageController implements Initializable {
             
         } catch (Exception e) {
             e.printStackTrace();
-            alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Project", "You must select a project", currentStage);
         }
         
     }
