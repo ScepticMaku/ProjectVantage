@@ -7,7 +7,7 @@ package projectvantage.controllers.project_manager;
 
 import projectvantage.utility.ReportPrinter;
 import java.awt.print.PrinterJob;
-import java.io.File;
+import projectvantage.models.TeamMember;
 import projectvantage.models.Task;
 import projectvantage.models.Project;
 import projectvantage.models.Team;
@@ -33,6 +33,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -41,6 +42,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import projectvantage.controllers.task_manager.ViewTaskPageController;
+import projectvantage.controllers.team_member.TeamMemberMainPageController;
 /**
  * FXML Controller class
  *
@@ -114,6 +116,12 @@ public class ViewProjectPageController implements Initializable {
     private TableColumn<Task, String> statusColumn;
     @FXML
     private Button printReportButton;
+    @FXML
+    private Button seeTaskButton;
+    @FXML
+    private Button seeTeamButton;
+    @FXML
+    private ListView<?> recentActivityListView;
 
     /**
      * Initializes the controller class.
@@ -155,6 +163,18 @@ public class ViewProjectPageController implements Initializable {
             dueDateLabel.setText(dueDate);
             statusLabel.setText(status);
             creatorNameLabel.setText(creatorName);
+            
+            if(!(role.equals("admin") || role.equals("project manager"))) {
+                addTaskButton.setVisible(false);
+                deleteTaskButton.setVisible(false);
+                assignTeamButton.setVisible(false);
+                deleteTeamButton.setVisible(false);
+                printReportButton.setVisible(false);
+                
+                seeTaskButton.setVisible(true);
+                seeTeamButton.setVisible(true);
+                
+            }
         });
     }
     
@@ -287,29 +307,37 @@ public class ViewProjectPageController implements Initializable {
         try {
             AdminPageController adminController = AdminPageController.getInstance();
             TeamManagerPageController teamManagerController = TeamManagerPageController.getInstance();
-
+            
             Team selectedTeam = teamTable.getSelectionModel().getSelectedItem();
+            
+            if(selectedTeam == null) {
+                alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Team", "You must select a team", currentStage);
+                return;
+            }
+            
             int teamId = selectedTeam.getId();
             
             String viewTeamFXML = "/projectvantage/fxml/team_manager/ViewTeamPage.fxml";
             
             if(role.equals("admin")) {
                 adminController.loadPage(viewTeamFXML, "Team");
-                ViewTeamPageController viewTeamController = ViewTeamPageController.getInstance();
-                viewTeamController.loadContent(teamId, username);
+                ViewTeamPageController.getInstance().loadContent(teamId, username);
                 return;
             }
 
             if(role.equals("team manager")) {
                 teamManagerController.loadPage(viewTeamFXML, "Team");
-                ViewTeamPageController viewTeamController = ViewTeamPageController.getInstance();
-                viewTeamController.loadContent(selectedTeam.getId(), username);
+                ViewTeamPageController.getInstance().loadContent(selectedTeam.getId(), username);
+                return;
+            }
+            
+            if(role.equals("standard")) {
+                TeamMemberMainPageController.getInstance().loadPage(viewTeamFXML, "Team");
+                ViewTeamPageController.getInstance().loadContent(selectedTeam.getId(), username);
             }
             
         } catch (Exception e) {
             e.printStackTrace();
-            alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Team", "You must select a team", currentStage);
-            
         }
     }
 
@@ -362,8 +390,6 @@ public class ViewProjectPageController implements Initializable {
         AssignTeamPageController.getInstance().setProjectId(projectId);
     }
 
-
-
     @FXML
     private void removeTeamButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
@@ -403,5 +429,41 @@ public class ViewProjectPageController implements Initializable {
                  e.printStackTrace();
              }
         }
+    }
+
+    @FXML
+    private void seeTaskButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        TeamMember member = databaseConf.getTeamMemberByUserId(userId);
+        int teamMemberId = member.getId();
+        Task task = databaseConf.getTaskByTeamMemberId(teamMemberId);
+        
+        if(task == null) {
+            alertConf.showAlert(Alert.AlertType.ERROR, "Error Showing Task", "You are not assigned to a task yet.", currentStage);
+            return;
+        }
+        
+        int taskId = task.getId();
+        pageConf.loadWindow("/projectvantage/fxml/task_manager/ViewTaskPage.fxml", "View Task", rootPane);
+        ViewTaskPageController.getInstance().setUsername(username);
+        ViewTaskPageController.getInstance().loadContent(taskId);
+    }
+
+    @FXML
+    private void seeTeamButtonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        TeamMember member = databaseConf.getTeamMemberByUserId(userId);
+        int teamId = member.getTeamId();
+        Team team = databaseConf.getTeamById(teamId);
+        
+        if(team == null) {
+            alertConf.showAlert(Alert.AlertType.ERROR, "Error Showing Team", "You are not assigned to a team yet.", currentStage);
+            return;
+        }
+        
+        String viewTeamFXML = "/projectvantage/fxml/team_manager/ViewTeamPage.fxml";
+        
+        TeamMemberMainPageController.getInstance().loadPage(viewTeamFXML, "Team");
+        ViewTeamPageController.getInstance().loadContent(teamId, username);
     }
 }

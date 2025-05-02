@@ -9,6 +9,7 @@ import projectvantage.models.Task;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.dbConnect;
+import projectvantage.utility.DatabaseConfig;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -41,10 +42,12 @@ public class TaskPageController implements Initializable {
     dbConnect db = new dbConnect();
     PageConfig pageConf = new PageConfig();
     AlertConfig alertConf = new AlertConfig();
+    DatabaseConfig databaseConf = new DatabaseConfig();
     
     ObservableList<Task> taskList = FXCollections.observableArrayList();
     
     private String username;
+    private int userId;
     
     @FXML
     private Pagination pagination;
@@ -99,6 +102,7 @@ public class TaskPageController implements Initializable {
     }
     
     public void loadTaskTable() {
+        
         String sql = "SELECT task.id, task.name, task.description, date_created, due_date, user.last_name, team_member_id, project_id, task_status.name AS status "
                 + "FROM task INNER JOIN user ON user_id = user.id INNER JOIN task_status ON task.status_id = task_status.id ORDER BY task.id DESC";
         

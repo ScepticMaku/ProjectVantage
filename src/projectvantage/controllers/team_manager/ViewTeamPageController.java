@@ -106,6 +106,14 @@ public class ViewTeamPageController implements Initializable {
         // TODO
         instance = this;
         
+        load();
+    }
+    
+    public static ViewTeamPageController getInstance() {
+        return instance;
+    }
+    
+    public void load() {
         idColumn.setSortable(false);
         usernameColumn.setSortable(false);
         lastNameColumn.setSortable(false);
@@ -119,22 +127,24 @@ public class ViewTeamPageController implements Initializable {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         
         Platform.runLater(() -> {
-            loadTableData();
+            refreshTable();
             
             memberTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                if(newSelection.getRole().equals("team leader")) {
+                if(newSelection != null && newSelection.getRole().equals("team leader") && userRole.equals("admin") || userRole.equals("project manager")) {
                     removeLeaderButton.setVisible(true);
-                    return;
+                } else {
+                    removeLeaderButton.setVisible(false);
                 }
-                
-                removeLeaderButton.setVisible(false);
-                
             });
+            
+            if(userRole.equals("standard")) {
+                addMemberButton.setVisible(false);
+                deleteTeamButton.setVisible(false);
+                removeMemberButton.setVisible(false);
+                addLeaderButton.setVisible(false);
+                removeLeaderButton.setVisible(false);
+            }
         });
-    }    
-    
-    public static ViewTeamPageController getInstance() {
-        return instance;
     }
     
     public void loadContent(int id, String username) {
@@ -217,7 +227,29 @@ public class ViewTeamPageController implements Initializable {
         
         if(db.executeQuery(sql, memberId)) {
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Leader Successfully Assigned!", "Leader assigned successfully!", currentStage);
-            refreshTable();
+            
+            try {
+                AdminPageController adminController = AdminPageController.getInstance();
+                TeamManagerPageController teamManagerController = TeamManagerPageController.getInstance();
+                
+                String viewTeamFXML = "/projectvantage/fxml/team_manager/ViewTeamPage.fxml";
+                
+                if(userRole.equals("admin")) {
+                    adminController.loadPage(viewTeamFXML, "Team");
+                    getInstance().loadContent(id, username);
+                    getInstance().load();
+                    return;
+                }
+
+                if(userRole.equals("team manager")) {
+                    teamManagerController.loadPage(viewTeamFXML, "Team");
+                    getInstance().loadContent(id, username);
+                    getInstance().load();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Team", "You must select a team", currentStage);
+            } 
         }
     }
 
@@ -286,7 +318,28 @@ public class ViewTeamPageController implements Initializable {
         
         if(db.executeQuery(sql, memberId)) {
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Leader Successfully Removed!", "Leader removed successfully!", currentStage);
-            refreshTable();
+            
+            
+            try {
+
+                String viewTeamFXML = "/projectvantage/fxml/team_manager/ViewTeamPage.fxml";
+
+                if(userRole.equals("admin")) {
+                    AdminPageController.getInstance().loadPage(viewTeamFXML, "Team");
+                    getInstance().loadContent(id, username);
+                    getInstance().load();
+                    return;
+                }
+
+                if(userRole.equals("team manager")) {
+                    TeamManagerPageController.getInstance().loadPage(viewTeamFXML, "Team");
+                    getInstance().loadContent(id, username);
+                    getInstance().load();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Team", "You must select a team", currentStage);
+            } 
         }
     }
 }

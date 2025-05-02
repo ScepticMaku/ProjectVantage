@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+
+
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="311.0" prefWidth="325.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="projectvantage.controllers.task_manager.AssignTeamMemberPageController">
+   <children>
+      <BorderPane prefHeight="311.0" prefWidth="328.0">
+         <top>
+            <Pane prefHeight="61.0" prefWidth="348.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label layoutX="14.0" layoutY="14.0" text="List of available teams" />
+                  <Label layoutX="174.0" layoutY="10.0" prefHeight="41.0" prefWidth="88.0" text="List of available team members" wrapText="true" />
+               </children>
+            </Pane>
+         </top>
+         <center>
+            <Pane prefHeight="85.0" prefWidth="335.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TableView fx:id="teamTable" layoutX="12.0" layoutY="5.0" prefHeight="200.0" prefWidth="140.0">
+                    <columns>
+                      <TableColumn fx:id="teamColumn" prefWidth="140.0" text="Team" />
+                    </columns>
+                  </TableView>
+                  <TableView fx:id="memberTable" layoutX="174.0" layoutY="5.0" prefHeight="200.0" prefWidth="140.0">
+                     <columns>
+                        <TableColumn fx:id="memberColumn" prefWidth="140.0" text="Member" />
+                     </columns>
+                  </TableView>
+               </children>
+            </Pane>
+         </center>
+         <bottom>
+            <Pane prefHeight="45.0" prefWidth="328.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="assignButton" layoutX="248.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#assignButtonMouseClickHandler" prefWidth="66.0" text="Assign" />
+               </children>
+            </Pane>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

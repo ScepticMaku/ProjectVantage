@@ -22,6 +22,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -30,6 +32,7 @@ import projectvantage.controllers.project_manager.ProjectManagerPageController;
 import projectvantage.controllers.project_manager.ViewProjectPageController;
 import projectvantage.controllers.team_member.ViewTeamMemberPageController;
 import projectvantage.controllers.task_manager.TaskPageController;
+import projectvantage.controllers.team_member.TeamMemberMainPageController;
 
 /**
  * FXML Controller class
@@ -47,8 +50,10 @@ public class ViewTaskPageController implements Initializable {
     
     private int taskId;
     private int userId;
-    private int projectId;
+    private int projectId; 
+    private int guestTeamMemberId;
     private int teamMemberId;
+    private String guestRole;
     private String taskName;
     private String description;
     private String dateCreated;
@@ -90,6 +95,16 @@ public class ViewTaskPageController implements Initializable {
     private Button uncompleteTaskButton;
     @FXML
     private Button assignMemberButton;
+    @FXML
+    private TextField taskNameField;
+    @FXML
+    private TextArea taskDescriptionTextArea;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button applyButton;
+    @FXML
+    private Button removeMemberButton;
 
     /**
      * Initializes the controller class.
@@ -102,7 +117,7 @@ public class ViewTaskPageController implements Initializable {
         load();
     }
     
-    private void load() {
+    public void load() {
         Platform.runLater(() -> {
            taskNameLabel.setText(taskName);
            descriptionLabel.setText(description);
@@ -119,6 +134,16 @@ public class ViewTaskPageController implements Initializable {
            } else {
                uncompleteTaskButton.setVisible(false);
                completeTaskButton.setVisible(true);
+           }
+           
+           if(guestTeamMemberId != teamMemberId && !role.equals(("admin"))) {
+               completeTaskButton.setVisible(false);
+               uncompleteTaskButton.setVisible(false);
+           }
+           
+           if(!(role.equals("admin") || role.equals("project manager"))) {
+               editTaskButton.setVisible(false);
+               removeMemberButton.setVisible(false);
            }
            
            Stage currentStage = (Stage)rootPane.getScene().getWindow();
@@ -151,6 +176,14 @@ public class ViewTaskPageController implements Initializable {
         User user = databaseConf.getUserByUsername(username);
         
         this.role = user.getRole();
+        this.userId = user.getId();
+        
+        TeamMember member = databaseConf.getTeamMemberByUserId(userId);
+        
+        if(member != null) {
+            this.guestTeamMemberId = member.getId();
+            this.guestRole = member.getRole();
+        }
     }
 
     public void loadContent(int taskId) {
@@ -173,16 +206,23 @@ public class ViewTaskPageController implements Initializable {
         
         TeamMember teamMember = databaseConf.getTeamMemberById(teamMemberId);
         
-        if(teamMember == null) {
-            assignMemberButton.setVisible(true);
-            viewMemberButton.setVisible(false);
+        if(teamMember != null) {
+            assignMemberButton.setVisible(false);
+            viewMemberButton.setVisible(true);
+            removeMemberButton.setVisible(true);
+
+            this.assignedTo = teamMember.getLastName();
             return;
         }
-            
-        assignMemberButton.setVisible(false);
-        viewMemberButton.setVisible(true);
         
-        this.assignedTo = teamMember.getLastName();
+        if(role.equals("admin") || role.equals("project manager") || guestRole.equals("team leader")) {
+            assignMemberButton.setVisible(true);
+            viewMemberButton.setVisible(false);
+            removeMemberButton.setVisible(false);
+            return;
+        }
+        
+        assignMemberButton.setVisible(false);
     }
     
     @FXML
@@ -190,18 +230,25 @@ public class ViewTaskPageController implements Initializable {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         AdminPageController adminController = AdminPageController.getInstance();
         ProjectManagerPageController projectManagerController = ProjectManagerPageController.getInstance();
+        TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
         
         String viewProjectFXML = "/projectvantage/fxml/project_manager/ViewProjectPage.fxml";
         
         try {
-            if(role.equals("admin")) {
-                adminController.loadPage(viewProjectFXML, projectName);
-                ViewProjectPageController.getInstance().loadContent(projectId, username);
-                currentStage.close();
-                return;
+            switch(role) {
+                case "admin":
+                    adminController.loadPage(viewProjectFXML, projectName);
+                    ViewProjectPageController.getInstance().loadContent(projectId, username);
+                    currentStage.close();
+                break;
+                case "standard":
+                    teamMemberController.loadPage(viewProjectFXML, projectName);
+                    ViewProjectPageController.getInstance().loadContent(projectId, username);
+                    currentStage.close();
+                break;
             }
             
-            projectManagerController.loadPage(viewProjectFXML, projectName);
+//            projectManagerController.loadPage(viewProjectFXML, projectName);
             currentStage.close();
             
         } catch (Exception e) {
@@ -228,6 +275,19 @@ public class ViewTaskPageController implements Initializable {
 
     @FXML
     private void editTaskButtonMouseClickHandler(MouseEvent event) {
+        taskNameLabel.setVisible(false);
+        descriptionLabel.setVisible(false);
+        completeTaskButton.setVisible(false);
+        uncompleteTaskButton.setVisible(false);
+        editTaskButton.setVisible(false);
+        
+        cancelButton.setVisible(true);
+        applyButton.setVisible(true);
+        taskNameField.setVisible(true);
+        taskDescriptionTextArea.setVisible(true);
+        taskNameField.setText(taskNameLabel.getText());
+        taskDescriptionTextArea.setText(descriptionLabel.getText());
+        
     }
 
     @FXML
@@ -258,9 +318,63 @@ public class ViewTaskPageController implements Initializable {
 
     @FXML
     private void assignMemberButtonMouseClickHandler(MouseEvent event) throws Exception {
-        pageConf.loadWindow("/projectvantage/fxml/task_manager/AssignTaskPage.fxml", "Assign Task", rootPane);
-        AssignTaskPageController.getInstance().setProjectId(projectId);
-        AssignTaskPageController.getInstance().setTaskId(taskId);
+        pageConf.loadWindow("/projectvantage/fxml/task_manager/AssignTeamMemberPage.fxml", "Assign Team", rootPane);
+        AssignTeamMemberPageController.getInstance().setProjectId(projectId);
+        AssignTeamMemberPageController.getInstance().setTaskId(taskId);
+    }
+
+    @FXML
+    private void cancelButtonMouseClickHandler(MouseEvent event) {
+        taskNameLabel.setVisible(true);
+        descriptionLabel.setVisible(true);
+        completeTaskButton.setVisible(true);
+        uncompleteTaskButton.setVisible(true);
+        editTaskButton.setVisible(true);
+        
+        cancelButton.setVisible(false);
+        applyButton.setVisible(false);
+        taskNameField.setVisible(false);
+        taskDescriptionTextArea.setVisible(false);
+    }
+
+    @FXML
+    private void applyButtonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        taskNameLabel.setVisible(true);
+        descriptionLabel.setVisible(true);
+        completeTaskButton.setVisible(true);
+        uncompleteTaskButton.setVisible(true);
+        editTaskButton.setVisible(true);
+        
+        cancelButton.setVisible(false);
+        applyButton.setVisible(false);
+        taskNameField.setVisible(false);
+        taskDescriptionTextArea.setVisible(false);
+        
+        String sql = "UPDATE task SET name = ?, description = ? WHERE id = ?";
+        String name = taskNameField.getText();
+        String desc = taskDescriptionTextArea.getText();
+        
+        if(db.executeQuery(sql, name, desc, taskId)) {
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "Edit Successful", "Task successfully edited!", currentStage);
+            loadContent(taskId);
+            load();
+        }
+    }
+
+    @FXML
+    private void removeMemberButtonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        
+        String sql = "UPDATE task SET team_member_id = NULL WHERE id = ?";
+        
+        if(db.executeQuery(sql, taskId)) {
+            System.out.println("Task updated successfully!|");
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "Member Successfully Removed!", "Remove success!", currentStage);
+            currentStage.close();
+            ViewTaskPageController.getInstance().loadContent(taskId);
+            ViewTaskPageController.getInstance().load();
+        }
     }
     
 }

@@ -25,12 +25,12 @@
       <Label layoutX="312.0" layoutY="220.0" text="Teams:" />
       <Label layoutX="22.0" layoutY="153.0" text="Progress:" />
       <ProgressBar fx:id="taskProgressBar" layoutX="17.0" layoutY="178.0" prefHeight="18.0" prefWidth="565.0" progress="0.0" />
-      <ListView layoutX="17.0" layoutY="472.0" prefHeight="114.0" prefWidth="565.0" />
+      <ListView fx:id="recentActivityListView" layoutX="17.0" layoutY="472.0" prefHeight="114.0" prefWidth="565.0" />
       <Label layoutX="17.0" layoutY="455.0" text="Recent activities:" />
-      <Button fx:id="viewTeamButton" layoutX="412.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#viewTeamButtonMouseClickHandler" text="View" />
+      <Button fx:id="viewTeamButton" layoutX="410.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#viewTeamButtonMouseClickHandler" text="View" />
       <Button fx:id="assignTeamButton" layoutX="462.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#assignTeamButtonMouseClickHandler" text="Assign" />
-      <Button fx:id="viewTaskButton" layoutX="106.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#viewTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="View" />
-      <Button fx:id="addTaskButton" layoutX="167.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#addTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="Add" />
+      <Button fx:id="viewTaskButton" layoutX="113.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#viewTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="View" />
+      <Button fx:id="addTaskButton" layoutX="174.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#addTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="Add" />
       <TableView fx:id="teamTable" layoutX="312.0" layoutY="248.0" prefHeight="203.0" prefWidth="269.0">
         <columns>
           <TableColumn fx:id="teamIdColumn" prefWidth="134.66668701171875" text="ID" />
@@ -47,7 +47,9 @@
       <Label layoutX="418.0" layoutY="39.0" text="Created by:" />
       <Label fx:id="creatorNameLabel" layoutX="518.0" layoutY="39.0" text="Creator" />
       <Button fx:id="deleteTeamButton" layoutX="522.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#removeTeamButtonMouseClickHandler" text="Remove" />
-      <Button fx:id="deleteTaskButton" layoutX="228.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#deleteTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="Delete" />
+      <Button fx:id="deleteTaskButton" layoutX="235.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#deleteTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="Delete" />
       <Button fx:id="printReportButton" layoutX="490.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#printReportButtonMouseClickHandler" prefHeight="25.0" prefWidth="88.0" text="Print Report" />
+      <Button fx:id="seeTaskButton" layoutX="173.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#seeTaskButtonMouseClickHandler" text="See Assigned Task" visible="false" />
+      <Button fx:id="seeTeamButton" layoutX="463.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#seeTeamButtonMouseClickHandler" text="See Assigned Team" visible="false" />
    </children>
 </AnchorPane>

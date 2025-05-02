@@ -317,5 +317,31 @@ public class DatabaseConfig {
         
         return null;
     }
+    
+    public Task getTaskByTeamMemberId(int teamMemberId) {
+        String sql = "SELECT task.id, task.name, task.description, date_created, due_date, user.last_name, team_member_id, project_id, task_status.name AS status "
+                + "FROM task INNER JOIN user ON user_id = user.id INNER JOIN task_status ON task.status_id = task_status.id WHERE team_member_id = " + teamMemberId;
+        
+        try(ResultSet result = db.getData(sql)) {
+            if(result.next()) {
+                return new Task(
+                    result.getInt("id"),
+                    result.getString("name"),
+                    result.getString("description"),
+                    result.getString("date_created"),
+                    result.getString("due_date"),
+                    result.getString("last_name"),
+                    result.getInt("team_member_id"),
+                    result.getInt("project_id"),
+                    result.getString("status")
+                );
+            }
+        } catch (Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
 }
 
