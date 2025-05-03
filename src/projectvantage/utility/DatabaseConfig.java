@@ -343,5 +343,33 @@ public class DatabaseConfig {
         
         return null;
     }
+    
+    public int getCompletedTasks(int projectId) {
+        String sql = "SELECT COUNT(*) AS total FROM task WHERE status_id = 2 AND project_id = " + projectId;
+        
+        try (ResultSet result = db.getData(sql)) {
+            if(result.next()) {
+                return result.getInt("total");
+            }
+        } catch (Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    public int getTotalTasks(int projectId) {
+        String sql = "SELECT COUNT(*) AS total FROM task WHERE project_id = " + projectId;
+        
+        try(ResultSet result = db.getData(sql)) {
+            if(result.next()) {
+                return result.getInt("total");
+            }
+        } catch (Exception e) {
+            System.out.println("Database Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }
 

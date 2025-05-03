@@ -17,6 +17,7 @@ public class Task {
     private String dueDate;
     private String creatorName;
     private int teamMemberid;
+    private String assignedLastName;
     private int projectId;
     private String status;
     
@@ -66,5 +67,13 @@ public class Task {
     
     public String getStatus() {
         return status;
+    }
+    
+    public String getAssignedLastName() {
+        return assignedLastName;
+    }
+    
+    public void setAssignedLastName(String assignedLastName) {
+        this.assignedLastName = assignedLastName;
     }
 }

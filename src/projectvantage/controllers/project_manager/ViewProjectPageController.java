@@ -33,6 +33,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import java.awt.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -56,8 +57,11 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.printing.PDFPrintable;
 import projectvantage.controllers.task_manager.ViewTaskPageController;
 import projectvantage.controllers.team_member.TeamMemberMainPageController;
+import org.apache.pdfbox.printing.PDFPrintable;
+import org.apache.pdfbox.printing.Scaling;
 /**
  * FXML Controller class
  *
@@ -174,7 +178,7 @@ public class ViewProjectPageController implements Initializable {
             
 //            updateTaskProgress(getCompletedTasks());
 
-            updateTaskProgress(getCompletedTasks());
+            updateTaskProgress(databaseConf.getCompletedTasks(projectId));
 
             projectNameLabel.setText(projectName);
             descriptionText.setText(description);
@@ -209,11 +213,11 @@ public class ViewProjectPageController implements Initializable {
     public void refreshTaskTable() {
         taskList.clear();
         loadTaskTable();
-        updateTaskProgress(getCompletedTasks());
+        updateTaskProgress(databaseConf.getCompletedTasks(projectId));
     }
     
     public void updateTaskProgress(int progress) {
-        taskProgressBar.setProgress((double)progress/(double)getTotalTasks());
+        taskProgressBar.setProgress((double)progress/(double)databaseConf.getTotalTasks(projectId));
     }
     
     public void loadContent(int projectId, String username) {
@@ -244,33 +248,7 @@ public class ViewProjectPageController implements Initializable {
 //        }
     }
     
-    public int getCompletedTasks() {
-        String sql = "SELECT COUNT(*) AS total FROM task WHERE status_id = 2 AND project_id = " + projectId;
-        
-        try (ResultSet result = db.getData(sql)) {
-            if(result.next()) {
-                return result.getInt("total");
-            }
-        } catch (Exception e) {
-            System.out.println("Database Error: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return -1;
-    }
     
-    public int getTotalTasks() {
-        String sql = "SELECT COUNT(*) AS total FROM task WHERE project_id = " + projectId;
-        
-        try(ResultSet result = db.getData(sql)) {
-            if(result.next()) {
-                return result.getInt("total");
-            }
-        } catch (Exception e) {
-            System.out.println("Database Error: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return -1;
-    }
     
     public void loadTaskTable() {
         String sql = "SELECT task.id, task.name, task.description, date_created, due_date, user.last_name, team_member_id, project_id, task_status.name AS status "
@@ -422,6 +400,47 @@ public class ViewProjectPageController implements Initializable {
 
     @FXML
     private void printReportButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/misc/ProjectReportPDF.fxml"));
+        Parent root = loader.load();
+        ProjectReportPDFController controller = loader.getController();
+        controller.loadContent(projectId, username);
+        controller.load();
+        
+        Scene dummyScene = new Scene(root);
+        Stage dummyStage = new Stage();
+        dummyStage.setScene(dummyScene);
+        
+        Platform.runLater(() -> {
+            try {
+                WritableImage fxImage = root.snapshot(new SnapshotParameters(), null);
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
+
+                PDDocument document = new PDDocument();
+                PDPage page = new PDPage(PDRectangle.A4);
+                document.addPage(page);
+
+                PDImageXObject pdfImage = LosslessFactory.createFromImage(document, bufferedImage);
+
+                PDPageContentStream contentStream = new PDPageContentStream(document, page);
+                contentStream.drawImage(pdfImage, 0, 0, PDRectangle.A4.getWidth(), PDRectangle.A4.getHeight());
+                contentStream.close();
+
+                PrinterJob printJob = PrinterJob.getPrinterJob();
+                printJob.setJobName("Project Report");
+
+                PDFPrintable printable = new PDFPrintable(document, Scaling.SHRINK_TO_FIT);
+                printJob.setPrintable(printable);
+
+                if (printJob.printDialog()) {
+                    printJob.print(); // Send to printer
+                    alertConf.showAlert(Alert.AlertType.INFORMATION, "Print Successful", "PDF was sent to the printer.", currentStage);
+                }
+                document.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @FXML
@@ -472,44 +491,52 @@ public class ViewProjectPageController implements Initializable {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/misc/ProjectReportPDF.fxml"));
         Parent root = loader.load();
-        
-        Stage dummyStage = new Stage();
-        Scene scene = new Scene(root);
-        dummyStage.setScene(scene);
-        dummyStage.show();
-        
         ProjectReportPDFController controller = loader.getController();
         controller.loadContent(projectId, username);
         controller.load();
         
-        root.applyCss();
-        root.layout();
+        Scene dummyScene = new Scene(root);
+        Stage dummyStage = new Stage();
+        dummyStage.setScene(dummyScene);
         
-        WritableImage fxImage = root.snapshot(new SnapshotParameters(), null);
-        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
-        
-        PDDocument document = new PDDocument();
-        PDPage page = new PDPage(PDRectangle.A4);
-        document.addPage(page);
-        
-        PDImageXObject pdfImage = LosslessFactory.createFromImage(document, bufferedImage);
-        
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        contentStream.drawImage(pdfImage, 0, 0, PDRectangle.A4.getWidth(), PDRectangle.A4.getHeight());
-        contentStream.close();
-        
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Report As");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        fileChooser.setInitialFileName("ProjectReport.pdf");
-        
-        Window window = ((Node) event.getSource()).getScene().getWindow();
-        File file = fileChooser.showSaveDialog(window);
+        Platform.runLater(() -> {
+            try {
+                WritableImage fxImage = root.snapshot(new SnapshotParameters(), null);
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(fxImage, null);
 
-        if (file != null) {
-            document.save(file);
-            alertConf.showAlert(Alert.AlertType.INFORMATION, "Generate PDF Successful", "PDF Successfully Generated!", currentStage);
-        }
-        document.close();
+                PDDocument document = new PDDocument();
+                PDPage page = new PDPage(PDRectangle.A4);
+                document.addPage(page);
+
+                PDImageXObject pdfImage = LosslessFactory.createFromImage(document, bufferedImage);
+
+                PDPageContentStream contentStream = new PDPageContentStream(document, page);
+                contentStream.drawImage(pdfImage, 0, 0, PDRectangle.A4.getWidth(), PDRectangle.A4.getHeight());
+                contentStream.close();
+
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Report As");
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+                fileChooser.setInitialFileName("ProjectReport.pdf");
+                
+                String userHome = System.getProperty("user.home");
+                File downloadsDir = new File(userHome, "Downloads");
+                
+                if (downloadsDir.exists() && downloadsDir.isDirectory()) {
+                    fileChooser.setInitialDirectory(downloadsDir);
+                }
+
+                Window window = ((Node) event.getSource()).getScene().getWindow();
+                File file = fileChooser.showSaveDialog(window);
+
+                if (file != null) {
+                    document.save(file);
+                    alertConf.showAlert(Alert.AlertType.INFORMATION, "Generate PDF Successful", "PDF Successfully Generated!", currentStage);
+                }
+                document.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

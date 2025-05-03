@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-
 
 <AnchorPane id="AnchorPane" prefHeight="842.0" prefWidth="595.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.ProjectReportPDFController">
    <children>
@@ -50,7 +52,25 @@
             <Label layoutX="394.0" layoutY="22.0" text="Project Manager:" textFill="#545454" />
             <ProgressBar fx:id="taskProgressBar" layoutX="26.0" layoutY="247.0" prefHeight="18.0" prefWidth="538.0" progress="0.0" />
             <Rectangle fill="#a5b4d9" height="1.0" layoutX="5.0" layoutY="285.0" opacity="0.2" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="580.0" />
+            <TableView fx:id="taskTable" layoutX="27.0" layoutY="327.0" prefHeight="392.0" prefWidth="538.0">
+              <columns>
+                <TableColumn fx:id="taskNameColumn" prefWidth="172.0" text="Task Name" />
+                <TableColumn fx:id="assignedToColumn" prefWidth="141.0" text="Assigned To" />
+                  <TableColumn fx:id="dueDateColumn" prefWidth="114.0" text="Due Date" />
+                  <TableColumn fx:id="statusColumn" prefWidth="109.0" text="Status" />
+              </columns>
+            </TableView>
+            <Label layoutX="26.0" layoutY="304.0" text="Tasks:" textFill="#545454" />
+            <Label layoutX="25.0" layoutY="767.0" text="Number of tasks completed:" textFill="#545454" />
+            <Label layoutX="25.0" layoutY="790.0" text="Total tasks:" textFill="#545454" />
+            <Rectangle fill="#a5b4d9" height="1.0" layoutX="8.0" layoutY="746.0" opacity="0.2" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="580.0" />
+            <Label fx:id="completedTaskLabel" layoutX="187.0" layoutY="767.0" text="Completed tasks" textFill="#545454" />
+            <Label fx:id="totalTaskLabel" layoutX="187.0" layoutY="790.0" text="Total tasks" textFill="#545454" />
          </children>
       </Pane>
    </children>
+   <stylesheets>
+      <URL value="@../../css/style.css" />
+      <URL value="@../../css/table-style.css" />
+   </stylesheets>
 </AnchorPane>
