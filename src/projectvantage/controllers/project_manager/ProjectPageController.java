@@ -293,6 +293,7 @@ public class ProjectPageController implements Initializable {
             }
             
             projectManagerController.loadPage(viewProjectFXML, selectedProject.getName());
+            ViewProjectPageController.getInstance().loadContent(selectedProject.getId(), username);
             
         } catch (Exception e) {
             e.printStackTrace();

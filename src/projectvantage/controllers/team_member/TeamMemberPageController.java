@@ -22,6 +22,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableCell;
@@ -161,6 +163,13 @@ public class TeamMemberPageController implements Initializable {
         loadTableData();
     }
     
+    private Node createPage(int pageIndex) {
+        int fromIndex = pageIndex * ROWS_PER_PAGE;
+        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, teamMemberList.size());
+        teamMemberTable.setItems(FXCollections.observableArrayList(teamMemberList.subList(fromIndex, toIndex)));
+        return teamMemberTable;
+    }
+    
     public void loadTableData() {
         String sql = "SELECT team_member.id AS id, team_id, user.last_name AS last_name, user.username AS username, team_member_role.name AS role, team_member_status.name AS status "
                 + "FROM team_member INNER JOIN user ON user_id = user.id INNER JOIN team_member_role ON team_member.role_id = team_member_role.id "
@@ -178,7 +187,9 @@ public class TeamMemberPageController implements Initializable {
                 ));
             }
             
-            teamMemberTable.setItems(teamMemberList);
+            int pageCount = (int) Math.ceil((double) teamMemberList.size() / ROWS_PER_PAGE);
+            pagination.setPageCount(pageCount);
+            pagination.setPageFactory(this::createPage);
         } catch (Exception e) {
             System.out.println("Database Error: " + e.getMessage());
             e.printStackTrace();
@@ -191,9 +202,17 @@ public class TeamMemberPageController implements Initializable {
 
     @FXML
     private void viewTeamMemberButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
         String viewTeamMemberFXML = "/projectvantage/fxml/team_member/ViewTeamMemberPage.fxml";
         
-        int teamMemberId = teamMemberTable.getSelectionModel().getSelectedItem().getId();
+        TeamMember member = teamMemberTable.getSelectionModel().getSelectedItem();
+        
+        if(member == null) {
+            alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening Team Member", "You must select a team member.", currentStage);
+            return;
+        }
+        
+        int teamMemberId = member.getId();
         int userId = databaseConf.getUserIdById(teamMemberId);
         
         pageConf.loadWindow(viewTeamMemberFXML, "Team Member", rootPane);

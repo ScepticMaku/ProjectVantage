@@ -19,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
@@ -45,6 +46,8 @@ public class TaskPageController implements Initializable {
     DatabaseConfig databaseConf = new DatabaseConfig();
     
     ObservableList<Task> taskList = FXCollections.observableArrayList();
+    
+    private static final int ROWS_PER_PAGE = 9;
     
     private String username;
     private int userId;
@@ -101,6 +104,13 @@ public class TaskPageController implements Initializable {
         loadTaskTable();
     }
     
+    private Node createPage(int pageIndex) {
+        int fromIndex = pageIndex * ROWS_PER_PAGE;
+        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, taskList.size());
+        taskTable.setItems(FXCollections.observableArrayList(taskList.subList(fromIndex, toIndex)));
+        return taskTable;
+    }
+    
     public void loadTaskTable() {
         
         String sql = "SELECT task.id, task.name, task.description, date_created, due_date, user.last_name, team_member_id, project_id, task_status.name AS status "
@@ -121,7 +131,9 @@ public class TaskPageController implements Initializable {
                 ));
             }
             
-            taskTable.setItems(taskList);
+            int pageCount = (int) Math.ceil((double) taskList.size() / ROWS_PER_PAGE);
+            pagination.setPageCount(pageCount);
+            pagination.setPageFactory(this::createPage);
             
         } catch (Exception e) {
             System.out.println("Database Error: " + e.getMessage());

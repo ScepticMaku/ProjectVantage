@@ -27,8 +27,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -51,6 +53,7 @@ public class AddTeamMemberPageController implements Initializable {
     
     ObservableList<User> userList = FXCollections.observableArrayList();
     
+    private boolean isMultipleSelection = false;
     private int teamId;
     
     @FXML
@@ -63,6 +66,8 @@ public class AddTeamMemberPageController implements Initializable {
     private TableColumn<User, String> usernameColumn;
     @FXML
     private TableView<User> userTable;
+    @FXML
+    private ToggleButton selectMultipleToggleButton;
 
     /**
      * Initializes the controller class.
@@ -99,7 +104,7 @@ public class AddTeamMemberPageController implements Initializable {
     
     private void loadUsers() {
         String sql = "SELECT user.id, first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key, user_role.name AS role, user_status.name AS status "
-                + "FROM user INNER JOIN user_role ON user.role_id = user_role.id INNER JOIN user_status ON user.status_id = user_status.id WHERE user.role_id = 2 ORDER BY user.id ASC";
+                + "FROM user INNER JOIN user_role ON user.role_id = user_role.id INNER JOIN user_status ON user.status_id = user_status.id WHERE user.role_id = 2 AND user.id NOT IN (SELECT user_id FROM team_member) ORDER BY user.id ASC";
         
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {
@@ -142,26 +147,70 @@ public class AddTeamMemberPageController implements Initializable {
 
     @FXML
     private void addButtonMouseClickHandler(MouseEvent event) {
-        Stage currentStage = (Stage)rootPane.getScene().getWindow();
-        User user = userTable.getSelectionModel().getSelectedItem();
-        
-        int id = user.getId();
-//        String username = user.getUsername();
-        
-        String sql = "INSERT INTO team_member (team_id, user_id) "
-                + "VALUES (?, ?)";
-        
-        if(isUserAlreadyAdded(id)) {
-            alertConf.showAddTeamErrorAlert(currentStage, "user is already in a team");
+//        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+//        User user = userTable.getSelectionModel().getSelectedItem();
+//        
+//        int id = user.getId();
+////        String username = user.getUsername();
+//        
+//        String sql = "INSERT INTO team_member (team_id, user_id) "
+//                + "VALUES (?, ?)";
+//        
+//        if(isUserAlreadyAdded(id)) {
+//            alertConf.showAddTeamErrorAlert(currentStage, "user is already in a team");
+//            return;
+//        }
+//        
+//        if(db.executeQuery(sql, teamId, id)) {
+//            System.out.println("Team added to database!");
+//            alertConf.showAlert(Alert.AlertType.INFORMATION, "Team member successfully added!", "Team member add successful!", currentStage);
+//            currentStage.close();
+//            ViewTeamPageController.getInstance().refreshTable();
+//        }
+        Stage currentStage = (Stage) rootPane.getScene().getWindow();
+
+        ObservableList<User> selectedUsers = userTable.getSelectionModel().getSelectedItems();
+
+        if (selectedUsers.isEmpty()) {
+            alertConf.showAlert(Alert.AlertType.WARNING, "No Selection", "Please select at least one user.", currentStage);
             return;
         }
-        
-        if(db.executeQuery(sql, teamId, id)) {
-            System.out.println("Team added to database!");
-            alertConf.showAlert(Alert.AlertType.INFORMATION, "Team member successfully added!", "Team member add successful!", currentStage);
-            currentStage.close();
-            ViewTeamPageController.getInstance().refreshTable();
+
+        int successCount = 0;
+        for (User user : selectedUsers) {
+            int userId = user.getId();
+
+            if (isUserAlreadyAdded(userId)) {
+                System.out.println("User ID " + userId + " is already in a team. Skipping.");
+                continue;
+            }
+
+            String sql = "INSERT INTO team_member (team_id, user_id) VALUES (?, ?)";
+            if (db.executeQuery(sql, teamId, userId)) {
+                successCount++;
+            }
         }
+
+        if (successCount > 0) {
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "Success",
+                    successCount + " user(s) successfully added!", currentStage);
+            ViewTeamPageController.getInstance().refreshTable();
+            currentStage.close();
+        } else {
+            alertConf.showAddTeamErrorAlert(currentStage, "No users were added. They may already be in a team.");
+        }
+    }
+
+    @FXML
+    private void selectMultipleToggleButtonMouseClickHandler(MouseEvent event) {
+        isMultipleSelection = !isMultipleSelection;
+
+    if (isMultipleSelection) {
+        userTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    } else {
+        userTable.getSelectionModel().clearSelection();
+        userTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    }
     }
     
 }

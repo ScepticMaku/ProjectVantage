@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="293.0" prefWidth="253.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.team_member.AddTeamMemberPageController">
@@ -16,5 +17,6 @@
             <TableColumn fx:id="usernameColumn" prefWidth="113.33338165283203" text="Username" />
         </columns>
       </TableView>
+      <ToggleButton fx:id="selectMultipleToggleButton" layoutX="147.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#selectMultipleToggleButtonMouseClickHandler" text="Select Multiple" />
    </children>
 </AnchorPane>
