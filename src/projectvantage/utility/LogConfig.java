@@ -22,8 +22,7 @@ public class LogConfig {
         db.executeQuery(sql, userId, act, desc);
     }
     
-    public void logLogin(boolean isUserLoggedIn, int userId, String desc) {
-        
+    public void loginLog(boolean isUserLoggedIn, int userId, String desc) {
         this.action = "Login Success";
         this.description = desc;
         
@@ -33,5 +32,20 @@ public class LogConfig {
         
         insertLog(userId, action, description);
     }
+    
+    public void logLogout(int userId) {
+        this.action = "Logout";
+        this.description = "User logged out";
+        
+        insertLog(userId, action, description);
+    }
+    
+    public void logResetPassword(int userId) {
+        this.action = "Password Changed/Reset";
+        this.description = "User changed password";
+        
+        insertLog(userId, action, description);
+    }
+    
     
 }

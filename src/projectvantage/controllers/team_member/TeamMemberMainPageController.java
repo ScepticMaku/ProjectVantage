@@ -302,7 +302,7 @@ public class TeamMemberMainPageController implements Initializable {
 
     @FXML
     private void logoutButtonMouseClickHandler(MouseEvent event) {
-        alertConf.showLogoutConfirmationAlert(rootPane, event);
+        alertConf.showLogoutConfirmationAlert(rootPane, event, userId);
     }
 
     @FXML

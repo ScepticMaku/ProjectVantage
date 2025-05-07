@@ -13,11 +13,21 @@ import java.sql.*;
  */
 public class dbConnect {
     
+    // XAMPP 
+    private static final String URL = "jdbc:mysql://localhost:3306/projectvantage_db";
+    private static final String USER = "root";
+    private static final String PASS = "";
+    
+    // RAILWAY
+//    private static final String URL = "jdbc:mysql://root:nDxxRJUQVuJHamVtSNNsSFYekGyWkqpm@crossover.proxy.rlwy.net:22322/railway";
+//    private static final String USER = "root";
+//    private static final String PASS = "nDxxRJUQVuJHamVtSNNsSFYekGyWkqpm";
+    
     private Connection connect;
     
     public dbConnect(){
         try {
-            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectvantage_db", "root", "");
+            connect = DriverManager.getConnection(URL, USER, PASS);
         } catch(SQLException e) {
             System.out.println("Database connection failed: " + e.getMessage());
         }

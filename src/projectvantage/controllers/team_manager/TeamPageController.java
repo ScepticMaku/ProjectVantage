@@ -244,6 +244,12 @@ public class TeamPageController implements Initializable {
             TeamManagerPageController teamManagerController = TeamManagerPageController.getInstance();
 
             Team selectedTeam = teamTable.getSelectionModel().getSelectedItem();
+            
+            if(selectedTeam == null) {
+                alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Team", "You must select a team", currentStage);
+                return;
+            }
+            
             int teamId = selectedTeam.getId();
             String viewTeamFXML = "/projectvantage/fxml/team_manager/ViewTeamPage.fxml";
             
@@ -262,7 +268,7 @@ public class TeamPageController implements Initializable {
             
         } catch(Exception e) {
             e.printStackTrace();
-            alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Team", "You must select a team", currentStage);
+            
         }
     }
 

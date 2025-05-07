@@ -70,7 +70,7 @@ public class ProjectVantage extends Application {
                 break;
             default:
                 alertConf.showLoginErrorAlert(stage, "Role not found.");
-                logConf.logLogin(false, userId, "Role not found.");
+                logConf.loginLog(false, userId, "Role not found.");
         }
     }
     

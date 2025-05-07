@@ -6,9 +6,13 @@
 package projectvantage.controllers.team_manager;
 
 import projectvantage.utility.AlertConfig;
+import projectvantage.utility.ElementConfig;
+import projectvantage.utility.PageConfig;
+import projectvantage.utility.DatabaseConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,9 +23,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import projectvantage.controllers.admin.AdminDashboardPageController;
+import projectvantage.controllers.misc.SettingsPageController;
+import projectvantage.models.User;
 
 /**
  * FXML Controller class
@@ -31,10 +39,17 @@ import javafx.stage.Stage;
 public class TeamManagerPageController implements Initializable {
     
     AlertConfig alertConf = new AlertConfig();
+    ElementConfig elementConf = new ElementConfig();
+    PageConfig pageConf = new PageConfig();
+    DatabaseConfig databaseConf = new DatabaseConfig();
     
     private static TeamManagerPageController instance;
     
+    private static final double IMAGE_SIZE = 50;
+    
     private String username;
+    private int userId;
+    
 
     @FXML
     private AnchorPane backgroundPane;
@@ -94,6 +109,11 @@ public class TeamManagerPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
+        
+        Platform.runLater(() -> {
+            elementConf.loadProfilePicture(username, profileButton, IMAGE_SIZE);
+            loadDashboardPage();
+        });
     }    
     
     public static TeamManagerPageController getInstance() {
@@ -102,10 +122,14 @@ public class TeamManagerPageController implements Initializable {
     
     public void setUsername(String username) {
         this.username = username;
+        
+        User user = databaseConf.getUserByUsername(username);
+        
+        this.userId = user.getId();
     }
     
     public void loadPage(String targetFXML, String title) {
-        Stage currentStage = (Stage)backgroundPane.getScene().getWindow();
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
         
         
         try {
@@ -117,105 +141,168 @@ public class TeamManagerPageController implements Initializable {
             alertConf.showDatabaseErrorAlert(currentStage, "Failed to load page: " + e.getMessage());
         }
     }
+    
+    private void loadDashboardPage() {
+        try{
+            FXMLLoader dashboardLoader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/team_manager/TeamManagerDashboardPage.fxml"));
+            rootPane.setCenter(dashboardLoader.load());
+
+            TeamManagerDashboardPageController dashboardController = dashboardLoader.getController();
+            dashboardController.loadContent(username);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void dashboardMouseReleaseHandler(MouseEvent event) {
+        dashboardButtonBG.setFill(Color.web("#f5f5f5"));
     }
 
     @FXML
     private void dashboardMouseExitHandler(MouseEvent event) {
+        elementConf.fadeOut(dashboardButtonBG);
     }
 
     @FXML
     private void dashboardButtonMouseEnteredHandler(MouseEvent event) {
+        elementConf.fadeIn(dashboardButtonBG);
     }
 
     @FXML
     private void dashboardButtonMouseClickHandler(MouseEvent event) {
+        elementConf.setSelected("/projectvantage/resources/icons/dashboard-icon-selected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        loadDashboardPage();
+        
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
     private void dashboardMousePressHandler(MouseEvent event) {
+        dashboardButtonBG.setFill(Color.web("#eeeeee"));
     }
 
     @FXML
     private void exitButtonMouseReleaseHandler(MouseEvent event) {
+        logoutButtonBG.setFill(Color.web("#f5f5f5"));
     }
 
     @FXML
     private void teamButtonMouseExitHandler(MouseEvent event) {
+        elementConf.fadeOut(teamButtonBG);
     }
 
     @FXML
     private void teamButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.fadeIn(teamButtonBG);
     }
 
     @FXML
     private void teamButtonMouseClickHandler(MouseEvent event) {
+        String teamFXML = "/projectvantage/fxml/team_manager/TeamPage.fxml";
+        
+        elementConf.setSelected("/projectvantage/resources/icons/team-icon-selected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
+        loadPage(teamFXML, "Teams");
+        TeamPageController.getInstance().setUsername(username);
+        
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
     }
 
     @FXML
     private void exitButtonMousePressHandler(MouseEvent event) {
+        teamButtonBG.setFill(Color.web("#eeeeee"));
     }
 
     @FXML
     private void settingsButtonMouseReleaseHandler(MouseEvent event) {
+        settingsButtonBG.setFill(Color.web("#f5f5f5"));
+        
     }
 
     @FXML
     private void settingsButtonMouseExitHandler(MouseEvent event) {
+        elementConf.fadeOut(settingsButtonBG);
     }
 
     @FXML
     private void settingsButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.fadeIn(settingsButtonBG);
     }
 
     @FXML
     private void settingsButtonMouseClickHandler(MouseEvent event) {
+        String settingsPageFXML = "/projectvantage/fxml/misc/SettingsPage.fxml";
+        loadPage(settingsPageFXML, "Settings");
+        SettingsPageController.getInstance().setUsername(username);
+        elementConf.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
     }
 
     @FXML
-    private void settingsButtonMousePressHandler(MouseEvent event) {
+    private void settingsButtonMousePressHandler(MouseEvent event) { 
+            settingsButtonBG.setFill(Color.web("#eeeeee")); 
     }
 
     @FXML
     private void logoutButtonMouseReleaseHandler(MouseEvent event) {
+        logoutButtonBG.setFill(Color.web("#f5f5f5"));
+        elementConf.setUnselected("/projectvantage/resources/icons/signout-icon-unselected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
     }
 
     @FXML
     private void logoutButtonMouseExitHandler(MouseEvent event) {
+        elementConf.fadeOut(logoutButtonBG);
     }
 
     @FXML
     private void logoutButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.fadeIn(logoutButtonBG);
     }
 
     @FXML
     private void logoutButtonMouseClickHandler(MouseEvent event) {
+        alertConf.showLogoutConfirmationAlert(rootPane, event, userId);
     }
 
     @FXML
     private void logoutButtonMousePressHandler(MouseEvent event) {
+        logoutButtonBG.setFill(Color.web("#eeeeee"));
+        elementConf.setSelected("/projectvantage/resources/icons/signout-icon-selected.png", logoutButtonLabel, logoutButtonIndicator, logoutButtonIcon);
     }
 
     @FXML
     private void profileButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(profileButton);
     }
 
     @FXML
     private void profileButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(profileButton);
     }
 
     @FXML
     private void profileButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(profileButton);
     }
 
     @FXML
-    private void profileButtonMouseClickHandler(MouseEvent event) {
+    private void profileButtonMouseClickHandler(MouseEvent event) throws Exception {
+        String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
+        String user = getInstance().username;
+        pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
+        
+        elementConf.setUnselected("/projectvantage/resources/icons/settings-icon-unselected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/dashboard-icon-unselected.png", dashboardButtonLabel, dashboardButtonIndicator, dashboardButtonIcon);
+        elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
     }
 
     @FXML
     private void profileButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(profileButton);
     }
 
     @FXML

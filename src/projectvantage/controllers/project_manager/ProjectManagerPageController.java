@@ -8,6 +8,7 @@ package projectvantage.controllers.project_manager;
 import projectvantage.controllers.misc.SettingsPageController;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.AlertConfig;
+import projectvantage.utility.DatabaseConfig;
 import projectvantage.utility.PageConfig;
 
 import java.net.URL;
@@ -27,6 +28,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import projectvantage.models.User;
 
 /**
  * FXML Controller class
@@ -37,6 +39,7 @@ public class ProjectManagerPageController implements Initializable {
     
     private static ProjectManagerPageController instance;
     
+    DatabaseConfig databaseConf = new DatabaseConfig();
     ElementConfig elementConf = new ElementConfig();
     AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
@@ -44,6 +47,7 @@ public class ProjectManagerPageController implements Initializable {
     private static final double IMAGE_SIZE = 50;
     
     private String username;
+    private int userId;
 
     @FXML
     private AnchorPane backgroundPane;
@@ -115,8 +119,12 @@ public class ProjectManagerPageController implements Initializable {
         return instance;
     }
     
-    public void setUsername(String user) {
-        this.username = user;
+    public void setUsername(String username) {
+        this.username = username;
+        
+        User user = databaseConf.getUserByUsername(username);
+        
+        this.userId = user.getId();
     }
     
    private void loadDashboardPage() {
@@ -226,7 +234,7 @@ public class ProjectManagerPageController implements Initializable {
 
     @FXML
     private void logoutButtonMouseClickHandler(MouseEvent event) {
-        alertConf.showLogoutConfirmationAlert(rootPane, event);
+        alertConf.showLogoutConfirmationAlert(rootPane, event, userId);
     }
 
     @FXML

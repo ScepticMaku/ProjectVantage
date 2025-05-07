@@ -138,7 +138,7 @@ public class LoginController implements Initializable {
         
         if(!doesPasswordMatch) {
             alertConf.showLoginErrorAlert(currentStage, "Password does not match.");
-            logConf.logLogin(false, user.getId(), "Password does not match.");
+            logConf.loginLog(false, user.getId(), "Password does not match.");
             return; 
         }
         
@@ -146,7 +146,7 @@ public class LoginController implements Initializable {
         
         if(!isStatusActive) {
             alertConf.showLoginErrorAlert(currentStage, "Account is not active yet.");
-            logConf.logLogin(false, user.getId(), "Account is not active yet.");
+            logConf.loginLog(false, user.getId(), "Account is not active yet.");
             return;
         }
         
@@ -167,10 +167,10 @@ public class LoginController implements Initializable {
                 break;
             default:
                 alertConf.showLoginErrorAlert(currentStage, "Role not found.");
-                logConf.logLogin(false, user.getId(), "Role not found.");
+                logConf.loginLog(false, user.getId(), "Role not found.");
         }
         
-        logConf.logLogin(true, user.getId(), "Successfully logged in");
+        logConf.loginLog(true, user.getId(), "Successfully logged in");
         alertConf.showAlert(Alert.AlertType.INFORMATION, "Login Alert", "Welcome " + username + "!", currentStage);
     }
     

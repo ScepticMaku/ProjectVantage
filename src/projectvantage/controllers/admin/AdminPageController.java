@@ -53,6 +53,7 @@ public class AdminPageController implements Initializable {
     
     private static AdminPageController instance;
     private String username;
+    private int userId;
 
     @FXML
     private AnchorPane backgroundPane;
@@ -172,7 +173,8 @@ public class AdminPageController implements Initializable {
     public void setUsername(String userInput) {
         User user = dbConf.getUserByUsername(userInput);
         
-        username = user.getUsername();
+        this.username = user.getUsername();
+        this.userId = user.getId();
     }
     
     public AnchorPane getBackgroundPane() {
@@ -298,7 +300,7 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void logoutButtonMouseClickHandler(MouseEvent event) throws Exception {
-        alertConf.showLogoutConfirmationAlert(rootPane, event);
+        alertConf.showLogoutConfirmationAlert(rootPane, event, userId);
     }
 
     @FXML
@@ -481,9 +483,7 @@ public class AdminPageController implements Initializable {
 
     @FXML
     private void profileButtonMousePressHandler(MouseEvent event) {
-//        config.pressIcon(profileButton);
-        profileButton.setScaleX(0.9);
-        profileButton.setScaleY(0.9);
+        elementConf.pressIcon(profileButton);
     }
     
     @FXML

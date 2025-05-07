@@ -12,21 +12,29 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/AssignTeamMemberPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/ViewProjectPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/admin/UserManagementPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/fxml/task_manager/AssignTeamMemberPage.fxml</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/ViewTaskPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/models/Task.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/ViewTeamPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/admin/AdminPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/utility/PageConfig.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/misc/ProjectReportPDFController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/ProjectPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/TaskPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/team_member/TeamMemberPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/ProjectManagerPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/team_member/AddTeamMemberPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/TeamManagerPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/team_member/TeamMemberPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/ViewTaskPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/ViewTeamPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/utility/dbConnect.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/TeamManagerDashboardPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/authentication/LoginController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/misc/ChangePasswordPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/TeamPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/team_member/TeamMemberMainPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/team_member/TeamMemberDashboardPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/misc/ResetPasswordPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/utility/GoogleAuthenticationConfig.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/utility/AlertConfig.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/AssignTeamMemberPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/ProjectManagerPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/TaskPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/ProjectPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/admin/AdminPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/main/ProjectVantage.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/utility/LogConfig.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/ViewProjectPageController.java</file>
+            <file>file:/C:/Users/Markj/OneDrive/Desktop/ProjectVantage/src/projectvantage/controllers/admin/UserManagementPageController.java</file>
         </group>
     </open-files>
 </project-private>

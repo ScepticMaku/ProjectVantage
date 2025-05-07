@@ -7,7 +7,9 @@ package projectvantage.controllers.team_manager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 
 /**
  * FXML Controller class
@@ -15,6 +17,10 @@ import javafx.fxml.Initializable;
  * @author Markj
  */
 public class TeamManagerDashboardPageController implements Initializable {
+    
+    private static TeamManagerDashboardPageController instance;
+    @FXML
+    private Label usernameLabel;
 
     /**
      * Initializes the controller class.
@@ -22,6 +28,15 @@ public class TeamManagerDashboardPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        instance = this;
     }    
+    
+    public static TeamManagerDashboardPageController getInstance() {
+        return instance;
+    }
+    
+    public void loadContent(String user) {
+        usernameLabel.setText(user);
+    }
     
 }

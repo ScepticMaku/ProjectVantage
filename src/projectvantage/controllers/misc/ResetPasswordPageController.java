@@ -11,6 +11,7 @@ import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.dbConnect;
+import projectvantage.utility.LogConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -34,6 +35,7 @@ public class ResetPasswordPageController implements Initializable {
     
     private static ResetPasswordPageController instance;
     
+    LogConfig logConf = new LogConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
     AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
@@ -45,7 +47,8 @@ public class ResetPasswordPageController implements Initializable {
     private String username;
     private String password;
     private String salt;
-
+    private int userId;
+    
     @FXML
     private Label usernamePlaceholder;
     @FXML
@@ -81,6 +84,7 @@ public class ResetPasswordPageController implements Initializable {
         usernamePlaceholder.setText(username);
         password = user.getPassword();
         salt = user.getSalt();
+        this.userId = user.getId();
     }
     
 //    private void returnToLogin(Event event) throws Exception {
@@ -137,7 +141,7 @@ public class ResetPasswordPageController implements Initializable {
         if(db.executeQuery(sql, updatedPassword, username)) {
             System.out.println("User updated successfully!");
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Change Password Successful", "Password Changed Succesfully!", currentStage);
-            
+            logConf.logResetPassword(userId);
             currentStage.close();
         }
     }

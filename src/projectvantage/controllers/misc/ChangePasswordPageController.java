@@ -12,6 +12,7 @@ import projectvantage.utility.PageConfig;
 import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.models.User;
+import projectvantage.utility.LogConfig;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -51,6 +52,7 @@ public class ChangePasswordPageController implements Initializable {
     PageConfig pageConf = new PageConfig();
     AuthenticationConfig authConf = new AuthenticationConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
+    LogConfig logConf = new LogConfig()
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
     

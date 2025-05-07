@@ -34,9 +34,10 @@ public class AlertConfig {
         alert.showAndWait();
     }
     
-    public void showLogoutConfirmationAlert(Node node, Event event) {
+    public void showLogoutConfirmationAlert(Node node, Event event, int userId) {
         PageConfig pageConf = new PageConfig();
         AuthenticationConfig authConf = new AuthenticationConfig();
+        LogConfig logConf = new LogConfig();
         
         Stage currentStage = (Stage) node.getScene().getWindow();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -55,6 +56,8 @@ public class AlertConfig {
                 try {
                     authConf.logout();
                     pageConf.switchScene(getClass(), event, loginFXML);
+                    logConf.logLogout(userId);
+                    
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
