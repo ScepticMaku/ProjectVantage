@@ -52,10 +52,11 @@ public class ChangePasswordPageController implements Initializable {
     PageConfig pageConf = new PageConfig();
     AuthenticationConfig authConf = new AuthenticationConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
-    LogConfig logConf = new LogConfig()
+    LogConfig logConf = new LogConfig();
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
     
+    private int userId;
     private String password;
     private String salt;
     private String username;
@@ -97,6 +98,7 @@ public class ChangePasswordPageController implements Initializable {
         role = user.getRole();
         password = user.getPassword();
         salt = user.getSalt();
+        userId = user.getId();
         
         usernamePlaceholder.setText(userInput);
     }
@@ -108,18 +110,18 @@ public class ChangePasswordPageController implements Initializable {
         
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
         
-        switch(role){
-            case "team member":
-                TeamMemberMainPageController teamMemberController = loader.getController();
-                teamMemberController.setUsername(username);
-                pageConf.loadProfilePage(fxmlLocation, username, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane());
-            break;
-            case "admin":
-                AdminPageController adminController = loader.getController();
-                adminController.setUsername(username);
-                pageConf.loadProfilePage(fxmlLocation, username, adminController.getBackgroundPane(), adminController.getRootPane());
-            break;
-        }
+//        switch(role){
+//            case "team member":
+//                TeamMemberMainPageController teamMemberController = loader.getController();
+//                teamMemberController.setUsername(username);
+//                pageConf.loadProfilePage(fxmlLocation, username, teamMemberController.getBackgroundPane(), teamMemberController.getRootPane());
+//            break;
+//            case "admin":
+//                AdminPageController adminController = loader.getController();
+//                adminController.setUsername(username);
+//                pageConf.loadProfilePage(fxmlLocation, username, adminController.getBackgroundPane(), adminController.getRootPane());
+//            break;
+//        }
         
         stage.setScene(new Scene(root));
         stage.setResizable(false);
@@ -186,6 +188,7 @@ public class ChangePasswordPageController implements Initializable {
         
         if(db.executeQuery(sql, newPass, username)) {
             System.out.println("User updated successfully!");
+            logConf.logResetPassword(userId);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Change Password Successful", "Password Changed Succesfully!", currentStage);
             
             currentStage.close();

@@ -212,7 +212,7 @@ public class TeamMemberMainPageController implements Initializable {
         String viewProjectFXML = "/projectvantage/fxml/project_manager/ViewProjectPage.fxml";
         
         loadPage(viewProjectFXML, "Project");
-        ViewProjectPageController.getInstance().loadContent(projectId, username);
+        ViewProjectPageController.getInstance().loadContent(projectId);
         
     }
 
@@ -436,7 +436,7 @@ public class TeamMemberMainPageController implements Initializable {
         
         String viewTeamPageFXML = "/projectvantage/fxml/team_manager/ViewTeamPage.fxml";
         loadPage(viewTeamPageFXML, "Team");
-        ViewTeamPageController.getInstance().loadContent(teamId, username);
+        ViewTeamPageController.getInstance().loadContent(teamId);
     }
 
     @FXML

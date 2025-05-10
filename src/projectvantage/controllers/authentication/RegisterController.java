@@ -11,6 +11,8 @@ import projectvantage.utility.PageConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.AlertConfig;
+import projectvantage.utility.LogConfig;
+import projectvantage.utility.DatabaseConfig;
 import projectvantage.models.User;
 
 import java.net.URL;
@@ -45,7 +47,8 @@ public class RegisterController implements Initializable {
     AuthenticationConfig authConf = new AuthenticationConfig();
     GoogleAuthenticationController googleAuth = GoogleAuthenticationController.getInstance();
     AlertConfig alertConf = new AlertConfig();
-    
+    LogConfig logConf = new LogConfig();
+    DatabaseConfig databaseConf = new DatabaseConfig();
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
     
@@ -183,8 +186,8 @@ public class RegisterController implements Initializable {
         String password = passwordField.getText();
         String passwordConfirm = passwordConfirmField.getText();
         
-        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password, secret_key) "
-                + "VALUES ( ?, ?, ?, ?, ?, ? ,?, ?, ?)";
+        String query = "INSERT INTO user (first_name, middle_name, last_name, email, phone_number, username, salt, password) "
+                + "VALUES ( ?, ?, ?, ?, ?, ? ,?, ?)";
         
         if(verifyUser(currentStage, firstName, lastName, emailAddress, phoneNumber, username, password, passwordConfirm))
             return;
@@ -192,7 +195,19 @@ public class RegisterController implements Initializable {
         String salt = authConf.generateSalt();
         String hashedPassword = authConf.hashPassword(passwordConfirm, salt);
         
-        pageConf.switchToVerifyAuthenticator(event, getClass(), rootPane, query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword);
+        if(connect.executeQuery(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, hashedPassword)) {
+             System.out.println("User added to database!");
+             alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
+         }
+        
+        User user = databaseConf.getUserByUsername(username);
+        
+        logConf.registerLog(user.getId());
+        
+        String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
+        
+        pageConf.switchScene(getClass(), event, loginFXML);
+        currentStage.setTitle("Login");
     }
 
     @FXML

@@ -5,6 +5,8 @@
  */
 package projectvantage.controllers.project_manager;
 
+import projectvantage.utility.LogConfig;
+import projectvantage.utility.SessionConfig;
 import projectvantage.models.Project;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.ElementConfig;
@@ -52,6 +54,7 @@ public class ProjectPageController implements Initializable {
     
     private static ProjectPageController instance;
     
+    LogConfig logConf = new LogConfig();
     dbConnect db = new dbConnect();
     ElementConfig elementConf = new ElementConfig();
     AlertConfig alertConf = new AlertConfig();
@@ -64,7 +67,7 @@ public class ProjectPageController implements Initializable {
     private static final double ICON_HEIGHT = 26;
     private static final double ICON_WIDTH = 26;
     
-    private String username;
+//    private String username;
     private String role;
     private int userId;
 
@@ -142,10 +145,12 @@ public class ProjectPageController implements Initializable {
                     deleteButton.setOnMouseClicked(event -> {
                         Project selectedRow = projectTable.getSelectionModel().getSelectedItem();
                         int id = selectedRow.getId();
+                        String name = selectedRow.getName();
                         
                         String sql = "DELETE FROM project WHERE id = ?";
                         
                         alertConf.showDeleteConfirmationAlert(currentStage, sql, id);
+                        logConf.logDeleteProject(userId, name);
                         refreshTable();
                     });
                     
@@ -190,25 +195,18 @@ public class ProjectPageController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
         
         Platform.runLater(() -> {
+        
+            SessionConfig sessionConf = SessionConfig.getInstance();
+
+            role = sessionConf.getRole();
+            userId = sessionConf.getId();
+            
             loadTableData();
         });
     }
     
     public static ProjectPageController getInstance() {
         return instance;
-    }
-    
-    public void setUsername(String username) {
-        this.username = username;
-        
-        User user = databaseConf.getUserByUsername(username);
-        
-        this.role = user.getRole();
-        this.userId = user.getId();
-    }
-    
-    public String getUsername() {
-        return username;
     }
     
     public void refreshTable() {
@@ -288,12 +286,12 @@ public class ProjectPageController implements Initializable {
         try {
             if(role.equals("admin")) {
                 adminController.loadPage(viewProjectFXML, selectedProject.getName());
-                ViewProjectPageController.getInstance().loadContent(selectedProject.getId(), username);
+                ViewProjectPageController.getInstance().loadContent(selectedProject.getId());
                 return;
             }
             
             projectManagerController.loadPage(viewProjectFXML, selectedProject.getName());
-            ViewProjectPageController.getInstance().loadContent(selectedProject.getId(), username);
+            ViewProjectPageController.getInstance().loadContent(selectedProject.getId());
             
         } catch (Exception e) {
             e.printStackTrace();

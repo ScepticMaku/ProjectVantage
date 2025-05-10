@@ -5,7 +5,8 @@
  */
 package projectvantage.controllers.project_manager;
 
-import projectvantage.models.User;
+import projectvantage.utility.LogConfig;
+import projectvantage.utility.SessionConfig;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.dbConnect;
@@ -38,6 +39,7 @@ import javafx.util.StringConverter;
  */
 public class AddProjectPageController implements Initializable {
     
+    LogConfig logConf = new LogConfig();
     ElementConfig elementConf = new ElementConfig();
     AlertConfig alertConf = new AlertConfig();
     dbConnect db = new dbConnect();
@@ -107,14 +109,13 @@ public class AddProjectPageController implements Initializable {
     private void addButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         ProjectPageController projectController = ProjectPageController.getInstance();
+        SessionConfig sessionConf = SessionConfig.getInstance();
         
+        int userId = sessionConf.getId();
         String name = projectNameField.getText();
         String description = descriptionTextArea.getText();
         String creationDate = getCurrentDate();
         String dueDate = datePicker.getEditor().getText();
-        String username = projectController.getUsername();
-        
-        User user = dbConf.getUserByUsername(username);
         Date formattedDueDate = formatDate(dueDate);
         LocalDate selectedDate = datePicker.getValue();
         LocalDate today = LocalDate.now();
@@ -141,8 +142,9 @@ public class AddProjectPageController implements Initializable {
         
         String sql = "INSERT INTO project (name, description, creation_date,  due_date, user_id) VALUES (?, ?, ?, ?, ?)";
         
-        if(db.executeQuery(sql, name, description, creationDate, formattedDueDate, user.getId())) {
+        if(db.executeQuery(sql, name, description, creationDate, formattedDueDate, userId)) {
             System.out.println("Project added to database!");
+            logConf.logAddProject(userId, name);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Project successfully Added!", "Add Successful", currentStage);
             projectController.refreshTable();
             currentStage.close();

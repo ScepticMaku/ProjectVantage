@@ -22,30 +22,64 @@ public class LogConfig {
         db.executeQuery(sql, userId, act, desc);
     }
     
-    public void loginLog(boolean isUserLoggedIn, int userId, String desc) {
-        this.action = "Login Success";
-        this.description = desc;
+    public void loginLog(boolean isUserLoggedIn, int userId, String description) {
+        action = "Login Success";
         
         if(!isUserLoggedIn) {
-            this.action = "Login Failed";
+            action = "Login Failed";
         }
         
         insertLog(userId, action, description);
     }
     
+    public void registerLog(int userId) {
+        action = "Register";
+        description = "User successully registered.";
+        
+        insertLog(userId, action, description);
+    }
+    
     public void logLogout(int userId) {
-        this.action = "Logout";
-        this.description = "User logged out";
+        action = "Logout";
+        description = "User logged out";
         
         insertLog(userId, action, description);
     }
     
     public void logResetPassword(int userId) {
-        this.action = "Password Changed/Reset";
-        this.description = "User changed password";
+        action = "Password Changed/Reset";
+        description = "User changed password";
         
         insertLog(userId, action, description);
     }
     
+    public void logEditProfile(int userId, String description) {
+        action = "Profile Edit";
+        
+        insertLog(userId, action, description);
+    }
     
+    public void logAddUser(int userId, String addedUserUsername) {
+        action = "Add User";
+        description = "User added: " + addedUserUsername;
+        
+        insertLog(userId, action, description);
+    }
+    
+    public void logAddProject(int userId, String projectName) {
+        action = "Add Project";
+        description = "Project added: " + projectName;
+        insertLog(userId, action, description);
+    }
+    
+    public void logEditProject(int userId, String description) {
+        action = "Edit Project";
+        insertLog(userId, action, description);
+    }
+    
+    public void logDeleteProject(int userId, String projectName) {
+        action = "Delete Project";
+        description = "Project deleted: " + projectName;
+        insertLog(userId, action, description);
+    }
 }

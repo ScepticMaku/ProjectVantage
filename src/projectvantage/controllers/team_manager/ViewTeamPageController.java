@@ -36,6 +36,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import projectvantage.utility.SessionConfig;
 
 /**
  * FXML Controller class
@@ -61,7 +62,7 @@ public class ViewTeamPageController implements Initializable {
     private String teamLeader;
     private String role;
     private String userRole;
-    private String username;
+//    private String username;
     
     @FXML
     private Label teamNameLabel;
@@ -147,13 +148,12 @@ public class ViewTeamPageController implements Initializable {
         });
     }
     
-    public void loadContent(int id, String username) {
+    public void loadContent(int id) {
         Team team = databaseConf.getTeamById(id);
-        User user = databaseConf.getUserByUsername(username);
         Project project = databaseConf.getProjectById(team.getProjectId());
+        SessionConfig sessionConf = SessionConfig.getInstance();
         
-        this.username = username;
-        this.userRole = user.getRole();
+        this.userRole = sessionConf.getRole();
         this.id = id;
         
         if(databaseConf.getTeamLeaderByTeamId(id) != null) {
@@ -236,14 +236,14 @@ public class ViewTeamPageController implements Initializable {
                 
                 if(userRole.equals("admin")) {
                     adminController.loadPage(viewTeamFXML, "Team");
-                    getInstance().loadContent(id, username);
+                    getInstance().loadContent(id);
                     getInstance().load();
                     return;
                 }
 
                 if(userRole.equals("team manager")) {
                     teamManagerController.loadPage(viewTeamFXML, "Team");
-                    getInstance().loadContent(id, username);
+                    getInstance().loadContent(id);
                     getInstance().load();
                 }
             } catch (Exception e) {
@@ -283,14 +283,12 @@ public class ViewTeamPageController implements Initializable {
         if(userRole.equals("admin")) {
             AdminPageController adminController = AdminPageController.getInstance();
             adminController.loadPage(teamPageFXML, "Teams");
-            TeamPageController.getInstance().setUsername(username);
             return;
         }
         
         if(userRole.equals("team manager")) {
             TeamManagerPageController teamManagerController = TeamManagerPageController.getInstance();
             teamManagerController.loadPage(teamPageFXML, "Teams");
-            TeamPageController.getInstance().setUsername(username);
         }
     }
 
@@ -326,14 +324,14 @@ public class ViewTeamPageController implements Initializable {
 
                 if(userRole.equals("admin")) {
                     AdminPageController.getInstance().loadPage(viewTeamFXML, "Team");
-                    getInstance().loadContent(id, username);
+                    getInstance().loadContent(id);
                     getInstance().load();
                     return;
                 }
 
                 if(userRole.equals("team manager")) {
                     TeamManagerPageController.getInstance().loadPage(viewTeamFXML, "Team");
-                    getInstance().loadContent(id, username);
+                    getInstance().loadContent(id);
                     getInstance().load();
                 }
             } catch (Exception e) {

@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.team_manager;
 
+import projectvantage.utility.SessionConfig;
 import projectvantage.models.Team;
 import projectvantage.models.User;
 import projectvantage.utility.dbConnect;
@@ -60,7 +61,7 @@ public class TeamPageController implements Initializable {
     private static final double ICON_HEIGHT = 26;
     private static final double ICON_WIDTH = 26;
 
-    private String username;
+//    private String username;
     private String role;
     
     @FXML
@@ -184,14 +185,6 @@ public class TeamPageController implements Initializable {
         return instance;
     }
     
-    public void setUsername(String username) {
-        this.username = username;
-        
-        User user = databaseConf.getUserByUsername(username);
-        
-        this.role = user.getRole();
-    }
-    
     public void refreshTable() {
         teamList.clear();
         loadTableData();
@@ -256,14 +249,14 @@ public class TeamPageController implements Initializable {
             if(role.equals("admin")) {
                 adminController.loadPage(viewTeamFXML, "Team");
                 ViewTeamPageController viewTeamController = ViewTeamPageController.getInstance();
-                viewTeamController.loadContent(teamId, username);
+                viewTeamController.loadContent(teamId);
                 return;
             }
 
             if(role.equals("team manager")) {
                 teamManagerController.loadPage(viewTeamFXML, "Team");
                 ViewTeamPageController viewTeamController = ViewTeamPageController.getInstance();
-                viewTeamController.loadContent(selectedTeam.getId(), username);
+                viewTeamController.loadContent(selectedTeam.getId());
             }
             
         } catch(Exception e) {

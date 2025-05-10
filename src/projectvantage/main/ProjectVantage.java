@@ -7,6 +7,7 @@ package projectvantage.main;
 
 import projectvantage.models.User;
 import projectvantage.utility.PageConfig;
+import projectvantage.utility.SessionConfig;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.DatabaseConfig;
@@ -43,6 +44,12 @@ public class ProjectVantage extends Application {
     
     private String role;
     private int id;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private String username;
     
     String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
     
@@ -78,29 +85,6 @@ public class ProjectVantage extends Application {
         FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
         Parent root = loader.load();
         
-        User user = dbConf.getUserByUsername(userInput);
-        
-        String userRole = user.getRole();
-        
-        switch(userRole){
-            case "admin":
-                AdminPageController adminController = loader.getController();
-                adminController.setUsername(userInput);
-            break;
-            case "standard":
-                TeamMemberMainPageController teamMemberController = loader.getController();
-                teamMemberController.setUsername(userInput);
-            break;
-            case "project manager":
-                ProjectManagerPageController projectManagerController = loader.getController();
-                projectManagerController.setUsername(userInput);
-            break;
-            case "team manager":
-                TeamManagerPageController teamManagerController = loader.getController();
-                teamManagerController.setUsername(userInput);
-                break;
-        }
-        
         authConf.rememberUser(userInput);
         
         stage.getIcons().add(new Image("/projectvantage/resources/img/ProjectLogo.png"));
@@ -113,14 +97,22 @@ public class ProjectVantage extends Application {
     
     @Override
     public void start(Stage primaryStage) throws Exception {
-        
         String rememberedUser = authConf.getRememberedUser();
+        SessionConfig sessionConf = new SessionConfig();
         
         if(rememberedUser != null) {
             User user = dbConf.getUserByUsername(rememberedUser);
             
-            this.role = user.getRole();
-            this.id = user.getId();
+            role = user.getRole();
+            firstName = user.getFirstName();
+            id = user.getId();
+            middleName = user.getMiddleName();
+            lastName = user.getLastName();
+            email = user.getEmail();
+            phoneNumber = user.getPhoneNumber();
+            username = user.getUsername();
+            
+            sessionConf.setSession(id, firstName, middleName, lastName, email, phoneNumber, username, role);
             
             checkRole(primaryStage, rememberedUser, role, id);
             return;

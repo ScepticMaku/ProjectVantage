@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.authentication;
 
+import projectvantage.utility.SessionConfig;
 import projectvantage.utility.Config;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
@@ -49,7 +50,6 @@ import projectvantage.controllers.team_manager.TeamManagerPageController;
  * @author Mark
  */
 public class LoginController implements Initializable {
-    
     Config config = new Config();
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
@@ -62,6 +62,11 @@ public class LoginController implements Initializable {
     
     private static LoginController instance;
     
+    private int userId;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String phoneNumber;
     private String role;
     private String password;
     private String username;
@@ -128,7 +133,12 @@ public class LoginController implements Initializable {
             return;
         }
         
-        role= user.getRole();
+        userId = user.getId();
+        firstName = user.getFirstName();
+        middleName = user.getMiddleName();
+        lastName = user.getLastName();
+        phoneNumber = user.getPhoneNumber();
+        role = user.getRole();
         password = user.getPassword();
         username = user.getUsername();
         salt = user.getSalt();
@@ -175,34 +185,13 @@ public class LoginController implements Initializable {
     }
     
     public void switchScene(String userInput, Class getClass, String targetFXML) throws Exception {
+        SessionConfig sessionConf = new SessionConfig();
         Stage stage = (Stage)rootPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass.getResource(targetFXML));
         Parent root = loader.load();
         
-        User user = dbConf.getUserByUsername(userInput);
-        
-        String userRole = user.getRole();
-        
-        switch(userRole){
-            case "admin":
-                AdminPageController adminController = loader.getController();
-                adminController.setUsername(userInput);
-            break;
-            case "standard":
-                TeamMemberMainPageController teamMemberController = loader.getController();
-                teamMemberController.setUsername(userInput);
-            break;
-            case "project manager":
-                ProjectManagerPageController projectManagerController = loader.getController();
-                projectManagerController.setUsername(userInput);
-            break;
-            case "team manager":
-                TeamManagerPageController teamManagerController = loader.getController();
-                teamManagerController.setUsername(userInput);
-                break;
-        }
-        
         authConfig.rememberUser(userInput);
+        sessionConf.setSession(userId, firstName, middleName, lastName, email, phoneNumber, username, role);
         
         stage.setScene(new Scene(root));
         stage.setResizable(false);

@@ -123,7 +123,7 @@ public class ProjectReportPDFController implements Initializable {
         });
     }
     
-    public void loadContent(int projectId, String username) {
+    public void loadContent(int projectId) {
         Project project = databaseConf.getProjectById(projectId);
         
         if(project != null) {

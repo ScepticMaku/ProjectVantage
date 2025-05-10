@@ -5,6 +5,9 @@
  */
 package projectvantage.controllers.admin;
 
+import projectvantage.utility.LogConfig;
+import projectvantage.models.User;
+import projectvantage.utility.DatabaseConfig;
 import projectvantage.models.Role;
 import projectvantage.controllers.authentication.RegisterController;
 import projectvantage.utility.dbConnect;
@@ -45,6 +48,7 @@ public class AddUserPageController implements Initializable {
     Config config = new Config();
     AuthenticationConfig authConf = new AuthenticationConfig();
     AlertConfig alertConf = new AlertConfig();
+    LogConfig logConf = new LogConfig();
     
     ObservableList<Role> roleList = FXCollections.observableArrayList();
 

@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.project_manager;
 
+import projectvantage.utility.SessionConfig;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import projectvantage.controllers.misc.ProjectReportPDFController;
@@ -81,7 +82,7 @@ public class ViewProjectPageController implements Initializable {
     
     private int userId;
     private int projectId;
-    private String username;
+//    private String username;
     private String role;
     private String projectName;
     private String description;
@@ -220,26 +221,30 @@ public class ViewProjectPageController implements Initializable {
         taskProgressBar.setProgress((double)progress/(double)databaseConf.getTotalTasks(projectId));
     }
     
-    public void loadContent(int projectId, String username) {
+    public void loadContent(int projectId) {
         Project project = databaseConf.getProjectById(projectId);
-        User user = databaseConf.getUserByUsername(username);
+        SessionConfig sessionConf = SessionConfig.getInstance();
         
-         this.username = username;
-         this.projectId = projectId;
+        this.projectId = projectId;
         
         if(project != null) {
-            this.projectName = project.getName();
-            this.description = project.getDescription();
-            this.creationDate = project.getCreationDate();
-            this.dueDate = project.getDueDate();
-            this.status = project.getStatus();
-            this.creatorName = project.getCreatorName();
+            projectName = project.getName();
+            description = project.getDescription();
+            creationDate = project.getCreationDate();
+            dueDate = project.getDueDate();
+            status = project.getStatus();
+            creatorName = project.getCreatorName();
         }
         
-        if(user != null) {
-            this.userId = user.getId();
-            this.role = user.getRole();
+        if(sessionConf != null) {
+            userId = sessionConf.getId();
+            role = sessionConf.getRole();
         }
+        
+//        if(user != null) {
+//            this.userId = user.getId();
+//            this.role = user.getRole();
+//        }
         
 //        User creator = databaseConf.getUserById(userId);
         
@@ -319,19 +324,19 @@ public class ViewProjectPageController implements Initializable {
             
             if(role.equals("admin")) {
                 adminController.loadPage(viewTeamFXML, "Team");
-                ViewTeamPageController.getInstance().loadContent(teamId, username);
+                ViewTeamPageController.getInstance().loadContent(teamId);
                 return;
             }
 
             if(role.equals("team manager")) {
                 teamManagerController.loadPage(viewTeamFXML, "Team");
-                ViewTeamPageController.getInstance().loadContent(selectedTeam.getId(), username);
+                ViewTeamPageController.getInstance().loadContent(selectedTeam.getId());
                 return;
             }
             
             if(role.equals("standard")) {
                 TeamMemberMainPageController.getInstance().loadPage(viewTeamFXML, "Team");
-                ViewTeamPageController.getInstance().loadContent(selectedTeam.getId(), username);
+                ViewTeamPageController.getInstance().loadContent(selectedTeam.getId());
             }
             
         } catch (Exception e) {
@@ -352,7 +357,6 @@ public class ViewProjectPageController implements Initializable {
         int taskId = task.getId();
         
         pageConf.loadWindow("/projectvantage/fxml/task_manager/ViewTaskPage.fxml", "View Task", rootPane);
-        ViewTaskPageController.getInstance().setUsername(username);
         ViewTaskPageController.getInstance().loadContent(taskId);
     }
 
@@ -360,7 +364,6 @@ public class ViewProjectPageController implements Initializable {
     private void addTaskButtonMouseClickHandler(MouseEvent event) throws Exception {
         pageConf.loadWindow("/projectvantage/fxml/task_manager/AddTaskPage.fxml", "Add Task", rootPane);
         AddTaskPageController addTaskController = AddTaskPageController.getInstance();
-        addTaskController.setUsername(username);
         addTaskController.setProjectId(projectId);
     }
 
@@ -404,7 +407,7 @@ public class ViewProjectPageController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/misc/ProjectReportPDF.fxml"));
         Parent root = loader.load();
         ProjectReportPDFController controller = loader.getController();
-        controller.loadContent(projectId, username);
+        controller.loadContent(projectId);
         controller.load();
         
         Scene dummyScene = new Scene(root);
@@ -457,7 +460,6 @@ public class ViewProjectPageController implements Initializable {
         
         int taskId = task.getId();
         pageConf.loadWindow("/projectvantage/fxml/task_manager/ViewTaskPage.fxml", "View Task", rootPane);
-        ViewTaskPageController.getInstance().setUsername(username);
         ViewTaskPageController.getInstance().loadContent(taskId);
     }
 
@@ -476,14 +478,14 @@ public class ViewProjectPageController implements Initializable {
         String viewTeamFXML = "/projectvantage/fxml/team_manager/ViewTeamPage.fxml";
         
         TeamMemberMainPageController.getInstance().loadPage(viewTeamFXML, "Team");
-        ViewTeamPageController.getInstance().loadContent(teamId, username);
+        ViewTeamPageController.getInstance().loadContent(teamId);
     }
 
     @FXML
     private void viewReportButtonMouseClickHandler(MouseEvent event) throws Exception {
         String reportFXML = "/projectvantage/fxml/misc/ProjectReportPDF.fxml";
         pageConf.loadWindow(reportFXML, "Project Report", rootPane);
-        ProjectReportPDFController.getInstance().loadContent(projectId, username);
+        ProjectReportPDFController.getInstance().loadContent(projectId);
     }
 
     @FXML
@@ -492,7 +494,7 @@ public class ViewProjectPageController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/misc/ProjectReportPDF.fxml"));
         Parent root = loader.load();
         ProjectReportPDFController controller = loader.getController();
-        controller.loadContent(projectId, username);
+        controller.loadContent(projectId);
         controller.load();
         
         Scene dummyScene = new Scene(root);

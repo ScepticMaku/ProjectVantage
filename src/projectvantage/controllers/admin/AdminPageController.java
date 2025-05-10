@@ -16,6 +16,7 @@ import projectvantage.utility.PageConfig;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.models.User;
+import projectvantage.utility.SessionConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,7 +42,6 @@ import javafx.stage.Stage;
  * @author Mark Work Account
  */
 public class AdminPageController implements Initializable {
-    
     AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
@@ -156,6 +156,11 @@ public class AdminPageController implements Initializable {
         instance = this;
         
         Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            username = sessionConf.getUsername();
+            userId = sessionConf.getId();
+            
             elementConf.loadProfilePicture(username, profileButton, IMAGE_SIZE);
             
             loadDashboardPage();
@@ -168,13 +173,6 @@ public class AdminPageController implements Initializable {
     
     public String getUsername() {
         return username;
-    }
-    
-    public void setUsername(String userInput) {
-        User user = dbConf.getUserByUsername(userInput);
-        
-        this.username = user.getUsername();
-        this.userId = user.getId();
     }
     
     public AnchorPane getBackgroundPane() {
@@ -206,9 +204,6 @@ public class AdminPageController implements Initializable {
         try{
             FXMLLoader dashboardLoader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/admin/AdminDashboardPage.fxml"));
             rootPane.setCenter(dashboardLoader.load());
-
-            AdminDashboardPageController dashboardController = dashboardLoader.getController();
-            dashboardController.loadContent(username);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -266,7 +261,6 @@ public class AdminPageController implements Initializable {
     private void projectButtonMouseClickHandler(MouseEvent event) {
         String projectFXML = "/projectvantage/fxml/project_manager/ProjectPage.fxml";
         loadPage(projectFXML, "Projects");
-        ProjectPageController.getInstance().setUsername(username);
         elementConf.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
@@ -330,7 +324,6 @@ public class AdminPageController implements Initializable {
         
         elementConf.setSelected("/projectvantage/resources/icons/team-icon-selected.png", teamButtonLabel, teamButtonIndicator, teamButtonIcon);
         loadPage(teamFXML, "Teams");
-        TeamPageController.getInstance().setUsername(username);
       
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);
         elementConf.setUnselected("/projectvantage/resources/icons/project-icon-unselected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
@@ -364,7 +357,6 @@ public class AdminPageController implements Initializable {
     private void taskButtonMouseClickHandler(MouseEvent event) {
         String taskFXML = "/projectvantage/fxml/task_manager/TaskPage.fxml";
         loadPage(taskFXML, "Tasks");
-        TaskPageController.getInstance().setUsername(username);
         
         elementConf.setSelected("/projectvantage/resources/icons/task-icon-selected.png", taskButtonLabel, taskButtonIndicator, taskButtoIcon);
         

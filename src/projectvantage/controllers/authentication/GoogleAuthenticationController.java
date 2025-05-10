@@ -11,7 +11,7 @@ import projectvantage.utility.GoogleAuthenticationConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.DatabaseConfig;
-import projectvantage.models.User;
+import projectvantage.utility.LogConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -43,6 +43,7 @@ public class GoogleAuthenticationController implements Initializable {
     GoogleAuthenticationConfig googleAuthConf = new GoogleAuthenticationConfig();
     AlertConfig alertConf = new AlertConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
+    LogConfig logConf = new LogConfig();
     
     private String query;
     private String firstName;
@@ -99,7 +100,7 @@ public class GoogleAuthenticationController implements Initializable {
         return event.getCode() == KeyCode.ENTER;
     }
     
-    private void registerUser(Event event) throws Exception {
+    private void verifyUser(Event event) throws Exception {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         String OTP = otpField.getText();
         
@@ -115,10 +116,10 @@ public class GoogleAuthenticationController implements Initializable {
         
         alertConf.showAlert(Alert.AlertType.INFORMATION, "Authentication Successful", "Account successfully verified!", currentStage);
         
-        if(connect.executeQuery(query, firstName, middleName, lastName, email, phoneNumber, username, salt, hashedPassword, secretKey)) {
-             System.out.println("User added to database!");
-             alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
-         }
+//        if(connect.executeQuery(query, firstName, middleName, lastName, email, phoneNumber, username, salt, hashedPassword, secretKey)) {
+//             System.out.println("User added to database!");
+//             alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
+//         }
         
         String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
         
@@ -128,12 +129,12 @@ public class GoogleAuthenticationController implements Initializable {
 
     @FXML
     private void submitButtonMouseClickHandler(MouseEvent event) throws Exception {
-        registerUser(event);
+        verifyUser(event);
     }
 
     @FXML
     private void otpFieldKeyPressedHandler(KeyEvent event) throws Exception {
         if(isEnterPressed(event))
-            registerUser(event);
+            verifyUser(event);
     }
 }

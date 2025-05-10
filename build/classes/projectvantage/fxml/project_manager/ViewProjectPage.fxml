@@ -28,8 +28,8 @@
       <ProgressBar fx:id="taskProgressBar" layoutX="17.0" layoutY="178.0" prefHeight="18.0" prefWidth="565.0" progress="0.0" />
       <ListView fx:id="recentActivityListView" layoutX="17.0" layoutY="472.0" prefHeight="114.0" prefWidth="565.0" />
       <Label layoutX="17.0" layoutY="455.0" text="Recent activities:" />
-      <Button fx:id="viewTeamButton" layoutX="410.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#viewTeamButtonMouseClickHandler" text="View" />
-      <Button fx:id="assignTeamButton" layoutX="462.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#assignTeamButtonMouseClickHandler" text="Assign" />
+      <Button fx:id="viewTeamButton" layoutX="398.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#viewTeamButtonMouseClickHandler" prefHeight="27.0" prefWidth="51.0" text="View" />
+      <Button fx:id="assignTeamButton" layoutX="459.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#assignTeamButtonMouseClickHandler" prefHeight="27.0" prefWidth="53.0" text="Assign" />
       <Button fx:id="viewTaskButton" layoutX="113.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#viewTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="View" />
       <Button fx:id="addTaskButton" layoutX="174.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#addTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="Add" />
       <TableView fx:id="teamTable" layoutX="312.0" layoutY="248.0" prefHeight="203.0" prefWidth="269.0">

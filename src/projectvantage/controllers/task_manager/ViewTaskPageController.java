@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.task_manager;
 
+import projectvantage.utility.SessionConfig;
 import projectvantage.models.Project;
 import projectvantage.models.User;
 import projectvantage.models.TeamMember;
@@ -43,6 +44,7 @@ public class ViewTaskPageController implements Initializable {
     
     private static ViewTaskPageController instance;
     
+    
     AlertConfig alertConf = new AlertConfig();
     DatabaseConfig databaseConf = new DatabaseConfig();
     PageConfig pageConf = new PageConfig();
@@ -62,7 +64,7 @@ public class ViewTaskPageController implements Initializable {
     private String assignedTo;
     private String projectName;
     private String status;
-    private String username;
+//    private String username;
     private String role;
     
     @FXML
@@ -115,6 +117,20 @@ public class ViewTaskPageController implements Initializable {
         instance = this;
         
         load();
+        
+        Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            userId = sessionConf.getId();
+            role = sessionConf.getRole();
+            
+            TeamMember member = databaseConf.getTeamMemberByUserId(userId);
+        
+            if(member != null) {
+                guestTeamMemberId = member.getId();
+                guestRole = member.getRole();
+            }
+        });
     }
     
     public void load() {
@@ -154,7 +170,7 @@ public class ViewTaskPageController implements Initializable {
                
                if(projectController != null) {
                     projectController.load();
-                    projectController.loadContent(projectId, username);
+                    projectController.loadContent(projectId);
                     return;
                }
                
@@ -168,22 +184,6 @@ public class ViewTaskPageController implements Initializable {
     
     public static ViewTaskPageController getInstance() {
         return instance;
-    }
-    
-    public void setUsername(String username) {
-        this.username = username;
-        
-        User user = databaseConf.getUserByUsername(username);
-        
-        this.role = user.getRole();
-        this.userId = user.getId();
-        
-        TeamMember member = databaseConf.getTeamMemberByUserId(userId);
-        
-        if(member != null) {
-            this.guestTeamMemberId = member.getId();
-            this.guestRole = member.getRole();
-        }
     }
 
     public void loadContent(int taskId) {
@@ -238,12 +238,12 @@ public class ViewTaskPageController implements Initializable {
             switch(role) {
                 case "admin":
                     adminController.loadPage(viewProjectFXML, projectName);
-                    ViewProjectPageController.getInstance().loadContent(projectId, username);
+                    ViewProjectPageController.getInstance().loadContent(projectId);
                     currentStage.close();
                 break;
                 case "standard":
                     teamMemberController.loadPage(viewProjectFXML, projectName);
-                    ViewProjectPageController.getInstance().loadContent(projectId, username);
+                    ViewProjectPageController.getInstance().loadContent(projectId);
                     currentStage.close();
                 break;
             }

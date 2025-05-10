@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.project_manager;
 
+import projectvantage.utility.SessionConfig;
 import projectvantage.controllers.misc.SettingsPageController;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.AlertConfig;
@@ -109,6 +110,11 @@ public class ProjectManagerPageController implements Initializable {
         instance = this;
         
         Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            username = sessionConf.getUsername();
+            userId = sessionConf.getId();
+            
             elementConf.loadProfilePicture(username, profileButton, IMAGE_SIZE);
             
             loadDashboardPage();
@@ -315,7 +321,6 @@ public class ProjectManagerPageController implements Initializable {
     private void projectButtonMouseClickHandler(MouseEvent event) {
         String projectFXML = "/projectvantage/fxml/project_manager/ProjectPage.fxml";
         loadPage(projectFXML, "Projects");
-        ProjectPageController.getInstance().setUsername(username);
         
         elementConf.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         

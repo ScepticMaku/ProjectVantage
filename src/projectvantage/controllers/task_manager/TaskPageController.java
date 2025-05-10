@@ -49,9 +49,6 @@ public class TaskPageController implements Initializable {
     
     private static final int ROWS_PER_PAGE = 9;
     
-    private String username;
-    private int userId;
-    
     @FXML
     private Pagination pagination;
     @FXML
@@ -93,10 +90,6 @@ public class TaskPageController implements Initializable {
     
     public static TaskPageController getInstance() {
         return instance;
-    }
-    
-    public void setUsername(String username) {
-        this.username = username;
     }
     
     public void refreshTaskTable() {
@@ -154,7 +147,6 @@ public class TaskPageController implements Initializable {
         int taskId = task.getId();
         
         pageConf.loadWindow("/projectvantage/fxml/task_manager/ViewTaskPage.fxml", "View Task", rootPane);
-        ViewTaskPageController.getInstance().setUsername(username);
         ViewTaskPageController.getInstance().loadContent(taskId);
     }
 

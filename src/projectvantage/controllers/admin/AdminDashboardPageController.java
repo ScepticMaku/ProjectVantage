@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.admin;
 
+import projectvantage.utility.SessionConfig;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -37,6 +38,12 @@ public class AdminDashboardPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
+        
+        Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            loadContent(sessionConf.getUsername());
+        });
     }    
     
     public static AdminDashboardPageController getInstance() {

@@ -5,12 +5,14 @@
  */
 package projectvantage.controllers.project_manager;
 
+import projectvantage.utility.LogConfig;
 import projectvantage.models.ProjectStatus;
 import projectvantage.utility.AlertConfig;
 import projectvantage.models.Project;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.dbConnect;
+import projectvantage.utility.SessionConfig;
 
 import java.time.LocalDate;
 import java.net.URL;
@@ -49,6 +51,7 @@ public class EditProjectPageController implements Initializable {
     ElementConfig elementConf = new ElementConfig();
     dbConnect db = new dbConnect();
     AlertConfig alertConf = new AlertConfig();
+    LogConfig logConf = new LogConfig();
     
     ObservableList<ProjectStatus> statusList = FXCollections.observableArrayList();
     
@@ -206,7 +209,9 @@ public class EditProjectPageController implements Initializable {
     @FXML
     private void submitButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        SessionConfig sessionConf = SessionConfig.getInstance();
         
+        int userId = sessionConf.getId();
         String nameF = projectNameField.getText();
         String descF = descriptionTextArea.getText();
         String dueDateF = dueDateField.getText();
@@ -223,16 +228,32 @@ public class EditProjectPageController implements Initializable {
             return;
         }
         
+        StringBuilder description = new StringBuilder("Updated project information, changed: ");
+        
+        if(!nameF.equals(name)) {
+            description.append(" | Project Name: ").append(nameF);
+        }
+        
+        if(!descF.equals(description)) {
+            description.append(" | Description: ").append(descF);
+        }
+        
+        if(!dueDateF.equals(dueDate)) {
+            description.append(" | Due date: ").append(dueDateF);
+        }
+        
         ProjectStatus projectStatus = statusComboBox.getSelectionModel().getSelectedItem();
         
        if(projectStatus != null) {
            pStatus = projectStatus.getId();
+           description.append(" | Status ID: ").append(pStatus);
        }
        
        String sql = "UPDATE project SET name = ?, description = ?, due_date = ?, status_id = ? WHERE id = ?";
        
        if(db.executeQuery(sql, nameF, descF, formattedDueDateF, pStatus, id)) {
             System.out.println("Project updated successfully!");
+            logConf.logEditProject(userId, description.toString());
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Project Update Successful", "Project Updated Succesfully!", currentStage);
             ProjectPageController.getInstance().refreshTable();
             currentStage.close();

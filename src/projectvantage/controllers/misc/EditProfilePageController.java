@@ -6,7 +6,7 @@
 package projectvantage.controllers.misc;
 
 import java.io.File;
-import java.io.IOException;
+import projectvantage.utility.LogConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.Config;
@@ -56,6 +56,7 @@ public class EditProfilePageController implements Initializable {
     Config config = new Config();
     DatabaseConfig dbConf = new DatabaseConfig();
     ElementConfig elementConf = new ElementConfig();
+    LogConfig logConf = new LogConfig();
     
     private static final double PROFILE_FIT_WIDTH = 204;
     private static final double PROFILE_FIT_HEIGHT = 168;
@@ -135,6 +136,7 @@ public class EditProfilePageController implements Initializable {
             alertConf.showEditProfileErrorAlert(currentStage, "Last name field must not be empty.");
             return true;
         }
+        
         return false;
     }
     
@@ -167,6 +169,7 @@ public class EditProfilePageController implements Initializable {
         
         sql = "UPDATE user_image SET image_path = ? WHERE user_id = ?";
         db.executeQuery(sql, imagePath, userId);
+        logConf.logEditProfile(userId, "User updated profile picture");
         System.out.println("User Image updated successfully!");
     }
 
@@ -183,8 +186,28 @@ public class EditProfilePageController implements Initializable {
         if(verifyInput(currentStage, fName, lName)) 
             return;
         
+        if(fName.equals(firstName) && mName.equals(middleName) && lName.equals(lastName) && selectedFile == null) {
+            return;
+        }
+        
         if(db.executeQuery(sql, fName, mName, lName, username)) {
                 System.out.println("User updated successfully!");
+                
+                StringBuilder description  = new StringBuilder("User updated profile information, changed:");
+                
+                if(!fName.equals(firstName)) {
+                    description.append(" | First Name: ").append(fName);
+                }
+                
+                if(!mName.equals(middleName)) {
+                    description.append(" | Middle Name: ").append(mName);
+                }
+                
+                if(!lName.equals(lastName)) {
+                    description.append(" | Last Name: ").append(lName);
+                }
+                
+                logConf.logEditProfile(userId, description.toString());
                 alertConf.showAlert(Alert.AlertType.INFORMATION, "User Update Successful", "User Updated Succesfully!", currentStage);
                 
                 moveAndSaveImageToDatabase();

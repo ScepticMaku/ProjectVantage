@@ -84,7 +84,7 @@ public class ResetPasswordPageController implements Initializable {
         usernamePlaceholder.setText(username);
         password = user.getPassword();
         salt = user.getSalt();
-        this.userId = user.getId();
+        userId = user.getId();
     }
     
 //    private void returnToLogin(Event event) throws Exception {

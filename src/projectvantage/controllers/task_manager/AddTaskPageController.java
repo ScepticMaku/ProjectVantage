@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.task_manager;
 
+import projectvantage.utility.SessionConfig;
 import projectvantage.models.User;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.AlertConfig;
@@ -51,7 +52,7 @@ public class AddTaskPageController implements Initializable {
     private String description;
     private String creationDate;
     private String dueDate;
-    private String username;
+//    private String username;
 
     @FXML
     private AnchorPane rootPane;
@@ -108,10 +109,6 @@ public class AddTaskPageController implements Initializable {
         return instance;
     }
     
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    
     public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
@@ -130,13 +127,14 @@ public class AddTaskPageController implements Initializable {
     @FXML
     private void addButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        SessionConfig sessionConf = SessionConfig.getInstance();
         
         this.name = taskNameField.getText();
         this.description = descriptionTextArea.getText();
         this.creationDate = getCurrentDate();
         this.dueDate = datePicker.getEditor().getText();
         
-        User user = databaseConf.getUserByUsername(username);
+        
         Date formattedDueDate = formatDate(dueDate);
         LocalDate selectedDate = datePicker.getValue();
         LocalDate today = LocalDate.now();
@@ -163,7 +161,7 @@ public class AddTaskPageController implements Initializable {
         
         String sql = "INSERT INTO task (name, description, date_created, due_date, user_id, project_id) VALUES (?, ?, ?, ?, ?, ?)";
         
-        if(db.executeQuery(sql, name, description, creationDate, formattedDueDate, user.getId(), projectId)) {
+        if(db.executeQuery(sql, name, description, creationDate, formattedDueDate, sessionConf.getId(), projectId)) {
             System.out.println("Task added to database!");
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Task successfully added!", "Add successful", currentStage);
             currentStage.close();
