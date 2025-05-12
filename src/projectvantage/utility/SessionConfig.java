@@ -20,6 +20,7 @@ public class SessionConfig {
     private String phone_number;
     private String username;
     private String role;
+    private String secretKey;
     
     public SessionConfig() {
         instance = this;
@@ -102,5 +103,13 @@ public class SessionConfig {
     
     public String getRole() {
         return role;
+    }
+    
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+    
+    public String getSecretKey() {
+        return secretKey;
     }
 }

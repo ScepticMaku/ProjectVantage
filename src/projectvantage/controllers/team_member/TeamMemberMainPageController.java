@@ -269,7 +269,6 @@ public class TeamMemberMainPageController implements Initializable {
     private void settingsButtonMouseClickHandler(MouseEvent event) {
         String settingsFXML = "/projectvantage/fxml/misc/SettingsPage.fxml";
         loadPage(settingsFXML, "Settings");
-        SettingsPageController.getInstance().setUsername(username);
         
         elementConf.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
         

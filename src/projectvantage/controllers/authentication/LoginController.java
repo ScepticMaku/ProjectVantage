@@ -73,7 +73,8 @@ public class LoginController implements Initializable {
     private String salt;
     private String status;
     private String email;
-
+    private String secretKey;
+    
     @FXML
     private TextField usernameField;
     @FXML
@@ -143,6 +144,7 @@ public class LoginController implements Initializable {
         username = user.getUsername();
         salt = user.getSalt();
         status = user.getStatus();
+        secretKey = user.getSecretKey();
         
         boolean doesPasswordMatch = authConfig.verifyPassword(passwordInput, password, salt);
         
@@ -192,6 +194,10 @@ public class LoginController implements Initializable {
         
         authConfig.rememberUser(userInput);
         sessionConf.setSession(userId, firstName, middleName, lastName, email, phoneNumber, username, role);
+        
+        if(secretKey != null) {
+            sessionConf.setSecretKey(secretKey);
+        }
         
         stage.setScene(new Scene(root));
         stage.setResizable(false);

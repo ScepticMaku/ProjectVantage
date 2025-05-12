@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2025 at 05:21 AM
+-- Generation Time: May 12, 2025 at 12:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -1149,7 +1149,12 @@ INSERT INTO `system_log` (`id`, `user_id`, `action`, `description`, `timestamp`)
 (995, 44, 'Login Failed', 'Password does not match.', '2025-05-12 02:09:24'),
 (996, 44, 'Login Failed', 'Password does not match.', '2025-05-12 02:09:24'),
 (997, 44, 'Login Success', 'Successfully logged in', '2025-05-12 02:09:26'),
-(998, 44, 'Logout', 'User logged out', '2025-05-12 02:24:12');
+(998, 44, 'Logout', 'User logged out', '2025-05-12 02:24:12'),
+(999, 44, 'Login Success', 'Successfully logged in', '2025-05-12 09:26:29'),
+(1001, 44, 'Logout', 'User logged out', '2025-05-12 09:59:55'),
+(1002, 45, 'Login Failed', 'Password does not match.', '2025-05-12 10:00:02'),
+(1003, 45, 'Login Failed', 'Password does not match.', '2025-05-12 10:00:02'),
+(1004, 45, 'Login Success', 'Successfully logged in', '2025-05-12 10:00:04');
 
 -- --------------------------------------------------------
 
@@ -1395,18 +1400,19 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `first_name`, `middle_name`, `last_name`, `email`, `phone_number`, `username`, `salt`, `password`, `secret_key`, `role_id`, `status_id`) VALUES
 (44, 'Mark Jay ', 'Sarzosa', 'Cortez', 'markj@gmail.com', '09574463982', 'admin', 'KDYvivG0hSljZBZPfIaK/A==', '256f1360c83bb1102d9c4e8a2c39e6d66f5443a0fa6efb8fb484032d97c7daf1', 'NSLWJIUCKH3ZB3VP', 1, 2),
 (45, 'Jane', 'Devora', 'Smith', 'jane.smith@gmail.com', '09856697059', 'janesmith', '5SVh/IqSe/+b0Hq7XmdKRQ==', '2f3edade16e0a5d43e9ba8aeb9409957c6a01cec4dcdfd2941a5b3a3b645f348', 'NANHNLDR4T23GF52', 2, 2),
-(46, 'Aljon', '', 'Paragoso', 'aljon.paragoso@gmail.com', '09452213265', 'aljon', 'NOV6cAYQD/BQyaIMVIBywg==', '490fd32237ea889e802f623209642711118d3bf04b3da6dc5910d5a92469e1e2', '', 2, 2),
-(47, 'Jan Klyde', '', 'Bulagao', 'jan.bulagao@gmail.com', '09543321652', 'janklyde', 'BzQhRU6gcLUMGKjbuBTUYg==', 'ac7eac4f902ed6ed50f45995fb0ee421b06544e1ddc5bc69dd009fcf812f0c71', '', 4, 2),
-(48, 'Rasheed', '', 'Tapales', 'rasheed@gmail.com', '09512236526', 'rasheed', '8yPOxTTWI6SyCgF0f5xWAQ==', '20d2acaff05185c6b0e81175bb7da32e1ce86eac78cb68c4b202af0723638963', '', 5, 2),
-(49, 'Axcee', '', 'Cabusas', 'axcee@gmail.com', '09366695326', 'axcee', 'b90hNfAiNghPHtgVubut2Q==', '09d159469ef04cbdc89f1c4bf8f15d3ca02434278fcdcfe6731caa9630ee1108', '', 2, 2),
-(52, 'Jerame', '', 'Abing', 'abing@gmail.com', '09995869948', 'abing', '47Kqnf10dZChUb61Du0ZRg==', 'd3509ea4d31128813966c6a6f0b0a121ede09a2a092916a72d446073ba930fbb', '', 2, 2),
-(54, 'Jerkean', '', 'Gabrina', 'jerkean@gmail.com', '+639456231125', 'jerkean', 'g/ijzYC78+saQF2yowAr0A==', '6455887fa925f89f81bb4f4f8bafba3007adec9353921035a6310afdafd11759', '', 2, 2),
+(46, 'Aljon', '', 'Paragoso', 'aljon.paragoso@gmail.com', '09452213265', 'aljon', 'NOV6cAYQD/BQyaIMVIBywg==', '490fd32237ea889e802f623209642711118d3bf04b3da6dc5910d5a92469e1e2', NULL, 2, 2),
+(47, 'Jan Klyde', '', 'Bulagao', 'jan.bulagao@gmail.com', '09543321652', 'janklyde', 'BzQhRU6gcLUMGKjbuBTUYg==', 'ac7eac4f902ed6ed50f45995fb0ee421b06544e1ddc5bc69dd009fcf812f0c71', NULL, 4, 2),
+(48, 'Rasheed', '', 'Tapales', 'rasheed@gmail.com', '09512236526', 'rasheed', '8yPOxTTWI6SyCgF0f5xWAQ==', '20d2acaff05185c6b0e81175bb7da32e1ce86eac78cb68c4b202af0723638963', NULL, 5, 2),
+(49, 'Axcee', '', 'Cabusas', 'axcee@gmail.com', '09366695326', 'axcee', 'b90hNfAiNghPHtgVubut2Q==', '09d159469ef04cbdc89f1c4bf8f15d3ca02434278fcdcfe6731caa9630ee1108', NULL, 2, 2),
+(52, 'Jerame', '', 'Abing', 'abing@gmail.com', '09995869948', 'abing', '47Kqnf10dZChUb61Du0ZRg==', 'd3509ea4d31128813966c6a6f0b0a121ede09a2a092916a72d446073ba930fbb', NULL, 2, 2),
+(54, 'Jerkean', '', 'Gabrina', 'jerkean@gmail.com', '+639456231125', 'jerkean', 'g/ijzYC78+saQF2yowAr0A==', '6455887fa925f89f81bb4f4f8bafba3007adec9353921035a6310afdafd11759', NULL, 2, 2),
 (55, 'Joseph', '', 'Arambala', 'joseph@gmail.com', '09985743398', 'joseph', 'CVOr2+pbovf9QJ2R4zXhaQ==', '670314e892b48b056d56eb4943aa7bf133f3e5121ecede90efb73ebd0374d9a1', 'F43CACLQ6MJLP2PH', 2, 2),
-(56, 'Mark Joseph', '', 'Canedo', 'markcanedo@gmail.com', '09854493822', 'markcanedo', 'FluJSq6qHsq5OIYZU93pIA==', 'bebaf46405df72b8c37134fb54b8f8d8f3c9acffff6b0cebf7314f6af4caf85d', '', 2, 2),
+(56, 'Mark Joseph', '', 'Canedo', 'markcanedo@gmail.com', '09854493822', 'markcanedo', 'FluJSq6qHsq5OIYZU93pIA==', 'bebaf46405df72b8c37134fb54b8f8d8f3c9acffff6b0cebf7314f6af4caf85d', NULL, 2, 2),
 (57, 'Mark Christian', '', 'Canedo', 'christiancanedo@gmail.com', '09584494033', 'christian', '04g912E+uaYcvJNNRb/dTQ==', '4a0d5c85b5fed0ed109894160df6d42294d3561749cd5af6f74447730b69f2e9', 'PANRKPTGODGETZR6', 2, 1),
 (58, 'mark', '', 'mark', 'markjay@gmail.com', '09857389982', 'markj', 'lVTpzVpWlF7bKAKBP7V8Hg==', 'b8aacf7c1eb6e7867197bd10112b1ad942379fcac378720a3078ab8778630e8d', 'EIR6ZU2LF7RD52S5', 2, 2),
 (59, 'Arl', '', 'Sison', 'arl@gmail.com', '09586685567', 'arl', 'WwOxvlvknzIG4iiTXjHjDA==', '60448b23233b124403498dbdd25107dab6438f0a67e82202e46bc1b602ed3f4c', NULL, 2, 1),
-(60, 'ahlde', '', 'geonzon', 'ahlde@gmail.com', '09586695567', 'ahlde', 'f2XZyKlAa36GBebv4yLF+g==', 'c44130fa860b0f8de554a665e49db733c97a47efa1dccab3e02b57acaa22b1ae', NULL, 2, 1);
+(60, 'ahlde', '', 'geonzon', 'ahlde@gmail.com', '09586695567', 'ahlde', 'f2XZyKlAa36GBebv4yLF+g==', 'c44130fa860b0f8de554a665e49db733c97a47efa1dccab3e02b57acaa22b1ae', NULL, 2, 1),
+(61, 'Enzo', '', 'Cortes', 'enzo@gmail.com', '09586684545', 'enzo', 'a4FOQfkCQslps6B7rsxdHA==', '4d36ce476fcf328ebd7afbb29dff886c81d350972f739dbac1ff32e94f5a393a', NULL, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -1625,7 +1631,7 @@ ALTER TABLE `project_status`
 -- AUTO_INCREMENT for table `system_log`
 --
 ALTER TABLE `system_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=999;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1005;
 
 --
 -- AUTO_INCREMENT for table `task`
@@ -1673,7 +1679,7 @@ ALTER TABLE `team_member_role`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `user_image`

@@ -213,7 +213,6 @@ public class ProjectManagerPageController implements Initializable {
     private void settingsButtonMouseClickHandler(MouseEvent event) {
         String settingsPageFXML = "/projectvantage/fxml/misc/SettingsPage.fxml";
         loadPage(settingsPageFXML, "Settings");
-        SettingsPageController.getInstance().setUsername(username);
         
         elementConf.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
         

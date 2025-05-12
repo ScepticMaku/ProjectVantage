@@ -10,11 +10,14 @@ import projectvantage.utility.dbConnect;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
@@ -24,9 +27,13 @@ import javafx.scene.control.ListView;
 public class EventLogPageController implements Initializable {
     
     ObservableList<String> eventLogs = FXCollections.observableArrayList();
+    FilteredList<String> filteredData = new FilteredList<>(eventLogs, s -> true);
+    
     dbConnect db = new dbConnect();
     @FXML
     private ListView<String> listView;
+    @FXML
+    private TextField searchField;
     
     /**
      * Initializes the controller class.
@@ -35,6 +42,19 @@ public class EventLogPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         loadLogs();
+        
+        Platform.runLater(() -> {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                String keyword = newValue.toLowerCase();
+                
+                filteredData.setPredicate(item -> {
+                    if(keyword == null || keyword.isEmpty()) {
+                        return true;
+                    }
+                    return item.toLowerCase().contains(keyword);
+                });
+            });
+        });
     }    
     
     private void loadLogs() {
@@ -46,7 +66,7 @@ public class EventLogPageController implements Initializable {
                 String log = "[ID]: " + result.getInt("id") + " - [TIMESTAMP]: " + result.getTimestamp("timestamp") + " - [USER]: " + result.getString("username") + ": " + result.getString("description");
                 eventLogs.add(log);
             }
-            listView.setItems(eventLogs);
+            listView.setItems(filteredData);
         } catch (Exception e) {
             e.printStackTrace();
         }

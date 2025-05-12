@@ -427,7 +427,6 @@ public class AdminPageController implements Initializable {
     private void settingsButtonMouseClickHandler(MouseEvent event) throws Exception {
         String settingsPageFXML = "/projectvantage/fxml/misc/SettingsPage.fxml";
         loadPage(settingsPageFXML, "Settings");
-        SettingsPageController.getInstance().setUsername(username);
         elementConf.setSelected("/projectvantage/resources/icons/settings-icon-selected.png", settingsButtonLabel, settingsButtonIndicator, settingsButtonIcon);
         
         elementConf.setUnselected("/projectvantage/resources/icons/team-icon-unselected.png", teamMemberButtonLabel, teamMemberButtonIndicator, teamMemberButtonIcon);

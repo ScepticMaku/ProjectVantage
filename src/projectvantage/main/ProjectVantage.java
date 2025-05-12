@@ -5,7 +5,6 @@
  */
 package projectvantage.main;
 
-import projectvantage.models.User;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.SessionConfig;
 import projectvantage.utility.AlertConfig;
@@ -20,10 +19,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import projectvantage.controllers.admin.AdminPageController;
-import projectvantage.controllers.project_manager.ProjectManagerPageController;
-import projectvantage.controllers.team_manager.TeamManagerPageController;
-import projectvantage.controllers.team_member.TeamMemberMainPageController;
 import projectvantage.models.User;
 
 /**
@@ -50,6 +45,7 @@ public class ProjectVantage extends Application {
     private String email;
     private String phoneNumber;
     private String username;
+    private String secretKey;
     
     String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
     
@@ -117,8 +113,13 @@ public class ProjectVantage extends Application {
             email = user.getEmail();
             phoneNumber = user.getPhoneNumber();
             username = user.getUsername();
+            secretKey = user.getSecretKey();
             
             sessionConf.setSession(id, firstName, middleName, lastName, email, phoneNumber, username, role);
+            
+            if(secretKey != null) {
+                sessionConf.setSecretKey(secretKey);
+            }
             
             checkRole(primaryStage, rememberedUser, role, id);
             return;

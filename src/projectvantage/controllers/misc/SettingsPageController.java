@@ -7,7 +7,7 @@ package projectvantage.controllers.misc;
 
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.DatabaseConfig;
-import projectvantage.models.User;
+import projectvantage.utility.SessionConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -33,8 +34,10 @@ public class SettingsPageController implements Initializable {
     PageConfig pageConf = new PageConfig();
     DatabaseConfig databaseConf = new DatabaseConfig();
     
-    private String username;
+    private String emailAddress;
+    private String phoneNumber;
     private String role;
+    private String secretKey;
     
     @FXML
     private AnchorPane backgroundPane;
@@ -48,6 +51,10 @@ public class SettingsPageController implements Initializable {
     private Button enableAuthenticationButton;
     @FXML
     private Button disableAuthenticationButton;
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private TextField phoneNumberTextField;
 
     /**
      * Initializes the controller class.
@@ -58,9 +65,18 @@ public class SettingsPageController implements Initializable {
         instance = this;
         
         Platform.runLater(() -> {
+            
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            role = sessionConf.getRole();
+            emailAddress = sessionConf.getEmail();
+            phoneNumber = sessionConf.getPhoneNumber();
+            secretKey = sessionConf.getSecretKey();
+            
             if(!role.equals("admin")) {
                 adminSection.setOpacity(0.0);
             }
+            loadContent();
         });
     }    
     
@@ -68,16 +84,17 @@ public class SettingsPageController implements Initializable {
         return instance;
     }
     
-    public void setUsername(String username) {
-        this.username = username;
+    private void loadContent() {
+        emailTextField.setText(emailAddress);
+        phoneNumberTextField.setText(phoneNumber);
         
-        User user = databaseConf.getUserByUsername(username);
-        
-        this.role = user.getRole();
+        if(secretKey != null) {
+            authenticationLabel.setText("Enabled");
+            disableAuthenticationButton.setVisible(true);
+            enableAuthenticationButton.setVisible(false);
+        }
     }
     
-    
-
     @FXML
     private void logsButtonMouseClicklHandler(MouseEvent event) throws Exception {
         pageConf.loadWindow("/projectvantage/fxml/admin/EventLogPage.fxml", "Event Logs",backgroundPane);
