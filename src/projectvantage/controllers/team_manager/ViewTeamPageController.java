@@ -8,7 +8,7 @@ package projectvantage.controllers.team_manager;
 import projectvantage.controllers.team_member.ViewTeamMemberPageController;
 import projectvantage.controllers.team_member.AddTeamMemberPageController;
 import projectvantage.controllers.admin.AdminPageController;
-import projectvantage.controllers.team_manager.TeamPageController;
+import projectvantage.utility.LogConfig;
 import projectvantage.models.TeamMember;
 import projectvantage.models.Project;
 import projectvantage.models.Team;
@@ -36,6 +36,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import projectvantage.controllers.project_manager.ProjectManagerPageController;
+import projectvantage.controllers.project_manager.ViewProjectPageController;
+import projectvantage.controllers.team_member.TeamMemberMainPageController;
 import projectvantage.utility.SessionConfig;
 
 /**
@@ -50,15 +53,21 @@ public class ViewTeamPageController implements Initializable {
     PageConfig pageConf = new PageConfig();
     AlertConfig alertConf = new AlertConfig();
     DatabaseConfig databaseConf = new DatabaseConfig();
+    LogConfig logConf = new LogConfig();
     dbConnect db = new dbConnect();
     
+    ObservableList<String> recentActivities = FXCollections.observableArrayList();
     ObservableList<TeamMember> teamMemberList = FXCollections.observableArrayList();
     
-    private static final int ROWS_PER_PAGE = 9;
-    private static final double ICON_HEIGHT = 26;
-    private static final double ICON_WIDTH = 26;
+//    private static final int ROWS_PER_PAGE = 9;
+//    private static final double ICON_HEIGHT = 26;
+//    private static final double ICON_WIDTH = 26;
     
     private int id;
+    private int projectId;
+    private int userId;
+    private String teamName;
+    private String projectName;
     private String teamLeader;
     private String role;
     private String userRole;
@@ -98,6 +107,8 @@ public class ViewTeamPageController implements Initializable {
     private Button removeLeaderButton;
     @FXML
     private TableColumn<TeamMember, String> lastNameColumn;
+    @FXML
+    private Button viewProjectButton;
     
     /**
      * Initializes the controller class.
@@ -129,6 +140,7 @@ public class ViewTeamPageController implements Initializable {
         
         Platform.runLater(() -> {
             refreshTable();
+            reloadLog();
             
             memberTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
                 if(newSelection != null && newSelection.getRole().equals("team leader") && userRole.equals("admin") || userRole.equals("project manager")) {
@@ -153,20 +165,24 @@ public class ViewTeamPageController implements Initializable {
         Project project = databaseConf.getProjectById(team.getProjectId());
         SessionConfig sessionConf = SessionConfig.getInstance();
         
-        this.userRole = sessionConf.getRole();
+        userId = sessionConf.getId();
+        userRole = sessionConf.getRole();
         this.id = id;
+        teamName = team.getName();
         
         if(databaseConf.getTeamLeaderByTeamId(id) != null) {
-            this.teamLeader = databaseConf.getTeamLeaderByTeamId(id);
+            teamLeader = databaseConf.getTeamLeaderByTeamId(id);
             teamLeaderLabel.setText(teamLeader);
             addLeaderButton.setVisible(false);
         }
         
         if(project != null) {
-            projectLabel.setText(project.getName());
+            projectName = project.getName();
+            projectLabel.setText(projectName);
+            projectId = project.getId();
         }
         
-        teamNameLabel.setText(team.getName());
+        teamNameLabel.setText(teamName);
     }
     
     public void refreshTable() {
@@ -174,10 +190,31 @@ public class ViewTeamPageController implements Initializable {
         loadTableData();
     }
     
+    public void reloadLog() {
+        recentActivities.clear();
+        loadLogs();
+    }
+    
+    private void loadLogs() {
+        String sql = "SELECT team_log.id AS id, user.username AS username, description, timestamp "
+                + "FROM team_log INNER JOIN user ON team_log.user_id = user.id WHERE team_log.team_id = " + id +  " "
+                + "ORDER BY team_log.id DESC LIMIT 10";
+        
+        try(ResultSet result =  db.getData(sql)) {
+            while(result.next()) {
+                String log = "[USER]: " + result.getString("username")  + ": " + result.getString("description") + " - [TIMESTAMP]: " + result.getTimestamp("timestamp");
+                recentActivities.add(log);
+            }
+            activityListView.setItems(recentActivities);
+       } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void loadTableData() {
         String sql = "SELECT team_member.id AS id, team_id, user.last_name AS last_name, user.username AS username, team_member_role.name AS role, team_member_status.name AS status "
                 + "FROM team_member INNER JOIN user ON user_id = user.id INNER JOIN team_member_role ON team_member.role_id = team_member_role.id "
-                + "INNER JOIN team_member_status ON team_member.status_id = team_member_status.id WHERE team_id = " + id;
+                + "INNER JOIN team_member_status ON team_member.status_id = team_member_status.id WHERE team_id = " + id + " ORDER BY team_member.role_id DESC";
         
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {
@@ -217,6 +254,7 @@ public class ViewTeamPageController implements Initializable {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         
         int memberId = memberTable.getSelectionModel().getSelectedItem().getId();
+        String teamMemberName = memberTable.getSelectionModel().getSelectedItem().getLastName();
         
         if(doesLeaderAlreadyExist()) {
             alertConf.showAlert(Alert.AlertType.ERROR, "Error Adding Leader", "Team leader already exists.", currentStage);
@@ -227,6 +265,7 @@ public class ViewTeamPageController implements Initializable {
         
         if(db.executeQuery(sql, memberId)) {
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Leader Successfully Assigned!", "Leader assigned successfully!", currentStage);
+            logConf.logMakeLeader(userId, projectId, memberId, id, teamMemberName, teamName, projectName);
             
             try {
                 AdminPageController adminController = AdminPageController.getInstance();
@@ -263,13 +302,19 @@ public class ViewTeamPageController implements Initializable {
 
     @FXML
     private void viewMemberButtonMouseClickHandler(MouseEvent event) throws Exception {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
         String viewTeamMemberFXML = "/projectvantage/fxml/team_member/ViewTeamMemberPage.fxml";
         
-        int teamMemberId = memberTable.getSelectionModel().getSelectedItem().getId();
-        int userId = databaseConf.getUserIdById(teamMemberId);
+        TeamMember member = memberTable.getSelectionModel().getSelectedItem();
         
-        pageConf.loadWindow(viewTeamMemberFXML, "Team Member", rootPane);
-        ViewTeamMemberPageController.getInstance().loadContent(userId);
+        if(member != null) {
+            int teamMemberId = member.getId();
+            int userId = databaseConf.getUserIdById(teamMemberId);
+            pageConf.loadWindow(viewTeamMemberFXML, "Team Member", rootPane);
+            ViewTeamMemberPageController.getInstance().loadContent(userId);
+            return;
+        }
+        alertConf.showAlert(Alert.AlertType.ERROR, "Error viewing member", "You must select a member.", currentStage);
     }
 
     @FXML
@@ -279,6 +324,7 @@ public class ViewTeamPageController implements Initializable {
         String teamPageFXML = "/projectvantage/fxml/team_manager/TeamPage.fxml";
         
         alertConf.showDeleteConfirmationAlert(currentStage, sql, id);
+        logConf.logDeleteTeam(userId, teamName);
         
         if(userRole.equals("admin")) {
             AdminPageController adminController = AdminPageController.getInstance();
@@ -298,12 +344,16 @@ public class ViewTeamPageController implements Initializable {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         TeamMember member = memberTable.getSelectionModel().getSelectedItem();
         
-        int teamMemberId = member.getId();
         
         String sql = "DELETE FROM team_member WHERE id = ?";
         
-        alertConf.showDeleteConfirmationAlert(currentStage, sql, teamMemberId);
-        refreshTable();
+        if(member != null) {
+            int teamMemberId = member.getId();
+            String teamMemberName = member.getLastName();
+            alertConf.showDeleteConfirmationAlert(currentStage, sql, teamMemberId);
+            logConf.logRemoveTeamMember(userId, id, teamMemberName, teamName);
+            load();
+        }
     }
 
     @FXML
@@ -311,15 +361,15 @@ public class ViewTeamPageController implements Initializable {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         
         int memberId = memberTable.getSelectionModel().getSelectedItem().getId();
+        String teamMemberName = memberTable.getSelectionModel().getSelectedItem().getLastName();
         
         String sql = "UPDATE team_member SET role_id = 1 WHERE id = ?";
         
         if(db.executeQuery(sql, memberId)) {
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Leader Successfully Removed!", "Leader removed successfully!", currentStage);
-            
+            logConf.logRemoveLeader(userId, projectId, memberId, id, teamMemberName, teamName, projectName);
             
             try {
-
                 String viewTeamFXML = "/projectvantage/fxml/team_manager/ViewTeamPage.fxml";
 
                 if(userRole.equals("admin")) {
@@ -338,6 +388,40 @@ public class ViewTeamPageController implements Initializable {
                 e.printStackTrace();
                 alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening a Team", "You must select a team", currentStage);
             } 
+        }
+    }
+
+    @FXML
+    private void viewProjectButonMouseClickHandler(MouseEvent event) {
+        Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        AdminPageController adminController = AdminPageController.getInstance();
+        TeamManagerPageController teamManagerController = TeamManagerPageController.getInstance();
+        ProjectManagerPageController projectManagerController = ProjectManagerPageController.getInstance();
+        TeamMemberMainPageController teamMemberController = TeamMemberMainPageController.getInstance();
+        
+        String viewProjectFXML = "/projectvantage/fxml/project_manager/ViewProjectPage.fxml";
+        
+        try {
+            switch(userRole) {
+                case "admin":
+                    adminController.loadPage(viewProjectFXML, projectName);
+                    ViewProjectPageController.getInstance().loadContent(projectId);
+                break;
+                case "team manager":
+                    teamManagerController.loadPage(viewProjectFXML, projectName);
+                    ViewProjectPageController.getInstance().loadContent(projectId);
+                break;
+                case "project manager":
+                    projectManagerController.loadPage(viewProjectFXML, projectName);
+                    ViewProjectPageController.getInstance().loadContent(projectId);
+                break;
+                case "standard":
+                    teamMemberController.loadPage(viewProjectFXML, projectName);
+                    ViewProjectPageController.getInstance().loadContent(projectId);
+                break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

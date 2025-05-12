@@ -11,6 +11,8 @@ import projectvantage.utility.ElementConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.AlertConfig;
+import projectvantage.utility.LogConfig;
+import projectvantage.utility.SessionConfig;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -36,6 +38,7 @@ import javafx.util.Callback;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import projectvantage.models.Team;
 
 /**
  * FXML Controller class
@@ -51,12 +54,15 @@ public class TeamMemberPageController implements Initializable {
     DatabaseConfig databaseConf = new DatabaseConfig();
     AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
+    LogConfig logConf = new LogConfig();
     
     ObservableList<TeamMember> teamMemberList = FXCollections.observableArrayList();
     
     private static final int ROWS_PER_PAGE = 9;
     private static final double ICON_HEIGHT = 26;
     private static final double ICON_WIDTH = 26;
+    
+    private int userId;
     
     @FXML
     private AnchorPane rootPane;
@@ -132,9 +138,15 @@ public class TeamMemberPageController implements Initializable {
                     
                     deleteButton.setOnMouseClicked(event -> {
                         int id = teamMemberTable.getSelectionModel().getSelectedItem().getId();
+                        int teamId = teamMemberTable.getSelectionModel().getSelectedItem().getTeamId();
+                        String teamMemberName = teamMemberTable.getSelectionModel().getSelectedItem().getLastName();
+                        
+                        Team team = databaseConf.getTeamById(teamId);
+                        
+                        String teamName = team.getName();
                         
                         String sql = "DELETE FROM team_member WHERE id = ?";
-                        
+                        logConf.logRemoveTeamMember(userId, teamId, teamMemberName, teamName);
                         alertConf.showDeleteConfirmationAlert(currentStage, sql, id);
                         refreshTable();
                     });
@@ -150,6 +162,10 @@ public class TeamMemberPageController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
         
         Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            userId = sessionConf.getId();
+            
             loadTableData();
         });
     }    

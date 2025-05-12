@@ -114,6 +114,10 @@ public class ProfilePageController implements Initializable {
         lastNamePlaceholder.setText(lastName);
         usernamePlaceholder.setText(username);
         rolePlaceholder.setText(role);
+        
+        Platform.runLater(() -> {
+            elementConf.loadProfilePicture(username, profilePhoto, IMAGE_SIZE);
+        });
     }
 
     @FXML

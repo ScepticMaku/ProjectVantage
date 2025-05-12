@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -11,22 +12,26 @@
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" maxHeight="600.0" maxWidth="600.0" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.project_manager.ViewProjectPageController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Project" />
-      <Label layoutX="19.0" layoutY="40.0" text="Project Name:" />
-      <Label layoutX="20.0" layoutY="64.0" text="Description:" />
-      <Label fx:id="projectNameLabel" layoutX="100.0" layoutY="40.0" text="Name" />
-      <Label fx:id="descriptionText" layoutX="102.0" layoutY="64.0" text="Text" />
-      <Label layoutX="418.0" layoutY="62.0" text="Creation date:" />
-      <Label fx:id="creationDateLabel" layoutX="518.0" layoutY="66.0" text="Date" />
-      <Label layoutX="418.0" layoutY="85.0" text="Due date:" />
-      <Label fx:id="dueDateLabel" layoutX="518.0" layoutY="85.0" text="Date" />
+      <Label layoutX="14.0" layoutY="14.0" stylesheets="@../../css/title-label-style.css" text="Project" />
+      <Label layoutX="19.0" layoutY="49.0" text="Project Name:" />
+      <Label layoutX="20.0" layoutY="73.0" text="Description:" />
+      <Label fx:id="projectNameLabel" layoutX="100.0" layoutY="49.0" text="Name" />
+      <Label fx:id="descriptionText" layoutX="102.0" layoutY="73.0" text="Text" />
+      <Label layoutX="418.0" layoutY="71.0" text="Creation date:" />
+      <Label fx:id="creationDateLabel" layoutX="518.0" layoutY="75.0" text="Date" />
+      <Label layoutX="418.0" layoutY="94.0" text="Due date:" />
+      <Label fx:id="dueDateLabel" layoutX="518.0" layoutY="94.0" text="Date" />
       <Label layoutX="18.0" layoutY="220.0" text="Tasks:" />
-      <Label layoutX="418.0" layoutY="109.0" text="Status:" />
-      <Label fx:id="statusLabel" layoutX="515.0" layoutY="109.0" text="Status" />
+      <Label layoutX="418.0" layoutY="118.0" text="Status:" />
+      <Label fx:id="statusLabel" layoutX="515.0" layoutY="118.0" text="Status" />
       <Label layoutX="312.0" layoutY="220.0" text="Teams:" />
       <Label layoutX="22.0" layoutY="153.0" text="Progress:" />
       <ProgressBar fx:id="taskProgressBar" layoutX="17.0" layoutY="178.0" prefHeight="18.0" prefWidth="565.0" progress="0.0" />
-      <ListView fx:id="recentActivityListView" layoutX="17.0" layoutY="472.0" prefHeight="114.0" prefWidth="565.0" />
+      <ListView fx:id="recentActivityListView" layoutX="17.0" layoutY="472.0" prefHeight="114.0" prefWidth="565.0">
+         <styleClass>
+            <String fx:value="list-view" />
+            <String fx:value="list-cell" />
+         </styleClass></ListView>
       <Label layoutX="17.0" layoutY="455.0" text="Recent activities:" />
       <Button fx:id="viewTeamButton" layoutX="398.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#viewTeamButtonMouseClickHandler" prefHeight="27.0" prefWidth="51.0" text="View" />
       <Button fx:id="assignTeamButton" layoutX="459.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#assignTeamButtonMouseClickHandler" prefHeight="27.0" prefWidth="53.0" text="Assign" />
@@ -45,8 +50,8 @@
             <TableColumn fx:id="statusColumn" prefWidth="104.66664123535156" text="Status" />
          </columns>
       </TableView>
-      <Label layoutX="418.0" layoutY="39.0" text="Created by:" />
-      <Label fx:id="creatorNameLabel" layoutX="518.0" layoutY="39.0" text="Creator" />
+      <Label layoutX="418.0" layoutY="48.0" text="Created by:" />
+      <Label fx:id="creatorNameLabel" layoutX="518.0" layoutY="48.0" text="Creator" />
       <Button fx:id="deleteTeamButton" layoutX="522.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#removeTeamButtonMouseClickHandler" text="Remove" />
       <Button fx:id="deleteTaskButton" layoutX="235.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#deleteTaskButtonMouseClickHandler" prefHeight="25.0" prefWidth="51.0" text="Delete" />
       <Button fx:id="viewReportButton" layoutX="324.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#viewReportButtonMouseClickHandler" prefHeight="25.0" prefWidth="147.0" text="View Printable Report" />

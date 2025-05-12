@@ -5,11 +5,14 @@
  */
 package projectvantage.controllers.task_manager;
 
+import projectvantage.utility.LogConfig;
 import projectvantage.models.Team;
 import projectvantage.models.TeamMember;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.AlertConfig;
-import projectvantage.controllers.task_manager.ViewTaskPageController;
+import projectvantage.utility.DatabaseConfig;
+import projectvantage.models.Task;
+import projectvantage.models.Project;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -27,6 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import projectvantage.utility.SessionConfig;
 
 /**
  * FXML Controller class
@@ -37,14 +41,15 @@ public class AssignTeamMemberPageController implements Initializable {
     
     private static AssignTeamMemberPageController instance;
     
+    LogConfig logConf = new LogConfig();
     dbConnect db = new dbConnect();
     AlertConfig alertConf = new AlertConfig();
+    DatabaseConfig databaseConf = new DatabaseConfig();
     
     ObservableList<Team> teamList = FXCollections.observableArrayList();
     ObservableList<TeamMember> teamMemberList = FXCollections.observableArrayList();
     
     private int projectId;
-    private int teamId;
     private int taskId;
     
     @FXML
@@ -75,6 +80,7 @@ public class AssignTeamMemberPageController implements Initializable {
         memberColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         
         Platform.runLater(() -> {
+            
             refreshTeamTable();
             
             teamTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -124,7 +130,7 @@ public class AssignTeamMemberPageController implements Initializable {
     public void loadTeamMemberTable(int id) {
         String sql = "SELECT team_member.id AS id, team_id, user.last_name AS last_name, user.username AS username, team_member_role.name AS role, team_member_status.name AS status "
                 + "FROM team_member INNER JOIN user ON user_id = user.id INNER JOIN team_member_role ON team_member.role_id = team_member_role.id "
-                + "INNER JOIN team_member_status ON team_member.status_id = team_member_status.id WHERE team_id = " + id;
+                + "INNER JOIN team_member_status ON team_member.status_id = team_member_status.id WHERE team_id = " + id + " AND team_member.id NOT IN (SELECT team_member_id FROM task WHERE team_member_id = team_member.id)";
         
         try(ResultSet result = db.getData(sql)) {
             while(result.next()) {
@@ -163,8 +169,21 @@ public class AssignTeamMemberPageController implements Initializable {
     private void assignButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         TeamMember teamMember = memberTable.getSelectionModel().getSelectedItem();
+        Task task = databaseConf.getTaskById(taskId);
+        Project project = databaseConf.getProjectById(projectId);
+        SessionConfig sessionConf = SessionConfig.getInstance();
         
+         if(teamMember == null) {
+            alertConf.showAlert(Alert.AlertType.ERROR, "Error selecting a member", "Selection empty.", currentStage);
+            return;
+        }
+        
+        int userId = sessionConf.getId();
         int memberId = teamMember.getId();
+        int teamId = teamMember.getTeamId();
+        String memberName = teamMember.getUsername();
+        String taskName = task.getName();
+        String projectName = project.getName();
         
         if(isMemberAlreadyAssigned(memberId)) {
             alertConf.showAlert(Alert.AlertType.ERROR, "Error Assigning a Task", "This member is already assigned to a task.", currentStage);
@@ -175,6 +194,7 @@ public class AssignTeamMemberPageController implements Initializable {
         
         if(db.executeQuery(sql, memberId, taskId)) {
             System.out.println("Task updated successfully!|");
+            logConf.logAssignMember(userId, projectId, teamId, memberName, taskName, projectName);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Member Successfully Assigned!", "Assign success!", currentStage);
             currentStage.close();
             ViewTaskPageController.getInstance().loadContent(taskId);

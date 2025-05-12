@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="324.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.EditProfilePageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="324.0" prefWidth="527.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.EditProfilePageController">
    <children>
       <ImageView fx:id="profilePhoto" fitHeight="100.0" fitWidth="100.0" layoutX="71.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true">
          <viewport>
@@ -20,7 +20,7 @@
             <Image url="@../../resources/icons/user-profile-icon-2.png" />
          </image>
       </ImageView>
-      <Label fx:id="usernamePlaceholder" alignment="CENTER" layoutX="14.0" layoutY="191.0" prefHeight="18.0" prefWidth="214.0" text="Username" />
+      <Label fx:id="usernamePlaceholder" alignment="CENTER" layoutX="14.0" layoutY="191.0" prefHeight="18.0" prefWidth="214.0" stylesheets="@../../css/title-label-style.css" text="Username" />
       <Label layoutX="239.0" layoutY="93.0" text="First name:" />
       <Label layoutX="239.0" layoutY="148.0" text="Middle name:" />
       <Label layoutX="239.0" layoutY="200.0" text="Last Name:" />

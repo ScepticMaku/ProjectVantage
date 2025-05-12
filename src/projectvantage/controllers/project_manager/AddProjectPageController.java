@@ -144,7 +144,6 @@ public class AddProjectPageController implements Initializable {
         
         if(db.executeQuery(sql, name, description, creationDate, formattedDueDate, userId)) {
             System.out.println("Project added to database!");
-            logConf.logAddProject(userId, name);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Project successfully Added!", "Add Successful", currentStage);
             projectController.refreshTable();
             currentStage.close();

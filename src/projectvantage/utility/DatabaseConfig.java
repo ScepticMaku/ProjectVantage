@@ -293,12 +293,12 @@ public class DatabaseConfig {
     }
     
     public Task getTaskById(int id) {
-        String sql = "SELECT task.id, task.name, task.description, date_created, due_date, user.last_name, team_member_id, project_id, task_status.name AS status "
+        String sql = "SELECT task.id, task.name, task.description, date_created, due_date, date_completed, user.last_name, team_member_id, project_id, task_status.name AS status "
                 + "FROM task INNER JOIN user ON user_id = user.id INNER JOIN task_status ON task.status_id = task_status.id WHERE task.id = " + id;
         
         try(ResultSet result = db.getData(sql)) {
             if(result.next()) {
-                return new Task(
+                Task task = new Task(
                     result.getInt("id"),
                     result.getString("name"),
                     result.getString("description"),
@@ -309,6 +309,9 @@ public class DatabaseConfig {
                     result.getInt("project_id"),
                     result.getString("status")
                 );
+                task.setDateCompleted(result.getString("date_completed"));
+                
+                return task;
             }
         } catch (Exception e) {
             System.out.println("Database Error: " + e.getMessage());

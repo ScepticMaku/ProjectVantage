@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.admin;
 
+import projectvantage.utility.SessionConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.models.User;
@@ -29,7 +30,6 @@ import javafx.scene.layout.AnchorPane;
 public class AdminUserPageController implements Initializable {
     
     private static AdminUserPageController instance;
-    
     PageConfig pageConf = new PageConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
     ElementConfig elementConf = new ElementConfig();
@@ -75,6 +75,15 @@ public class AdminUserPageController implements Initializable {
         instance = this;
         
         Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            String userRole = sessionConf.getRole();
+            
+            if(!userRole.equals("admin")) {
+                editUserButton.setVisible(false);
+                backButton.setVisible(false);
+            }
+            
             elementConf.loadProfilePicture(username, userPhoto, IMAGE_SIZE);
         });
     }

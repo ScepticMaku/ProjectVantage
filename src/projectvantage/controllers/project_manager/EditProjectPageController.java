@@ -253,7 +253,7 @@ public class EditProjectPageController implements Initializable {
        
        if(db.executeQuery(sql, nameF, descF, formattedDueDateF, pStatus, id)) {
             System.out.println("Project updated successfully!");
-            logConf.logEditProject(userId, description.toString());
+            logConf.logEditProject(userId, id, description.toString());
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Project Update Successful", "Project Updated Succesfully!", currentStage);
             ProjectPageController.getInstance().refreshTable();
             currentStage.close();

@@ -10,6 +10,7 @@ import projectvantage.utility.dbConnect;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.models.TeamMember;
 import projectvantage.utility.AlertConfig;
+import projectvantage.utility.LogConfig;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -36,6 +37,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import projectvantage.models.Team;
 import projectvantage.models.User;
 
 /**
@@ -47,6 +49,7 @@ public class AddTeamMemberPageController implements Initializable {
 
     private static AddTeamMemberPageController instance;
     
+    LogConfig logConf = new LogConfig();
     DatabaseConfig databaseConf = new DatabaseConfig();
     AlertConfig alertConf = new AlertConfig();
     dbConnect db = new dbConnect();
@@ -55,6 +58,7 @@ public class AddTeamMemberPageController implements Initializable {
     
     private boolean isMultipleSelection = false;
     private int teamId;
+    private String teamName;
     
     @FXML
     private Button addButton;
@@ -85,6 +89,12 @@ public class AddTeamMemberPageController implements Initializable {
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         
         Platform.runLater(() -> {
+            Team team = databaseConf.getTeamById(teamId);
+            
+            if(team != null) {
+                teamName = team.getName();
+            }
+            
             loadUsers();
         });
     }
@@ -179,6 +189,7 @@ public class AddTeamMemberPageController implements Initializable {
         int successCount = 0;
         for (User user : selectedUsers) {
             int userId = user.getId();
+            String userLastName = user.getLastName();
 
             if (isUserAlreadyAdded(userId)) {
                 System.out.println("User ID " + userId + " is already in a team. Skipping.");
@@ -187,6 +198,13 @@ public class AddTeamMemberPageController implements Initializable {
 
             String sql = "INSERT INTO team_member (team_id, user_id) VALUES (?, ?)";
             if (db.executeQuery(sql, teamId, userId)) {
+                TeamMember member = databaseConf.getTeamMemberByUserId(userId);
+                
+                if(member != null) {
+                    int teamMemberId = member.getId();
+                    logConf.logAddTeamMember(userId, teamId, teamMemberId, userLastName, teamName);
+                }
+                
                 successCount++;
             }
         }
@@ -194,7 +212,7 @@ public class AddTeamMemberPageController implements Initializable {
         if (successCount > 0) {
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Success",
                     successCount + " user(s) successfully added!", currentStage);
-            ViewTeamPageController.getInstance().refreshTable();
+            ViewTeamPageController.getInstance().load();
             currentStage.close();
         } else {
             alertConf.showAddTeamErrorAlert(currentStage, "No users were added. They may already be in a team.");

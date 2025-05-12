@@ -6,8 +6,7 @@
 package projectvantage.controllers.admin;
 
 import projectvantage.utility.LogConfig;
-import projectvantage.models.User;
-import projectvantage.utility.DatabaseConfig;
+import projectvantage.utility.SessionConfig;
 import projectvantage.models.Role;
 import projectvantage.controllers.authentication.RegisterController;
 import projectvantage.utility.dbConnect;
@@ -52,6 +51,8 @@ public class AddUserPageController implements Initializable {
     
     ObservableList<Role> roleList = FXCollections.observableArrayList();
 
+    private int userId;
+    
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -82,11 +83,17 @@ public class AddUserPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO        
         loadColumnData();
+        
+        Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+        });
     }
     
     private void insertUser(Stage currentStage, String query, String firstName, String middleName, String lastName, String emailAddress, String phoneNumber, String username, String salt, String password, int id) {
         if(db.executeQuery(query, firstName, middleName, lastName, emailAddress, phoneNumber, username, salt, password, id)) {
             System.out.println("User added to database!");
+            logConf.logAddUser(userId, username);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Successful", currentStage);
         }
     }

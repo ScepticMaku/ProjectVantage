@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.project_manager;
 
+import projectvantage.utility.LogConfig;
 import projectvantage.utility.SessionConfig;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -72,6 +73,7 @@ public class ViewProjectPageController implements Initializable {
     
     private static ViewProjectPageController instance;
     
+    LogConfig logConf = new LogConfig();
     dbConnect db = new dbConnect();
     AlertConfig alertConf = new AlertConfig();
     DatabaseConfig databaseConf = new DatabaseConfig();
@@ -79,6 +81,7 @@ public class ViewProjectPageController implements Initializable {
     
     ObservableList<Task> taskList = FXCollections.observableArrayList();
     ObservableList<Team> teamList = FXCollections.observableArrayList();
+    ObservableList<String> recentActivities = FXCollections.observableArrayList();
     
     private int userId;
     private int projectId;
@@ -141,7 +144,7 @@ public class ViewProjectPageController implements Initializable {
     @FXML
     private Button seeTeamButton;
     @FXML
-    private ListView<?> recentActivityListView;
+    private ListView<String> recentActivityListView;
     @FXML
     private Button viewReportButton;
     @FXML
@@ -176,6 +179,7 @@ public class ViewProjectPageController implements Initializable {
         Platform.runLater(() -> {
             refreshTeamTable();
             refreshTaskTable();
+            refreshLogsList();
             
 //            updateTaskProgress(getCompletedTasks());
 
@@ -202,6 +206,22 @@ public class ViewProjectPageController implements Initializable {
         });
     }
     
+    private void loadLogs() {
+        String sql = "SELECT project_log.id AS id, user.username AS username, description, timestamp "
+                + "FROM project_log INNER JOIN user ON project_log.user_id = user.id WHERE project_log.project_id = " + projectId +  " "
+                + "ORDER BY id DESC LIMIT 10";
+        
+        try(ResultSet result =  db.getData(sql)) {
+            while(result.next()) {
+                String log = "[USER]: " + result.getString("username")  + ": " + result.getString("description") + " - [TIMESTAMP]: " + result.getTimestamp("timestamp");
+                recentActivities.add(log);
+            }
+            recentActivityListView.setItems(recentActivities);
+       } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public static ViewProjectPageController getInstance() {
         return instance;
     }
@@ -215,6 +235,11 @@ public class ViewProjectPageController implements Initializable {
         taskList.clear();
         loadTaskTable();
         updateTaskProgress(databaseConf.getCompletedTasks(projectId));
+    }
+    
+    public void refreshLogsList() {
+        recentActivities.clear();
+        loadLogs();
     }
     
     public void updateTaskProgress(int progress) {
@@ -310,7 +335,7 @@ public class ViewProjectPageController implements Initializable {
         try {
             AdminPageController adminController = AdminPageController.getInstance();
             TeamManagerPageController teamManagerController = TeamManagerPageController.getInstance();
-            
+            ProjectManagerPageController projectManagerController = ProjectManagerPageController.getInstance();
             Team selectedTeam = teamTable.getSelectionModel().getSelectedItem();
             
             if(selectedTeam == null) {
@@ -324,6 +349,12 @@ public class ViewProjectPageController implements Initializable {
             
             if(role.equals("admin")) {
                 adminController.loadPage(viewTeamFXML, "Team");
+                ViewTeamPageController.getInstance().loadContent(teamId);
+                return;
+            }
+            
+            if(role.equals("project manager")) {
+                projectManagerController.loadPage(viewTeamFXML, "Team");
                 ViewTeamPageController.getInstance().loadContent(teamId);
                 return;
             }
@@ -379,12 +410,14 @@ public class ViewProjectPageController implements Initializable {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         
         int teamId = teamTable.getSelectionModel().getSelectedItem().getId();
+        String teamName = teamTable.getSelectionModel().getSelectedItem().getName();
         
         String sql = "UPDATE team SET project_id = NULL WHERE id = ?";
         
         if(db.executeQuery(sql, teamId)) {
+            logConf.logRemoveTeam(userId, projectId, teamName, projectName);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Team successfully removed!", "Remove Successfull!", currentStage);
-            refreshTeamTable();
+            load();
         }
     }
 
@@ -394,10 +427,12 @@ public class ViewProjectPageController implements Initializable {
         String sql = "DELETE FROM task WHERE id = ?";
         
         int taskId = taskTable.getSelectionModel().getSelectedItem().getId();
+        String taskName = taskTable.getSelectionModel().getSelectedItem().getName();
         
         if(db.executeQuery(sql, taskId)) {
+            logConf.logDeleteTask(userId, projectId, taskName);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Task successfully deleted!", "Delete Successful!", currentStage);
-            refreshTaskTable();
+            load();
         }
     }
 
@@ -437,6 +472,7 @@ public class ViewProjectPageController implements Initializable {
 
                 if (printJob.printDialog()) {
                     printJob.print(); // Send to printer
+                    logConf.logPrintReport(userId, projectId, projectName);
                     alertConf.showAlert(Alert.AlertType.INFORMATION, "Print Successful", "PDF was sent to the printer.", currentStage);
                 }
                 document.close();
@@ -533,6 +569,7 @@ public class ViewProjectPageController implements Initializable {
 
                 if (file != null) {
                     document.save(file);
+                    logConf.logGeneratePDF(userId, projectId, projectName);
                     alertConf.showAlert(Alert.AlertType.INFORMATION, "Generate PDF Successful", "PDF Successfully Generated!", currentStage);
                 }
                 document.close();

@@ -5,6 +5,9 @@
  */
 package projectvantage.controllers.team_manager;
 
+import projectvantage.models.Project;
+import projectvantage.utility.DatabaseConfig;
+import projectvantage.utility.LogConfig;
 import projectvantage.models.Team;
 import projectvantage.controllers.project_manager.ViewProjectPageController;
 import projectvantage.utility.dbConnect;
@@ -26,6 +29,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import projectvantage.utility.SessionConfig;
 
 /**
  * FXML Controller class
@@ -36,6 +40,8 @@ public class AssignTeamPageController implements Initializable {
     
     private static AssignTeamPageController instance;
     
+    DatabaseConfig databaseConf = new DatabaseConfig();
+    LogConfig logConf = new LogConfig();
     AlertConfig alertConf = new AlertConfig();
     dbConnect db = new dbConnect();
     
@@ -100,16 +106,22 @@ public class AssignTeamPageController implements Initializable {
     private void assignButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         Team team = teamTable.getSelectionModel().getSelectedItem();
+        Project project = databaseConf.getProjectById(projectId);
+        SessionConfig sessionConf = SessionConfig.getInstance();
         
+        String teamName = team.getName();
+        String projectName = project.getName();
         int teamId = team.getId();
+        int userId = sessionConf.getId();
         
         String sql = "UPDATE team SET project_id = ? WHERE id = ?";
         
         if(db.executeQuery(sql, projectId, teamId)) {
             System.out.println("Team updated successfully!");
+            logConf.logAssignTeam(userId, projectId, teamName, projectName);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Team Successfully Assigned!", "Assign Success!", currentStage);
             currentStage.close();
-            ViewProjectPageController.getInstance().refreshTeamTable();
+            ViewProjectPageController.getInstance().load();
         }
     }
     

@@ -5,8 +5,9 @@
  */
 package projectvantage.controllers.task_manager;
 
+import projectvantage.models.Project;
 import projectvantage.utility.SessionConfig;
-import projectvantage.models.User;
+import projectvantage.utility.LogConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.DatabaseConfig;
@@ -46,13 +47,14 @@ public class AddTaskPageController implements Initializable {
     AlertConfig alertConf = new AlertConfig();
     ElementConfig elementConf = new ElementConfig();
     dbConnect db = new dbConnect();
+    LogConfig logConf = new LogConfig();
     
     private int projectId;
     private String name;
     private String description;
     private String creationDate;
     private String dueDate;
-//    private String username;
+    private String projectName;
 
     @FXML
     private AnchorPane rootPane;
@@ -128,11 +130,13 @@ public class AddTaskPageController implements Initializable {
     private void addButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
         SessionConfig sessionConf = SessionConfig.getInstance();
+        Project project = databaseConf.getProjectById(projectId);
         
-        this.name = taskNameField.getText();
-        this.description = descriptionTextArea.getText();
-        this.creationDate = getCurrentDate();
-        this.dueDate = datePicker.getEditor().getText();
+        projectName = project.getName();
+        name = taskNameField.getText();
+        description = descriptionTextArea.getText();
+        creationDate = getCurrentDate();
+        dueDate = datePicker.getEditor().getText();
         
         
         Date formattedDueDate = formatDate(dueDate);
@@ -163,9 +167,10 @@ public class AddTaskPageController implements Initializable {
         
         if(db.executeQuery(sql, name, description, creationDate, formattedDueDate, sessionConf.getId(), projectId)) {
             System.out.println("Task added to database!");
+            logConf.logAddTask(sessionConf.getId(), projectId, name, projectName);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Task successfully added!", "Add successful", currentStage);
             currentStage.close();
-            ViewProjectPageController.getInstance().refreshTaskTable();
+            ViewProjectPageController.getInstance().load();
         }
     }
 

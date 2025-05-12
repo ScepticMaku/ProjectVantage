@@ -6,6 +6,8 @@
 package projectvantage.controllers.admin;
 
 import java.io.File;
+import projectvantage.utility.LogConfig;
+import projectvantage.utility.SessionConfig;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.Config;
@@ -56,6 +58,7 @@ public class EditUserPageController implements Initializable {
     private static EditUserPageController instance;
     
     dbConnect db = new dbConnect();
+    LogConfig logConf = new LogConfig();
     AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
     Config config = new Config();
@@ -70,6 +73,8 @@ public class EditUserPageController implements Initializable {
     private File selectedFile;
     
     private int userId;
+    private int sessionUserId;
+    private int userRoleId;
     private String firstName;
     private String middleName;
     private String lastName;
@@ -115,6 +120,10 @@ public class EditUserPageController implements Initializable {
         instance = this;
         
         Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            sessionUserId = sessionConf.getId();
+            
             roleComboBox.setPromptText(role);
         });
         
@@ -146,8 +155,6 @@ public class EditUserPageController implements Initializable {
         phoneNumberField.setText(phoneNumber);
         usernameLabel.setText(username);
         usernameField.setText(username);
-        
-        
         
         boolean isActive = status.equals("active");
         
@@ -183,12 +190,14 @@ public class EditUserPageController implements Initializable {
         if(dbConf.getImagePath(username) == null) {
             sql = "INSERT INTO user_image (user_id, image_path) VALUES (?, ?)";
             db.executeQuery(sql, userId, imagePath);
+            logConf.logEditUserProfilePicture(sessionUserId, username);
             System.out.println("User Image updated successfully!");
             return;
         }
         
         sql = "UPDATE user_image SET image_path = ? WHERE user_id = ?";
         db.executeQuery(sql, imagePath, userId);
+        logConf.logEditUserProfilePicture(sessionUserId, username);
         System.out.println("User Image updated successfully!");
     }
     
@@ -314,6 +323,8 @@ public class EditUserPageController implements Initializable {
         }
         
         alertConf.showAlert(Alert.AlertType.INFORMATION, "User Deactivation Successful", "User successfully deactivated!", currentStage);
+        AdminUserPageController.getInstance().loadUser(username);
+        logConf.logDeactivateUser(sessionUserId, username);
         refreshPage();
     }
 
@@ -328,6 +339,8 @@ public class EditUserPageController implements Initializable {
         }
         
         alertConf.showAlert(Alert.AlertType.INFORMATION, "User Activation", "User successfully activated!", currentStage);
+        logConf.logActivateUser(sessionUserId, username);
+        AdminUserPageController.getInstance().loadUser(username);
         refreshPage();
     }
     
@@ -387,6 +400,38 @@ public class EditUserPageController implements Initializable {
             
             if(db.executeQuery(sql, fName, mName, lName, pNumber, eAddress, uName, id, username)) {
                 System.out.println("User updated successfully!");
+                
+                StringBuilder description  = new StringBuilder("Updated user information, changed:");
+                
+                if(!fName.equals(firstName)) {
+                    description.append(" | First Name: ").append(fName);
+                }
+                
+                if(!mName.equals(middleName)) {
+                    description.append(" | Middle Name: ").append(mName);
+                }
+                
+                if(!lName.equals(lastName)) {
+                    description.append(" | Last Name: ").append(lName);
+                }
+                
+                if(!pNumber.equals(phoneNumber)) {
+                    description.append("| Phone Number: ").append(pNumber);
+                }
+                
+                if(!eAddress.equals(emailAddress)) {
+                    description.append("| Email Address: ").append(eAddress);
+                }
+                
+                if(!uName.equals(username)) {
+                    description.append("| Username: ").append(uName);
+                }
+                
+                if(id != dbConf.getUserRoleIdByUsername(username)) {
+                    description.append(" | Role ID: ").append(id);
+                }
+                
+                logConf.logEditUser(sessionUserId, description.toString());
                 alertConf.showAlert(Alert.AlertType.INFORMATION, "User Update Successful", "User Updated Succesfully!", currentStage);
                 moveAndSaveImageToDatabase();
                 elementConf.loadProfilePicture(username, adminUserController.getUserPhoto(), IMAGE_SIZE);

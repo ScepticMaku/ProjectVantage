@@ -15,6 +15,7 @@ public class Task {
     private String description;
     private String creationDate;
     private String dueDate;
+    private String dateCompleted;
     private String creatorName;
     private int teamMemberid;
     private String assignedLastName;
@@ -75,5 +76,13 @@ public class Task {
     
     public void setAssignedLastName(String assignedLastName) {
         this.assignedLastName = assignedLastName;
+    }
+    
+    public String getDateCompleted() {
+        return dateCompleted;
+    }
+    
+    public void setDateCompleted(String dateCompleted) {
+        this.dateCompleted = dateCompleted;
     }
 }

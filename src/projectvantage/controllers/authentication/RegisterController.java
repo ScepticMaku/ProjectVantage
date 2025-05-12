@@ -26,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -82,6 +83,20 @@ public class RegisterController implements Initializable {
     private AnchorPane rootPane;
     @FXML
     private TextField middleNameField;
+    @FXML
+    private Label registerLabel;
+    @FXML
+    private ImageView hidePasswordButton;
+    @FXML
+    private ImageView showPasswordButton;
+    @FXML
+    private TextField revealedPasswordField;
+    @FXML
+    private TextField revealedConfirmPasswordField;
+    @FXML
+    private ImageView hideConfirmPasswordButton;
+    @FXML
+    private ImageView showConfirmPasswordButton;
     
     /**
      * Initializes the controller class.
@@ -223,5 +238,149 @@ public class RegisterController implements Initializable {
     @FXML
     private void loginButtonMousePressHandler(MouseEvent event) {
         loginButton.setStyle("-fx-text-fill: #01528d");
+    }
+
+    @FXML
+    private void hidePasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(hidePasswordButton);
+    }
+
+    @FXML
+    private void hidePasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(hidePasswordButton);
+    }
+
+    @FXML
+    private void hidePasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(hidePasswordButton);
+    }
+
+    @FXML
+    private void hidePasswordButtonMouseClickHandler(MouseEvent event) {
+        hidePasswordButton.setVisible(false);
+        showPasswordButton.setVisible(true);
+        
+        revealedPasswordField.setOpacity(1.0);
+        revealedPasswordField.toFront();
+        passwordField.setOpacity(0);
+    }
+
+    @FXML
+    private void hidePasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(hidePasswordButton);
+    }
+
+    @FXML
+    private void showPasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(hidePasswordButton);
+    }
+
+    @FXML
+    private void showPasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(showPasswordButton);
+    }
+
+    @FXML
+    private void showPasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(showPasswordButton);
+    }
+
+    @FXML
+    private void showPaswordButtonMouseClickHandler(MouseEvent event) {
+        showPasswordButton.setVisible(false);
+        hidePasswordButton.setVisible(true);
+        
+        passwordField.setOpacity(1.0);
+        passwordField.toFront();
+        revealedPasswordField.setOpacity(0);
+
+
+    }
+
+    @FXML
+    private void showPasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(showPasswordButton);
+    }
+
+    @FXML
+    private void passwordFieldKeyTypedHandler(KeyEvent event) {
+        String passField = passwordField.getText();
+        revealedPasswordField.textProperty().bindBidirectional(passwordField.textProperty());
+        
+        hidePasswordButton.setVisible(false);
+        
+        if(!passField.isEmpty()) 
+            hidePasswordButton.setVisible(true);
+    }
+
+    @FXML
+    private void passwordConfirmFieldKeyTypedHandler(KeyEvent event) {
+        String passConfirmField = passwordConfirmField.getText();
+        revealedConfirmPasswordField.textProperty().bindBidirectional(passwordConfirmField.textProperty());
+        
+        hideConfirmPasswordButton.setVisible(false);
+        
+        if(!passConfirmField.isEmpty()) 
+            hideConfirmPasswordButton.setVisible(true);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(hideConfirmPasswordButton);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(hideConfirmPasswordButton);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(hideConfirmPasswordButton);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMouseClickHandler(MouseEvent event) {
+        hideConfirmPasswordButton.setVisible(false);
+        showConfirmPasswordButton.setVisible(true);
+        
+        revealedConfirmPasswordField.setOpacity(1.0);
+        revealedConfirmPasswordField.toFront();
+        passwordConfirmField.setOpacity(0);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(hideConfirmPasswordButton);
+    }
+
+    @FXML
+    private void showConfirmPasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(showConfirmPasswordButton);
+    }
+
+    @FXML
+    private void showConfirmPasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.hoverIcon(showConfirmPasswordButton);
+    }
+
+    @FXML
+    private void showConfirmPasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(showConfirmPasswordButton);
+    }
+
+    @FXML
+    private void showConfirmPaswordButtonMouseClickHandler(MouseEvent event) {
+        showConfirmPasswordButton.setVisible(false);
+        hideConfirmPasswordButton.setVisible(true);
+        
+        passwordConfirmField.setOpacity(1.0);
+        passwordConfirmField.toFront();
+        revealedConfirmPasswordField.setOpacity(0);
+    }
+
+    @FXML
+    private void showConfirmPasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(showConfirmPasswordButton);
     }
 }

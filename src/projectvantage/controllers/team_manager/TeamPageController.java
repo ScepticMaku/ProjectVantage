@@ -7,7 +7,7 @@ package projectvantage.controllers.team_manager;
 
 import projectvantage.utility.SessionConfig;
 import projectvantage.models.Team;
-import projectvantage.models.User;
+import projectvantage.utility.LogConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.AlertConfig;
@@ -54,6 +54,7 @@ public class TeamPageController implements Initializable {
     AlertConfig alertConf = new AlertConfig();
     PageConfig pageConf = new PageConfig();
     DatabaseConfig databaseConf = new DatabaseConfig();
+    LogConfig logConf = new LogConfig();
     
     ObservableList<Team> teamList = FXCollections.observableArrayList();
     
@@ -62,6 +63,7 @@ public class TeamPageController implements Initializable {
     private static final double ICON_WIDTH = 26;
 
 //    private String username;
+    private int userId;
     private String role;
     
     @FXML
@@ -129,10 +131,11 @@ public class TeamPageController implements Initializable {
                     deleteButton.setOnMouseClicked(event -> {
                         Team selectedRow = teamTable.getSelectionModel().getSelectedItem();
                         int id = selectedRow.getId();
+                        String teamName = selectedRow.getName();
                         
                         String sql = "DELETE FROM team WHERE id = ?";
-                        
                         alertConf.showDeleteConfirmationAlert(currentStage, sql, id);
+                        logConf.logDeleteTeam(userId, teamName);
                         refreshTable();
                     });
                     
@@ -177,6 +180,11 @@ public class TeamPageController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
         
         Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            userId = sessionConf.getId();
+            role = sessionConf.getRole();
+            
             loadTableData();
         });
     }    

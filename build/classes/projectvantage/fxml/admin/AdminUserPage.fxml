@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.AdminUserPageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.admin.AdminUserPageController">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="User" textFill="#192b4b">
          <font>
@@ -16,10 +16,10 @@
       </Label>
       <ImageView fx:id="userPhoto" fitHeight="168.0" fitWidth="100.0" layoutX="87.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../resources/icons/user-profile-icon.png" />
+            <Image url="@../../resources/icons/user-profile-icon-2.png" />
          </image>
       </ImageView>
-      <Label fx:id="usernamePlaceholder" alignment="CENTER" layoutX="57.0" layoutY="206.0" prefHeight="18.0" prefWidth="160.0" text="Username" />
+      <Label fx:id="usernamePlaceholder" alignment="CENTER" layoutX="57.0" layoutY="206.0" prefHeight="18.0" prefWidth="160.0" stylesheets="@../../css/title-label-style.css" text="Username" />
       <Label layoutX="239.0" layoutY="103.0" text="First name:" textFill="#2f9efe">
          <font>
             <Font name="Segoe UI Bold" size="16.0" />

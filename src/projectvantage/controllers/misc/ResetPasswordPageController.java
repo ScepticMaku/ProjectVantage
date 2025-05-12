@@ -12,6 +12,7 @@ import projectvantage.utility.PageConfig;
 import projectvantage.utility.AuthenticationConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.LogConfig;
+import projectvantage.utility.ElementConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +23,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -41,6 +45,7 @@ public class ResetPasswordPageController implements Initializable {
     PageConfig pageConf = new PageConfig();
     AuthenticationConfig authConf = new AuthenticationConfig();
     dbConnect db = new dbConnect();
+    ElementConfig elementConf = new ElementConfig();
     
     private static final int MINIMUM_PASSWORD_LENGTH = 8;
     
@@ -61,6 +66,18 @@ public class ResetPasswordPageController implements Initializable {
     private Button cancelButton;
     @FXML
     private AnchorPane rootPane;
+    @FXML
+    private TextField revealedNewPasswordField;
+    @FXML
+    private TextField revealedConfirmPasswordField;
+    @FXML
+    private ImageView hideNewPasswordButton;
+    @FXML
+    private ImageView showNewPasswordButton;
+    @FXML
+    private ImageView hideConfirmPasswordButton;
+    @FXML
+    private ImageView showConfirmPasswordButton;
 
     /**
      * Initializes the controller class.
@@ -119,7 +136,6 @@ public class ResetPasswordPageController implements Initializable {
         return false;
     }
 
-
     @FXML
     private void submitButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) rootPane.getScene().getWindow();
@@ -150,6 +166,148 @@ public class ResetPasswordPageController implements Initializable {
     private void cancelButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) rootPane.getScene().getWindow();
         currentStage.close();
+    }
+
+    @FXML
+    private void hideNewPasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(hideNewPasswordButton);
+    }
+
+    @FXML
+    private void hideNewPasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(hideNewPasswordButton);
+    }
+
+    @FXML
+    private void hideNewPasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(hideNewPasswordButton);
+    }
+
+    @FXML
+    private void hideNewPasswordButtonMouseClickHandler(MouseEvent event) {
+        hideNewPasswordButton.setVisible(false);
+        showNewPasswordButton.setVisible(true);
+        
+        revealedNewPasswordField.setOpacity(1.0);
+        revealedNewPasswordField.toFront();
+        newPasswordField.setOpacity(0);
+    }
+
+    @FXML
+    private void hideNewPasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(hideNewPasswordButton);
+    }
+
+    @FXML
+    private void showNewPasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(showNewPasswordButton);
+    }
+
+    @FXML
+    private void showNewPasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(showNewPasswordButton);
+    }
+
+    @FXML
+    private void showNewPasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(showNewPasswordButton);
+    }
+
+    @FXML
+    private void showNewPaswordButtonMouseClickHandler(MouseEvent event) {
+        showNewPasswordButton.setVisible(false);
+        hideNewPasswordButton.setVisible(true);
+        
+        newPasswordField.setOpacity(1.0);
+        newPasswordField.toFront();
+        revealedNewPasswordField.setOpacity(0);
+    }
+
+    @FXML
+    private void showNewPasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(showNewPasswordButton);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(hideConfirmPasswordButton);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(hideConfirmPasswordButton);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(hideConfirmPasswordButton);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMouseClickHandler(MouseEvent event) {
+        hideConfirmPasswordButton.setVisible(false);
+        showConfirmPasswordButton.setVisible(true);
+        
+        revealedConfirmPasswordField.setOpacity(1.0);
+        revealedConfirmPasswordField.toFront();
+        confirmPasswordField.setOpacity(0);
+    }
+
+    @FXML
+    private void hideConfirmPasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(hideConfirmPasswordButton);
+    }
+
+    @FXML
+    private void showConfirmPasswordButtonMouseReleaseHandler(MouseEvent event) {
+        elementConf.releaseIcon(showConfirmPasswordButton);
+    }
+
+    @FXML
+    private void showConfirmPasswordButtonMouseExitHandler(MouseEvent event) {
+        elementConf.unhoverIcon(showConfirmPasswordButton);
+    }
+
+    @FXML
+    private void showConfirmPasswordButtonMouseEnterHandler(MouseEvent event) {
+        elementConf.hoverIcon(showConfirmPasswordButton);
+    }
+
+    @FXML
+    private void showConfirmPaswordButtonMouseClickHandler(MouseEvent event) {
+        showConfirmPasswordButton.setVisible(false);
+        hideConfirmPasswordButton.setVisible(true);
+        
+        confirmPasswordField.setOpacity(1.0);
+        confirmPasswordField.toFront();
+        revealedConfirmPasswordField.setOpacity(0);
+    }
+
+    @FXML
+    private void showConfirmPasswordButtonMousePressHandler(MouseEvent event) {
+        elementConf.pressIcon(showConfirmPasswordButton);
+    }
+
+    @FXML
+    private void newPasswordFieldKeyTypeHandler(KeyEvent event) {
+        String passField = newPasswordField.getText();
+        revealedNewPasswordField.textProperty().bindBidirectional(newPasswordField.textProperty());
+        
+        hideNewPasswordButton.setVisible(false);
+        
+        if(!passField.isEmpty()) 
+            hideNewPasswordButton.setVisible(true);
+    }
+
+    @FXML
+    private void confirmPasswordFieldKeyTypedHandler(KeyEvent event) {
+        String passField = confirmPasswordField.getText();
+        revealedConfirmPasswordField.textProperty().bindBidirectional(confirmPasswordField.textProperty());
+        
+        hideConfirmPasswordButton.setVisible(false);
+        
+        if(!passField.isEmpty()) 
+            hideConfirmPasswordButton.setVisible(true);
     }
     
 }

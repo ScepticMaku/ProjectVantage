@@ -120,6 +120,10 @@ public class TeamManagerPageController implements Initializable {
         return instance;
     }
     
+    public BorderPane getBackgroundPane() {
+        return rootPane;
+    }
+    
     public void setUsername(String username) {
         this.username = username;
         

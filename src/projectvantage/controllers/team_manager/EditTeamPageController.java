@@ -6,6 +6,8 @@
 package projectvantage.controllers.team_manager;
 
 import projectvantage.models.Team;
+import projectvantage.utility.SessionConfig;
+import projectvantage.utility.LogConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.dbConnect;
@@ -31,11 +33,13 @@ public class EditTeamPageController implements Initializable {
     
     private static EditTeamPageController instance;
     
+    LogConfig logConf = new LogConfig();
     DatabaseConfig databaseConf = new DatabaseConfig();
     AlertConfig alertConf = new AlertConfig();
     dbConnect db = new dbConnect();
     
     private int id;
+    private int userId;
     private String name;
     
     @FXML
@@ -54,6 +58,10 @@ public class EditTeamPageController implements Initializable {
         instance = this;
         
         Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            userId = sessionConf.getId();
+            
             teamNameField.setText(name);
         });
     }    
@@ -84,6 +92,7 @@ public class EditTeamPageController implements Initializable {
         
         if(db.executeQuery(sql, nameField, id)) {
             System.out.println("Team updated successfully!");
+            logConf.logEditTeam(userId, id, nameField);
             alertConf.showAlert(Alert.AlertType.INFORMATION, "Team Update Successful", "Team Updated Successfully!", currentStage);
             TeamPageController.getInstance().refreshTable();
             currentStage.close();

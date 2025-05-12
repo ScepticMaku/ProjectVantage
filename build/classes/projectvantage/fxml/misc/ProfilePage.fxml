@@ -6,22 +6,22 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.ProfilePageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="570.0" prefWidth="600.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.misc.ProfilePageController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Profile" textFill="#192b4b" />
+      <Label layoutX="14.0" layoutY="14.0" stylesheets="@../../css/title-label-style.css" text="Profile" textFill="#192b4b" />
       <ImageView fx:id="profilePhoto" fitHeight="100.0" fitWidth="100.0" layoutX="72.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../resources/icons/user-profile-icon-2.png" />
          </image>
       </ImageView>
-      <Label fx:id="usernamePlaceholder" alignment="CENTER" layoutX="15.0" layoutY="203.0" prefHeight="18.0" prefWidth="214.0" text="Username" />
-      <Label layoutX="239.0" layoutY="103.0" text="First name:" />
+      <Label fx:id="usernamePlaceholder" alignment="CENTER" layoutX="15.0" layoutY="203.0" prefHeight="18.0" prefWidth="214.0" stylesheets="@../../css/title-label-style.css" text="Username" />
+      <Label layoutX="239.0" layoutY="103.0" stylesheets="@../../css/title-label-style.css" text="First name:" />
       <Label fx:id="firstNamePlaceholder" layoutX="239.0" layoutY="122.0" text="Placeholder" />
-      <Label layoutX="239.0" layoutY="157.0" text="Middle name:" />
+      <Label layoutX="239.0" layoutY="157.0" stylesheets="@../../css/title-label-style.css" text="Middle name:" />
       <Label fx:id="middleNamePlaceholder" layoutX="239.0" layoutY="176.0" text="Placeholder" />
-      <Label layoutX="239.0" layoutY="212.0" text="Last Name:" />
+      <Label layoutX="239.0" layoutY="212.0" stylesheets="@../../css/title-label-style.css" text="Last Name:" />
       <Label fx:id="lastNamePlaceholder" layoutX="239.0" layoutY="231.0" text="Placeholder" />
-      <Label layoutX="399.0" layoutY="104.0" text="Role:" />
+      <Label layoutX="399.0" layoutY="104.0" stylesheets="@../../css/title-label-style.css" text="Role:" />
       <Label fx:id="rolePlaceholder" layoutX="399.0" layoutY="123.0" text="Placeholder" />
       <Button fx:id="editProfileButton" layoutX="503.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#editProfileMouseClickHandler" prefHeight="27.0" prefWidth="83.0" text="Edit Profile" />
       <Button fx:id="changePasswordButton" layoutX="377.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#changePasswordMouseClickHandler" prefHeight="27.0" prefWidth="116.0" text="Change Password" />

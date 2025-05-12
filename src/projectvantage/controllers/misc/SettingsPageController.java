@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -41,6 +42,12 @@ public class SettingsPageController implements Initializable {
     private Button logsButton;
     @FXML
     private Pane adminSection;
+    @FXML
+    private Label authenticationLabel;
+    @FXML
+    private Button enableAuthenticationButton;
+    @FXML
+    private Button disableAuthenticationButton;
 
     /**
      * Initializes the controller class.
@@ -74,6 +81,14 @@ public class SettingsPageController implements Initializable {
     @FXML
     private void logsButtonMouseClicklHandler(MouseEvent event) throws Exception {
         pageConf.loadWindow("/projectvantage/fxml/admin/EventLogPage.fxml", "Event Logs",backgroundPane);
+    }
+
+    @FXML
+    private void enableAuthenticationButtonMouseClickHandler(MouseEvent event) {
+    }
+
+    @FXML
+    private void disableAuthenticationButtonMouseClickHandler(MouseEvent event) {
     }
     
 }

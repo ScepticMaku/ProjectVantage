@@ -91,6 +91,12 @@ public class ProjectVantage extends Application {
         stage.setTitle("Dashboard");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
+        
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+            alertConf.showExitConfirmationAlert(stage);
+        });
+        
         stage.show();
         pageConf.setCenterAlignment(stage);
     }

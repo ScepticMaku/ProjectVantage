@@ -12,12 +12,15 @@ import projectvantage.utility.Config;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.dbConnect;
+import projectvantage.utility.SessionConfig;
+import projectvantage.utility.LogConfig;
 
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -60,10 +63,13 @@ public class UserManagementPageController implements Initializable {
     ObservableList<User> userList = FXCollections.observableArrayList();
     AlertConfig alertConf = new AlertConfig();
     Config config = new Config();
+    LogConfig logConf = new LogConfig();
     PageConfig pageConf = new PageConfig();
     ElementConfig elementConf = new ElementConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
     dbConnect db = new dbConnect();
+    
+    private int sessionUserId;
 
     @FXML
     private AnchorPane rootPane;
@@ -144,6 +150,7 @@ public class UserManagementPageController implements Initializable {
                         User selectedRow = userTable.getSelectionModel().getSelectedItem();
                         int id = selectedRow.getId();
                         String role = selectedRow.getRole();
+                        String username = selectedRow.getUsername();
                         
                         String sql = "DELETE FROM user WHERE id = ?";
                         
@@ -153,9 +160,9 @@ public class UserManagementPageController implements Initializable {
                                 break;
                             default:
                                 alertConf.showDeleteConfirmationAlert(currentStage, sql, id);
+                                logConf.logDeleteUser(sessionUserId, username);
                                 refreshTable();
                         }
-                        
                     });
                     
                     HBox actionButtons = new HBox(deleteButton);
@@ -168,6 +175,12 @@ public class UserManagementPageController implements Initializable {
         userAction.setCellFactory(cellFactory);
         
         loadTableData();
+        
+        Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            sessionUserId = sessionConf.getId();
+        });
     }
     
     public static UserManagementPageController getInstance() {
@@ -267,6 +280,6 @@ public class UserManagementPageController implements Initializable {
         
         String fxmlLocation = "/projectvantage/fxml/admin/AdminUserPage.fxml";
         String user = selectedRow.getUsername();
-        pageConf.loadUserPage(fxmlLocation, user ,adminController.getBackgroundPane(), adminController.getRootPane());
+        pageConf.loadUserPage(fxmlLocation, user , adminController.getBackgroundPane(), adminController.getRootPane());
     }
 }

@@ -6,9 +6,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="220.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.task_manager.ViewTaskPageController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="220.0" prefWidth="470.0" stylesheets="@../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.task_manager.ViewTaskPageController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Task" />
+      <Label layoutX="14.0" layoutY="14.0" stylesheets="@../../css/title-label-style.css" text="Task" />
       <Label layoutX="17.0" layoutY="43.0" text="Name:" />
       <Label layoutX="18.0" layoutY="66.0" text="Description:" />
       <Label fx:id="taskNameLabel" layoutX="62.0" layoutY="43.0" text="Name" />
@@ -25,16 +25,17 @@
       <Label fx:id="fromProjectLabel" layoutX="372.0" layoutY="136.0" text="None" />
       <Label layoutX="273.0" layoutY="160.0" text="Status:" />
       <Label fx:id="statusLabel" layoutX="372.0" layoutY="160.0" text="None" />
-      <Button fx:id="viewProjectButton" layoutX="376.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#viewProjectButtonMouseClickHandler" text="View Project" />
-      <Button fx:id="viewMemberButton" layoutX="225.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#viewMemberButtonMouseClickHandler" text="View Assigned Member" visible="false" />
-      <Button fx:id="editTaskButton" layoutX="152.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#editTaskButtonMouseClickHandler" text="Edit Task" />
-      <Button fx:id="completeTaskButton" layoutX="14.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#completeTaskButtonMouseClickHandler" text="Complete Task" />
+      <Button fx:id="viewProjectButton" layoutX="363.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#viewProjectButtonMouseClickHandler" prefHeight="27.0" prefWidth="89.0" text="View Project" />
+      <Button fx:id="viewMemberButton" layoutX="218.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#viewMemberButtonMouseClickHandler" text="View Assigned Member" visible="false" />
+      <Button fx:id="editTaskButton" layoutX="131.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#editTaskButtonMouseClickHandler" prefHeight="27.0" prefWidth="71.0" text="Edit Task" />
+      <Button fx:id="completeTaskButton" layoutX="14.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#completeTaskButtonMouseClickHandler" prefHeight="27.0" prefWidth="102.0" text="Complete Task" />
       <Button fx:id="uncompleteTaskButton" layoutX="14.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#uncompleteTaskButtonMouseClickHandler" text="Uncomplete Task" visible="false" />
-      <Button fx:id="assignMemberButton" layoutX="225.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#assignMemberButtonMouseClickHandler" prefHeight="25.0" prefWidth="141.0" text="Assign Member" />
+      <Button fx:id="assignMemberButton" layoutX="212.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#assignMemberButtonMouseClickHandler" prefHeight="25.0" prefWidth="141.0" text="Assign Member" />
       <TextField fx:id="taskNameField" layoutX="62.0" layoutY="39.0" prefHeight="25.0" prefWidth="190.0" promptText="Task Name" visible="false" />
       <Button fx:id="cancelButton" layoutX="71.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#cancelButtonMouseClickHandler" text="Cancel" visible="false" />
       <Button fx:id="applyButton" layoutX="14.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#applyButtonMouseClickHandler" text="Apply" visible="false" />
       <TextArea fx:id="taskDescriptionTextArea" layoutX="17.0" layoutY="93.0" prefHeight="78.0" prefWidth="236.0" promptText="Task Description" visible="false" />
-      <Button fx:id="removeMemberButton" layoutX="119.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#removeMemberButtonMouseClickHandler" text="Remove Assigned Member" />
+      <Button fx:id="removeMemberButton" layoutX="126.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#removeMemberButtonMouseClickHandler" prefHeight="27.0" prefWidth="166.0" text="Remove Assigned Member" />
+      <Label fx:id="dateCompletedLabel" layoutX="372.0" layoutY="185.0" text="date completed" visible="false" />
    </children>
 </AnchorPane>

@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.team_member;
 
+import projectvantage.utility.SessionConfig;
 import projectvantage.utility.Config;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.PageConfig;
@@ -138,6 +139,23 @@ public class TeamMemberMainPageController implements Initializable {
         instance = this;
         
         Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            userId = sessionConf.getId();
+            username = sessionConf.getUsername();
+
+            TeamMember member = databaseConf.getTeamMemberByUserId(userId);
+
+            if(member != null) {
+                this.teamId = member.getTeamId();
+            }
+
+            Team team = databaseConf.getTeamById(teamId);
+
+            if(team != null) {    
+                this.projectId = team.getProjectId();
+            }
+            
             elementConf.loadProfilePicture(username, profileButton, IMAGE_SIZE);
             
             loadDashboardPage();
@@ -146,6 +164,10 @@ public class TeamMemberMainPageController implements Initializable {
     
     public static TeamMemberMainPageController getInstance() {
         return instance;
+    }
+    
+    public BorderPane getBackgroundPane() {
+        return rootPane;
     }
     
     public void loadPage(String targetFXML, String title) {
@@ -173,31 +195,8 @@ public class TeamMemberMainPageController implements Initializable {
         }
     }
     
-    public void setUsername(String username) {
-        this.username = username;
-        
-        User user = databaseConf.getUserByUsername(username);
-        this.userId = user.getId();
-        
-        TeamMember member = databaseConf.getTeamMemberByUserId(userId);
-        
-        if(member != null) {
-            this.teamId = member.getTeamId();
-        }
-        
-        Team team = databaseConf.getTeamById(teamId);
-        
-        if(team != null) {    
-            this.projectId = team.getProjectId();
-        }
-    }
-    
     public String getUsername() {
         return username;
-    }
-    
-    public AnchorPane getBackgroundPane() {
-        return backgroundPane;
     }
     
     public BorderPane getRootPane() {
@@ -330,7 +329,10 @@ public class TeamMemberMainPageController implements Initializable {
     private void profileButtonMouseClickHandler(MouseEvent event) throws Exception {
         Stage currentStage = (Stage) rootPane.getScene().getWindow();
         String fxmlLocation = "/projectvantage/fxml/misc/ProfilePage.fxml";
-        String user = getInstance().getUsername();
+        SessionConfig sessionConf = SessionConfig.getInstance();
+        
+        String user = sessionConf.getUsername();
+        
         pageConf.loadProfilePage(fxmlLocation, user, backgroundPane, rootPane);
         currentStage.setTitle("Profile");
     }
@@ -386,11 +388,6 @@ public class TeamMemberMainPageController implements Initializable {
     @FXML
     private void projectButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
-        
-        if(projectId == 0) {
-            alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening Project", "You are not assigned to a project yet.", currentStage);
-            return;
-        }
         
         elementConf.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         
