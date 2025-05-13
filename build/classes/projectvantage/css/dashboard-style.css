@@ -1,11 +1,134 @@
-.hello-label {
+/* Root styles */
+.root {
+    -fx-background-color: #f5f6fa;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Navigation Menu */
+.nav-menu {
+    -fx-background-color: #2c3e50;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+.nav-title {
+    -fx-text-fill: white;
     -fx-font-size: 20px;
     -fx-font-weight: bold;
+    -fx-padding: 0 0 20 0;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 14px;
+    -fx-padding: 10 15;
+    -fx-alignment: CENTER_LEFT;
+    -fx-min-width: 180;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: #34495e;
+}
+
+/* Top Bar */
+.top-bar {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.hello-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #2c3e50;
 }
 
 .username-label {
-    -fx-font-size: 20px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2F9EFE;
+    -fx-text-fill: #2c3e50;
+}
 
+.logout-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-background-color: #c0392b;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+    -fx-padding: 20;
+}
+
+/* Welcome Section */
+.welcome-title {
+    -fx-text-fill: #2f9efe;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.welcome-subtitle {
+    -fx-text-fill: #a5b4d9;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Statistics Cards */
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.stat-title {
+    -fx-text-fill: #a5b4d9;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.stat-value {
+    -fx-text-fill: #2f9efe;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Recent Activity */
+.section-title {
+    -fx-text-fill: #2f9efe;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.table-view .column-header {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 10;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #2f9efe;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.table-row-cell {
+    -fx-border-color: #f1f1f1;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f8f9fa;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #e3f2fd;
+}
+
+.table-row-cell .text {
+    -fx-fill: #2c3e50;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
 }

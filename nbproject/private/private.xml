@@ -21,8 +21,8 @@
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/models/Project.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/misc/SettingsPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/TeamPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/ViewTaskPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/utility/AuthenticationConfig.java</file>
+            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/ViewTaskPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/utility/PageConfig.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/authentication/LoginController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/TaskPageController.java</file>
@@ -46,18 +46,19 @@
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/authentication/GoogleAuthenticationController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/task_manager/AddTaskPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/ViewProjectPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/authentication/RegisterController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/fxml/task_manager/AssignTeamMemberPage.fxml</file>
+            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/authentication/RegisterController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/TeamManagerDashboardPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/models/Task.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/admin/AdminPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/team_member/TeamMemberDashboardPageController.java</file>
+            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/admin/AdminPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/misc/ProfilePageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/TeamManagerPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/AddTeamPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/team_manager/EditTeamPageController.java</file>
-            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/misc/EditProfilePageController.java</file>
+            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/ProjectManagerDashboardPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/AddProjectPageController.java</file>
+            <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/misc/EditProfilePageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/ProjectManagerPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/project_manager/EditProjectPageController.java</file>
             <file>file:/C:/Users/markj/Desktop/ProjectVantage/src/projectvantage/controllers/admin/EventLogPageController.java</file>

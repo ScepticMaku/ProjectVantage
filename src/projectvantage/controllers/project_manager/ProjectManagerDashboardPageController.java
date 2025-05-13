@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -22,9 +24,33 @@ public class ProjectManagerDashboardPageController implements Initializable {
     private static ProjectManagerDashboardPageController instance;
     
     @FXML
-    private AnchorPane rootPane;
-    @FXML
     private Label usernameLabel;
+    @FXML
+    private Label activeProjectsLabel;
+    @FXML
+    private Label teamMembersLabel;
+    @FXML
+    private Label tasksDueLabel;
+    @FXML
+    private TableView<?> projectProgressTable;
+    @FXML
+    private TableColumn<?, ?> projectNameColumn;
+    @FXML
+    private TableColumn<?, ?> progressColumn;
+    @FXML
+    private TableColumn<?, ?> deadlineColumn;
+    @FXML
+    private TableColumn<?, ?> statusColumn;
+    @FXML
+    private TableView<?> activityTable;
+    @FXML
+    private TableColumn<?, ?> dateColumn;
+    @FXML
+    private TableColumn<?, ?> memberColumn;
+    @FXML
+    private TableColumn<?, ?> actionColumn;
+    @FXML
+    private TableColumn<?, ?> projectColumn;
     
     /**
      * Initializes the controller class.

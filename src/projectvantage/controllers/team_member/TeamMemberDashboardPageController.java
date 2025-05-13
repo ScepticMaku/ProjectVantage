@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -23,9 +25,33 @@ public class TeamMemberDashboardPageController implements Initializable {
     private static TeamMemberDashboardPageController instance;
 
     @FXML
-    private AnchorPane rootPane;
-    @FXML
     private Label usernameLabel;
+    @FXML
+    private Label assignedTasksLabel;
+    @FXML
+    private Label tasksDueLabel;
+    @FXML
+    private Label completedTasksLabel;
+    @FXML
+    private TableView<?> tasksTable;
+    @FXML
+    private TableColumn<?, ?> taskNameColumn;
+    @FXML
+    private TableColumn<?, ?> projectColumn;
+    @FXML
+    private TableColumn<?, ?> deadlineColumn;
+    @FXML
+    private TableColumn<?, ?> priorityColumn;
+    @FXML
+    private TableColumn<?, ?> statusColumn;
+    @FXML
+    private TableView<?> activityTable;
+    @FXML
+    private TableColumn<?, ?> dateColumn;
+    @FXML
+    private TableColumn<?, ?> taskColumn;
+    @FXML
+    private TableColumn<?, ?> actionColumn;
 
     /**
      * Initializes the controller class.
