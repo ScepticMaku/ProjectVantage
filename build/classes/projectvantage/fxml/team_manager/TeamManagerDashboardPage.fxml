@@ -1,12 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="projectvantage.controllers.team_manager.TeamManagerDashboardPageController">
+<AnchorPane id="AnchorPane" prefHeight="570.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projectvantage.controllers.team_manager.TeamManagerDashboardPageController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Welcome," />
-      <Label fx:id="usernameLabel" layoutX="69.0" layoutY="14.0" text="User" />
+      <Pane prefHeight="488.0" prefWidth="600.0">
+         <children>
+            <!-- Welcome Section -->
+            <VBox layoutX="20.0" layoutY="20.0" prefWidth="560.0">
+               <children>
+                  <Label styleClass="welcome-title" stylesheets="@../../css/title-label-style.css" text="Welcome Back!">
+                     <font>
+                        <Font name="Segoe UI Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="usernameLabel" text="Username">
+                     <font>
+                        <Font name="Segoe UI" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+      
+            <!-- Statistics Cards -->
+            <HBox layoutX="20.0" layoutY="100.0" spacing="20.0">
+               <children>
+                  <VBox prefWidth="180.0" styleClass="stat-card">
+                     <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                     </padding>
+                     <children>
+                        <Label styleClass="stat-title" text="Total Teams">
+                           <font>
+                              <Font name="Segoe UI" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totalTeamsLabel" styleClass="stat-value" text="0">
+                           <font>
+                              <Font name="Segoe UI Bold" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox prefWidth="180.0" styleClass="stat-card">
+                     <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                     </padding>
+                     <children>
+                        <Label styleClass="stat-title" text="Team Members">
+                           <font>
+                              <Font name="Segoe UI" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="teamMembersLabel" styleClass="stat-value" text="0">
+                           <font>
+                              <Font name="Segoe UI Bold" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+      
+            <!-- Recent Activity Section -->
+            <VBox layoutX="20.0" layoutY="200.0" prefWidth="560.0" spacing="10.0">
+               <children>
+                  <Label styleClass="section-title" text="Team Activities">
+                     <font>
+                        <Font name="Segoe UI Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="teamActivityTable" prefHeight="357.0" prefWidth="560.0" VBox.vgrow="ALWAYS">
+                     <columns>
+                        <TableColumn fx:id="dateColumn" prefWidth="120" text="Date" />
+                        <TableColumn fx:id="teamColumn" prefWidth="120" text="Team" />
+                        <TableColumn fx:id="activityColumn" prefWidth="318.0" text="Activity" />
+                     </columns>
+                  </TableView>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
    </children>
+   <stylesheets>
+      <URL value="@../../css/style.css" />
+      <URL value="@../../css/table-style.css" />
+   </stylesheets>
 </AnchorPane>

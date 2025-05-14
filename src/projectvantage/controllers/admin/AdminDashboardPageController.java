@@ -5,6 +5,7 @@
  */
 package projectvantage.controllers.admin;
 
+import projectvantage.models.RecentActivity;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.SessionConfig;
 import java.net.URL;
@@ -53,17 +54,15 @@ public class AdminDashboardPageController implements Initializable {
     @FXML
     private Label completedTasksLabel;
     @FXML
-    private TableView<ActivityLog> activityTable;
+    private TableView<RecentActivity> activityTable;
     @FXML
-    private TableColumn<ActivityLog, String> dateColumn;
+    private TableColumn<RecentActivity, String> dateColumn;
     @FXML
-    private TableColumn<ActivityLog, String> userColumn;
+    private TableColumn<RecentActivity, String> userColumn;
     @FXML
-    private TableColumn<ActivityLog, String> actionColumn;
-    @FXML
-    private TableColumn<ActivityLog, String> statusColumn;
+    private TableColumn<RecentActivity, String> actionColumn;
 
-    private ObservableList<ActivityLog> activityLogs;
+    private ObservableList<RecentActivity> activityLogs;
 
     /**
      * Initializes the controller class.
@@ -82,18 +81,15 @@ public class AdminDashboardPageController implements Initializable {
         dateColumn.setSortable(false);
         userColumn.setSortable(false);
         actionColumn.setSortable(false);
-        statusColumn.setSortable(false);
         
         dateColumn.setResizable(false);
         userColumn.setResizable(false);
         actionColumn.setResizable(false);
-        statusColumn.setResizable(false);
 
         // Initialize the activity table
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         userColumn.setCellValueFactory(new PropertyValueFactory<>("user"));
         actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         activityLogs = FXCollections.observableArrayList();
         activityTable.setItems(activityLogs);
@@ -124,7 +120,7 @@ public class AdminDashboardPageController implements Initializable {
     }
     
     private int getCompletedTasks() {
-        String sql = "SELECT COUNT(*) AS total FROM task";
+        String sql = "SELECT COUNT(*) AS total FROM task WHERE status_id = 2";
         
         try (ResultSet result = db.getData(sql)) {
             if(result.next()) {
@@ -152,8 +148,7 @@ public class AdminDashboardPageController implements Initializable {
     }
 
     private void loadDashboardData() {
-        // TODO: Replace with actual data from your backend
-        
+        // Load dashboard statistics
         totalUsers = getTotalUsers();
         totalActiveProjects = getActiveProjects();
         completedTasks = getCompletedTasks();
@@ -162,19 +157,31 @@ public class AdminDashboardPageController implements Initializable {
         activeProjectsLabel.setText(String.valueOf(totalActiveProjects));
         completedTasksLabel.setText(String.valueOf(completedTasks));
 
-        // Add some sample activity logs
-        activityLogs.add(new ActivityLog(
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-            "John Doe",
-            "Created new project 'Website Redesign'",
-            "Completed"
-        ));
-        activityLogs.add(new ActivityLog(
-            LocalDateTime.now().minusHours(2).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-            "Jane Smith",
-            "Updated project status",
-            "In Progress"
-        ));
+        // Clear existing activity logs
+        activityLogs.clear();
+        
+        // Load recent activities from system_logs table
+        String sql = "SELECT user.username, system_log.action, system_log.timestamp " +
+                    "FROM system_log " +
+                    "INNER JOIN user ON system_log.user_id = user.id " +
+                    "ORDER BY system_log.timestamp DESC LIMIT 10";
+        
+        try (ResultSet result = db.getData(sql)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            
+            while (result.next()) {
+                String timestamp = result.getTimestamp("timestamp").toLocalDateTime().format(formatter);
+                String username = result.getString("username");
+                String action = result.getString("action");
+                
+                activityLogs.add(new RecentActivity(timestamp, username, action));
+            }
+            
+            activityTable.setItems(activityLogs);
+        } catch (Exception e) {
+            System.out.println("Error loading activity logs: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -205,25 +212,5 @@ public class AdminDashboardPageController implements Initializable {
     @FXML
     private void handleLogout(ActionEvent event) {
         // TODO: Implement logout functionality
-    }
-
-    // Activity Log model class
-    public static class ActivityLog {
-        private final String date;
-        private final String user;
-        private final String action;
-        private final String status;
-
-        public ActivityLog(String date, String user, String action, String status) {
-            this.date = date;
-            this.user = user;
-            this.action = action;
-            this.status = status;
-        }
-
-        public String getDate() { return date; }
-        public String getUser() { return user; }
-        public String getAction() { return action; }
-        public String getStatus() { return status; }
     }
 }

@@ -45,6 +45,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import projectvantage.controllers.team_manager.ViewTeamPageController;
+import projectvantage.models.Task;
 
 /**
  * FXML Controller class
@@ -67,6 +68,7 @@ public class TeamMemberMainPageController implements Initializable {
     private String username;
     private int userId;
     private int teamId;
+    private int teamMemberId;
     private int projectId;
 
     @FXML
@@ -129,6 +131,10 @@ public class TeamMemberMainPageController implements Initializable {
     private Label teamButtonLabel;
     @FXML
     private Circle teamButtonIndicator;
+    @FXML
+    private Label currentTaskLabel;
+    @FXML
+    private Label currentTeamLabel;
 
     /**
      * Initializes the controller class.
@@ -147,13 +153,21 @@ public class TeamMemberMainPageController implements Initializable {
             TeamMember member = databaseConf.getTeamMemberByUserId(userId);
 
             if(member != null) {
-                this.teamId = member.getTeamId();
+                teamId = member.getTeamId();
+                teamMemberId = member.getId();
             }
 
             Team team = databaseConf.getTeamById(teamId);
 
-            if(team != null) {    
-                this.projectId = team.getProjectId();
+            if(team != null) {
+                currentTeamLabel.setText(team.getName());
+                projectId = team.getProjectId();
+            }
+            
+            Task task = databaseConf.getTaskByTeamMemberId(teamMemberId);
+            
+            if(task != null) {
+                currentTaskLabel.setText(task.getName());
             }
             
             elementConf.loadProfilePicture(username, profileButton, IMAGE_SIZE);
@@ -187,9 +201,6 @@ public class TeamMemberMainPageController implements Initializable {
         try{
             FXMLLoader dashboardLoader = new FXMLLoader(getClass().getResource("/projectvantage/fxml/team_member/TeamMemberDashboardPage.fxml"));
             rootPane.setCenter(dashboardLoader.load());
-
-            TeamMemberDashboardPageController dashboardController = dashboardLoader.getController();
-            dashboardController.loadContent(username);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -387,6 +398,13 @@ public class TeamMemberMainPageController implements Initializable {
     @FXML
     private void projectButtonMouseClickHandler(MouseEvent event) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
+        
+         Team team = databaseConf.getTeamById(teamId);
+        
+        if(team == null) {
+            alertConf.showAlert(Alert.AlertType.ERROR, "Error Opening Project", "You are not assigned to a team yet.", currentStage);
+            return;
+        }
         
         elementConf.setSelected("/projectvantage/resources/icons/project-icon-selected.png", projectButtonLabel, projectButtonIndicator, projectButtonIcon);
         

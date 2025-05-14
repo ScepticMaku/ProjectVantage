@@ -145,6 +145,7 @@ public class LoginController implements Initializable {
         salt = user.getSalt();
         status = user.getStatus();
         secretKey = user.getSecretKey();
+        email = user.getEmail();
         
         boolean doesPasswordMatch = authConfig.verifyPassword(passwordInput, password, salt);
         

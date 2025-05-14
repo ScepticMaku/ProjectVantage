@@ -64,7 +64,7 @@ public class ViewTeamPageController implements Initializable {
 //    private static final double ICON_WIDTH = 26;
     
     private int id;
-    private int projectId;
+    private int projectId = -1;
     private int userId;
     private String teamName;
     private String projectName;
@@ -181,6 +181,8 @@ public class ViewTeamPageController implements Initializable {
             projectLabel.setText(projectName);
             projectId = project.getId();
         }
+        
+        
         
         teamNameLabel.setText(teamName);
     }

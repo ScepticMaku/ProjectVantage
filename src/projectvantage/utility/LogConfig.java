@@ -238,9 +238,14 @@ public class LogConfig {
     
     public void logMakeLeader(int userId, int projectId, int teamMemberId, int teamId, String teamMemberName, String teamName, String projectName) {
         action = "Assign Leadership";
-        description = "Member: " + teamMemberName + " assigned leader in team: " + teamName + ", in project: " + projectName;
+        description = "Member: " + teamMemberName + " assigned leader in team: " + teamName;
+        
+        if(projectId != -1) {
+            description = "Member: " + teamMemberName + " assigned leader in team: " + teamName + ", in project: " + projectName;
+            insertProjectLog(userId, projectId, action, description);
+        }
+        
         insertLog(userId, action, description);
-        insertProjectLog(userId, projectId, action, description);
         insertTeamMemberLog(userId, teamMemberId, action, description);
         insertTeamLog(userId, teamId, action, description);
     }

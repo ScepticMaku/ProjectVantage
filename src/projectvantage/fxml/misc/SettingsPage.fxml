@@ -27,5 +27,6 @@
       <Label fx:id="authenticationLabel" layoutX="303.0" layoutY="181.0" stylesheets="@../../css/title-label-style.css" text="Disabled" />
       <Button fx:id="enableAuthenticationButton" layoutX="214.0" layoutY="209.0" mnemonicParsing="false" onMouseClicked="#enableAuthenticationButtonMouseClickHandler" text="Enable Authentication" />
       <Button fx:id="disableAuthenticationButton" layoutX="214.0" layoutY="209.0" mnemonicParsing="false" onMouseClicked="#disableAuthenticationButtonMouseClickHandler" text="Disable Authentication" visible="false" />
+      <Button fx:id="applyChangesButton" layoutX="497.0" layoutY="209.0" mnemonicParsing="false" onMouseClicked="#applyChangesButtonMouseClickHandler" text="Apply Changes" visible="false" />
    </children>
 </AnchorPane>

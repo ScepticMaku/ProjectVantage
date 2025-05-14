@@ -143,7 +143,6 @@ public class ProjectManagerPageController implements Initializable {
             rootPane.setCenter(dashboardLoader.load());
 
             ProjectManagerDashboardPageController dashboardController = dashboardLoader.getController();
-            dashboardController.loadContent(username);
         } catch(Exception e) {
             e.printStackTrace();
         }

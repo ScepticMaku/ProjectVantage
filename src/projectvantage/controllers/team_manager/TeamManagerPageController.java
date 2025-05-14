@@ -9,6 +9,7 @@ import projectvantage.utility.AlertConfig;
 import projectvantage.utility.ElementConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.DatabaseConfig;
+import projectvantage.utility.SessionConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -37,6 +38,7 @@ import projectvantage.models.User;
  * @author Markj
  */
 public class TeamManagerPageController implements Initializable {
+    
     
     AlertConfig alertConf = new AlertConfig();
     ElementConfig elementConf = new ElementConfig();
@@ -111,6 +113,12 @@ public class TeamManagerPageController implements Initializable {
         instance = this;
         
         Platform.runLater(() -> {
+            
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            username = sessionConf.getUsername();
+            userId = sessionConf.getId();
+            
             elementConf.loadProfilePicture(username, profileButton, IMAGE_SIZE);
             loadDashboardPage();
         });
@@ -124,13 +132,13 @@ public class TeamManagerPageController implements Initializable {
         return rootPane;
     }
     
-    public void setUsername(String username) {
-        this.username = username;
-        
-        User user = databaseConf.getUserByUsername(username);
-        
-        this.userId = user.getId();
-    }
+//    public void setUsername(String username) {
+//        this.username = username;
+//        
+//        User user = databaseConf.getUserByUsername(username);
+//        
+//        this.userId = user.getId();
+//    }
     
     public void loadPage(String targetFXML, String title) {
         Stage currentStage = (Stage)rootPane.getScene().getWindow();
@@ -152,7 +160,6 @@ public class TeamManagerPageController implements Initializable {
             rootPane.setCenter(dashboardLoader.load());
 
             TeamManagerDashboardPageController dashboardController = dashboardLoader.getController();
-            dashboardController.loadContent(username);
         } catch(Exception e) {
             e.printStackTrace();
         }

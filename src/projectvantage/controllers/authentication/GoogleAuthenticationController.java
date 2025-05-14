@@ -6,15 +6,18 @@
 package projectvantage.controllers.authentication;
 
 import projectvantage.utility.Config;
+import projectvantage.utility.SessionConfig;
 import projectvantage.utility.PageConfig;
 import projectvantage.utility.GoogleAuthenticationConfig;
 import projectvantage.utility.dbConnect;
 import projectvantage.utility.AlertConfig;
 import projectvantage.utility.DatabaseConfig;
 import projectvantage.utility.LogConfig;
+import projectvantage.utility.SessionConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +30,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import projectvantage.controllers.misc.SettingsPageController;
 
 /**
  * FXML Controller class
@@ -40,20 +44,13 @@ public class GoogleAuthenticationController implements Initializable {
     dbConnect connect = new dbConnect();
     PageConfig pageConf = new PageConfig();
     Config config = new Config();
+    dbConnect db = new dbConnect();
     GoogleAuthenticationConfig googleAuthConf = new GoogleAuthenticationConfig();
     AlertConfig alertConf = new AlertConfig();
     DatabaseConfig dbConf = new DatabaseConfig();
     LogConfig logConf = new LogConfig();
     
-    private String query;
-    private String firstName;
-    private String middleName;
-    private String lastName;
     private String email;
-    private String phoneNumber;
-    private String username;
-    private String salt;
-    private String hashedPassword;
     private String secretKey;
 
     @FXML
@@ -72,6 +69,18 @@ public class GoogleAuthenticationController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         instance = this;
+        
+        Platform.runLater(() -> {
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            
+            email = sessionConf.getEmail();
+            
+            secretKey = googleAuthConf.generateSecretKey();
+            String issuer = "ProjectVantage";
+
+            googleAuthConf.generateQRCode(secretKey, email, issuer, qrImageView);
+            
+        });
     }
     
     public static GoogleAuthenticationController getInstance() {
@@ -79,21 +88,6 @@ public class GoogleAuthenticationController implements Initializable {
     }
     
     public void loadContent(String sql, String...info) {
-        
-        query = sql;
-        firstName = info[0];
-        middleName = info[1];
-        lastName = info[2];
-        email = info[3];
-        phoneNumber = info[4];
-        username = info[5];
-        salt = info[6];
-        hashedPassword = info[7];
-        
-        secretKey = googleAuthConf.generateSecretKey();
-        String issuer = "ProjectVantage";
-        
-        googleAuthConf.generateQRCode(secretKey, email, issuer, qrImageView);
     }
     
     private boolean isEnterPressed(KeyEvent event) throws Exception {
@@ -114,17 +108,24 @@ public class GoogleAuthenticationController implements Initializable {
             return;
         }
         
-        alertConf.showAlert(Alert.AlertType.INFORMATION, "Authentication Successful", "Account successfully verified!", currentStage);
-        
-//        if(connect.executeQuery(query, firstName, middleName, lastName, email, phoneNumber, username, salt, hashedPassword, secretKey)) {
-//             System.out.println("User added to database!");
-//             alertConf.showAlert(Alert.AlertType.INFORMATION, "User successfully registered!", "Register Completed!", currentStage);
-//         }
-        
-        String loginFXML = "/projectvantage/fxml/authentication/Login.fxml";
-        
-        pageConf.switchScene(getClass(), event, loginFXML);
-        currentStage.setTitle("Login");
+        // Update the database with the secret key
+        String updateQuery = "UPDATE user SET secret_key = ? WHERE email = ?";
+        if(db.executeQuery(updateQuery, secretKey, email)) {
+            // Update session
+            SessionConfig sessionConf = SessionConfig.getInstance();
+            sessionConf.setSecretKey(secretKey);
+            
+            alertConf.showAlert(Alert.AlertType.INFORMATION, "Authentication Successful", "Two-factor authentication has been enabled successfully!", currentStage);
+            
+            // Close the current window and refresh settings page
+            currentStage.close();
+            
+            // Get settings page controller and refresh content
+            SettingsPageController settingsController = SettingsPageController.getInstance();
+            if(settingsController != null) {
+                settingsController.load();
+            }
+        }
     }
 
     @FXML

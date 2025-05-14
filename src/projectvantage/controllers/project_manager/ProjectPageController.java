@@ -144,6 +144,7 @@ public class ProjectPageController implements Initializable {
                     
                     deleteButton.setOnMouseClicked(event -> {
                         Project selectedRow = projectTable.getSelectionModel().getSelectedItem();
+                        
                         int id = selectedRow.getId();
                         String name = selectedRow.getName();
                         

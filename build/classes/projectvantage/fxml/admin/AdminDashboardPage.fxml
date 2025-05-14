@@ -101,8 +101,7 @@
                      <columns>
                         <TableColumn fx:id="dateColumn" prefWidth="120" text="Date" />
                         <TableColumn fx:id="userColumn" prefWidth="120" text="User" />
-                        <TableColumn fx:id="actionColumn" prefWidth="218.0" text="Action" />
-                        <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status" />
+                        <TableColumn fx:id="actionColumn" prefWidth="318.0" text="Action" />
                      </columns>
                   </TableView>
                </children>

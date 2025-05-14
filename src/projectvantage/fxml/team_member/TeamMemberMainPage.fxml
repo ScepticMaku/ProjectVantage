@@ -193,7 +193,7 @@
                                           <Font name="Segoe UI Bold" size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label layoutX="16.0" layoutY="119.0" text="Task Name" textFill="#192b4b">
+                                    <Label fx:id="currentTaskLabel" layoutX="16.0" layoutY="119.0" text="Task Name" textFill="#192b4b">
                                        <font>
                                           <Font name="Leelawadee UI Bold" size="12.0" />
                                        </font>
@@ -203,7 +203,7 @@
                                           <Font name="Segoe UI Bold" size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label layoutX="16.0" layoutY="181.0" text="Team Name" textFill="#192b4b">
+                                    <Label fx:id="currentTeamLabel" layoutX="16.0" layoutY="181.0" text="Team Name" textFill="#192b4b">
                                        <font>
                                           <Font name="Leelawadee UI Bold" size="12.0" />
                                        </font>
