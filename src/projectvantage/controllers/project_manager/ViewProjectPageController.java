@@ -461,13 +461,27 @@ public class ViewProjectPageController implements Initializable {
                 PDImageXObject pdfImage = LosslessFactory.createFromImage(document, bufferedImage);
 
                 PDPageContentStream contentStream = new PDPageContentStream(document, page);
-                contentStream.drawImage(pdfImage, 0, 0, PDRectangle.A4.getWidth(), PDRectangle.A4.getHeight());
+                
+                float pageWidth = PDRectangle.A4.getWidth();
+                float pageHeight = PDRectangle.A4.getHeight();
+
+                int imageWidth = bufferedImage.getWidth();
+                int imageHeight = bufferedImage.getHeight();
+
+                float scale = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
+                float scaledWidth = imageWidth * scale;
+                float scaledHeight = imageHeight * scale;
+
+                float x = (pageWidth - scaledWidth) / 2;
+                float y = (pageHeight - scaledHeight) / 2;
+
+                contentStream.drawImage(pdfImage, x, y, scaledWidth, scaledHeight);
                 contentStream.close();
 
                 PrinterJob printJob = PrinterJob.getPrinterJob();
                 printJob.setJobName("Project Report");
 
-                PDFPrintable printable = new PDFPrintable(document, Scaling.SHRINK_TO_FIT);
+                PDFPrintable printable = new PDFPrintable(document, Scaling.SCALE_TO_FIT);
                 printJob.setPrintable(printable);
 
                 if (printJob.printDialog()) {
@@ -549,7 +563,23 @@ public class ViewProjectPageController implements Initializable {
                 PDImageXObject pdfImage = LosslessFactory.createFromImage(document, bufferedImage);
 
                 PDPageContentStream contentStream = new PDPageContentStream(document, page);
-                contentStream.drawImage(pdfImage, 0, 0, PDRectangle.A4.getWidth(), PDRectangle.A4.getHeight());
+                
+                float pageWidth = PDRectangle.A4.getWidth();
+                float pageHeight = PDRectangle.A4.getHeight();
+
+                int imageWidth = bufferedImage.getWidth();
+                int imageHeight = bufferedImage.getHeight();
+
+                // Calculate scale to fit within A4 while preserving aspect ratio
+                float scale = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
+                float scaledWidth = imageWidth * scale;
+                float scaledHeight = imageHeight * scale;
+
+                // Center the image on the page
+                float x = (pageWidth - scaledWidth) / 2;
+                float y = (pageHeight - scaledHeight) / 2;
+
+                contentStream.drawImage(pdfImage, x, y, scaledWidth, scaledHeight);
                 contentStream.close();
 
                 FileChooser fileChooser = new FileChooser();
